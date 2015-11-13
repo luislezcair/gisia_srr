@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "VTeIC";
+}
+
+@Styles.Render("~/Content/jquery.steps")
+
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/wizard-controller.js")
+    @Scripts.Render("~/Scripts/jquery.steps.min.js")
+}
+
+<h2 class="srr">Sistema de Recopilación de Requerimientos</h2>
+
+<div id="bodyContainer" ng-app="WizardApp">
+    <section id="content">
+        <div id="wizard" class="container" ng-controller="QuestionController" after-render>
+            <h3 ng-repeat-start="q in questions">{{ q.title }}</h3>
+            <section ng-repeat-end>
+                <div class="text-center col-md-12">
+                    <p class="lead">{{ q.text }}</p>
+                </div>
+            </section>
+        </div>
+    </section>
+</div>

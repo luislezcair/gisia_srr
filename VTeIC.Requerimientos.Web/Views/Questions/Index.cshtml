@@ -1,0 +1,45 @@
+﻿@model IEnumerable<VTeIC.Requerimientos.Entidades.Question>
+
+@{
+    ViewBag.Title = "Preguntas";
+}
+
+<h2>Preguntas</h2>
+
+<p>
+    @Html.ActionLink("Añadir pregunta", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <p>Texto</p>
+        </th>
+        <th>
+            <p>Pregunta siguiente</p>
+        </th>
+        <th>
+            <p>Tipo de pregunta</p>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Text)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NextQuestion.Text)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionType.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

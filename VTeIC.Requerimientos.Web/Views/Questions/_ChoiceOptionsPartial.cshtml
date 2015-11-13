@@ -1,0 +1,19 @@
+﻿@model VTeIC.Requerimientos.Entidades.Question
+
+<table class="table">
+    <tr>
+        <th>Nº</th>
+        <th>Opción</th>
+    </tr>
+    @foreach (var item in Model.ChoiceOptions)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+        </tr>
+    }
+</table>

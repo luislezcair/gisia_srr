@@ -1,0 +1,36 @@
+﻿@model VTeIC.Requerimientos.Entidades.Question
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Detalles de pregunta</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Texto</dt>
+        <dd>@Html.DisplayFor(model => model.Text)</dd>
+        <dt>Tipo de pregunta</dt>
+        <dd>@Html.DisplayFor(model => model.QuestionType.Description)</dd>
+        <dt>Siguiente pregunta</dt>
+        <dd>@Html.DisplayFor(model => model.NextQuestion.Text)</dd>
+
+        @if (Model.QuestionTypeId == 2)
+        {
+            <dt>Siguiente pregunta por negación</dt>
+            <dd>@Html.DisplayFor(model => model.NextQuestionNegative.Text)</dd>
+        }
+
+        @if (Model.QuestionTypeId == 3) {
+            <dt>Opciones</dt>
+            <dd>@{ Html.RenderPartial("_ChoiceOptionsPartial", Model); }</dd>
+        }
+        <dt>Pregunta pivot</dt>
+        <dd>@(Model.IsPivot ? "Sí" : "No")</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Volver", "Index")
+</p>

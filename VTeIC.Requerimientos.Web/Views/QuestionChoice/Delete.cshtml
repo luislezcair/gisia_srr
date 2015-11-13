@@ -1,0 +1,27 @@
+﻿@model VTeIC.Requerimientos.Entidades.ChoiceOption
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminar</h2>
+
+<h3>¿Está seguro que desea eliminar esta opción?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Pregunta</dt>
+        <dd>@Html.DisplayFor(model => model.Question.Text)</dd>
+        <dt>Opción</dt>
+        <dd>@Html.DisplayFor(model => model.Text)</dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Volver", "Index")
+        </div>
+    }
+</div>

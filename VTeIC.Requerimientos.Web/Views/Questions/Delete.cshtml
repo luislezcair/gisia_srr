@@ -1,0 +1,37 @@
+﻿@model VTeIC.Requerimientos.Entidades.Question
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminar</h2>
+
+<h3>¿Está seguro que desea eliminar esta pregunta?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Texto</dt>
+        <dd>@Html.DisplayFor(model => model.Text)</dd>
+        <dt>Tipo de pregunta</dt>
+        <dd>@Html.DisplayFor(model => model.QuestionType.Description)</dd>
+        <dt>Siguiente pregunta</dt>
+        <dd>@Html.DisplayFor(model => model.NextQuestion.Text)</dd>
+
+        @if (Model.QuestionTypeId == 2)
+        {
+            <dt>Siguiente pregunta por negación</dt>
+            <dd>@Html.DisplayFor(model => model.NextQuestionNegative.Text)</dd>
+        }
+        <dt>Pregunta pivot</dt>
+        <dd>@(Model.IsPivot ? "Sí" : "No")</dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Volver", "Index")
+        </div>
+    }
+</div>

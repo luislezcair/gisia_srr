@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTeIC.Requerimientos.Web", "VTeIC.Requerimientos.Web\VTeIC.Requerimientos.Web.csproj", "{10895077-98FA-4719-A5E6-7660D5A5EA94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTeIC.Requerimientos.Entidades", "VTeIC.Requerimientos.Entidades\VTeIC.Requerimientos.Entidades.csproj", "{81DAF3D1-8CDE-4D6F-BAB9-6B80CA7C650A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10895077-98FA-4719-A5E6-7660D5A5EA94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10895077-98FA-4719-A5E6-7660D5A5EA94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10895077-98FA-4719-A5E6-7660D5A5EA94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10895077-98FA-4719-A5E6-7660D5A5EA94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DAF3D1-8CDE-4D6F-BAB9-6B80CA7C650A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DAF3D1-8CDE-4D6F-BAB9-6B80CA7C650A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DAF3D1-8CDE-4D6F-BAB9-6B80CA7C650A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DAF3D1-8CDE-4D6F-BAB9-6B80CA7C650A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
