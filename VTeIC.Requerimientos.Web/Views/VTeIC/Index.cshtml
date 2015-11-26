@@ -1,4 +1,5 @@
-﻿
+﻿@using VTeIC.Requerimientos.Entidades
+
 @{
     ViewBag.Title = "VTeIC";
 }
@@ -15,13 +16,34 @@
 
 <div id="bodyContainer" ng-app="WizardApp">
     <section id="content">
+        <form id="wizard-form" action="#">
         <div id="wizard" class="container" ng-controller="QuestionController" after-render>
             <h3 ng-repeat-start="q in questions">{{ q.title }}</h3>
             <section ng-repeat-end>
                 <div class="text-center col-md-12">
                     <p class="lead">{{ q.text }}</p>
                 </div>
+
+                <div ng-if="q.questionType == @((int) QuestionTypes.TEXT_FIELD)" id="textQuestion" class="col-md-12">
+                    <input type="text" class="form-control input-lg">
+                </div>
+
+                <div ng-if="q.questionType == @((int) QuestionTypes.BOOLEAN)" id="booleanQuestion" class="btn-group-vertical col-md-12" role="group">
+                    <button class="btn btn-default" value="1">SÍ</button>
+                    <button class="btn btn-default" value="0">NO</button>
+                </div>
+
+                <div ng-if="q.questionType == @((int) QuestionTypes.MULTIPLE_CHOICE)" id="choiceQuestion" class="btn-group-vertical col-md-12" role="group">
+                    <table>
+                        <tr ng-repeat="choice in q.choiceOptions">
+                            <td>
+                                <label><input type="checkbox" value="{{ choice.id }}"/>{{ choice.text }}</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </section>
         </div>
+        </form>
     </section>
 </div>

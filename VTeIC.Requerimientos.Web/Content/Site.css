@@ -44,3 +44,20 @@ input[type="checkbox"].input-validation-error {
 .srr {
     text-align: center;
 }
+
+#booleanQuestion button {
+    margin: auto;
+    width: 500px;
+}
+
+#textQuestion input[type="text"] {
+    margin: auto;
+}
+
+#choiceQuestion table {
+    margin: auto;
+}
+
+#choiceQuestion input {
+    margin-right: 10px;
+}

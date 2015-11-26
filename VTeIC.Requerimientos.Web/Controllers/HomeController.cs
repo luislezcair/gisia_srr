@@ -35,34 +35,34 @@ namespace VTeIC.Requerimientos.Web.Controllers
         [HttpPost]
         public ActionResult Check(AnswerViewModel answer)
         {
-            bool testBucle = false;
-            List<Answer> respuestas = new List<Answer>();
+            //bool testBucle = false;
+            var respuestas = new List<Answer>();
             Question nextQuestion = null;
 
             // Comprobar que QuestionId sea válido
-            Question question = db.Questions.Find(answer.QuestionId);
+            var question = db.Questions.Find(answer.QuestionId);
             if (question == null)
             {
                 throw new InvalidOperationException("ERROR: No se encuentra la pregunta actual");
             }
 
             //Evitar que cada pregunta tipo texto tenga mas de dos respuestas
-            Session session = db.Sessions.OrderByDescending(s => s.Id).First();
-            foreach (Answer respuesta in session.Answers)
-            {
-                if (question.QuestionType.Id == 1) 
-                {
-                    if (question.Id == respuesta.Question.Id)
-                    {
-                        bucle += 1;
-                        if (bucle > 2)
-                        {
-                            testBucle = true;
-                        }
+            //Session session = db.Sessions.OrderByDescending(s => s.Id).First();
+            //foreach (Answer respuesta in session.Answers)
+            //{
+            //    if (question.QuestionType.Id == 1) 
+            //    {
+            //        if (question.Id == respuesta.Question.Id)
+            //        {
+            //            bucle += 1;
+            //            if (bucle > 2)
+            //            {
+            //                testBucle = true;
+            //            }
                         
-                    }
-                }                
-            }
+            //        }
+            //    }                
+            //}
             
             SaveAnswer(question, answer);
 
@@ -119,9 +119,9 @@ namespace VTeIC.Requerimientos.Web.Controllers
          **/
         private void SaveAnswer(Question question, AnswerViewModel answer)
         {
-            Session session = db.Sessions.OrderByDescending(s => s.Id).First();
+            var session = db.Sessions.OrderByDescending(s => s.Id).First();
 
-            Answer dbAnswer = new Answer
+            var dbAnswer = new Answer
             {
                 Question = question,
                 AnswerType = question.QuestionType,
@@ -132,11 +132,10 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             session.Answers.Add(dbAnswer);
 
-            if (ModelState.IsValid)
-            {
-                db.Entry(session).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+            if (!ModelState.IsValid) return;
+
+            db.Entry(session).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
 
         /**

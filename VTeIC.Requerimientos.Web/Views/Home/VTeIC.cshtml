@@ -71,9 +71,9 @@
                             break;
                         case 3:
                             $("#tipo3").show();
-                            opciones = valor['opcionesPregunta'];
+                            var opciones = valor['opcionesPregunta'];
                             var table = document.getElementById("tablaCheck");
-                            for (i = 0; i < opciones.length; i++) {
+                            for (var i = 0; i < opciones.length; i++) {
                                 var row = table.insertRow(0);
                                 row.id = "Creada artificialmente";
                                 var cell1 = row.insertCell(0);
@@ -84,8 +84,8 @@
                                 checkbox.value = opciones[i]['Id'];
                                 checkbox.id = "election";
 
-                                var label = document.createElement('label')
-                                label.htmlFor = "id" + i;
+                                var label = document.createElement('label');
+                                label.htmlFor = "Id" + i;
 
                                 label.appendChild(document.createTextNode(opciones[i]['Text']));
 
@@ -108,7 +108,7 @@
     function searchKeyPress(e) {
         // look for window.event in case event isn't passed in
         e = e || window.event;
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             enviarRespuesta(1);
         }
     }
@@ -129,14 +129,14 @@
                 function (valor) {
                     var x = document.getElementById("claveTabla");
 
-                    for (i = 0; i < valor['respuesta'].length; i++){
+                    for (var i = 0; i < valor['respuesta'].length; i++) {
                         var row = x.insertRow(0);
                         row.id = "Creada artificialmente";
 
                         var cell1 = row.insertCell(0);
 
-                        var label = document.createElement('label')
-                        label.htmlFor = "id" + i;
+                        var label = document.createElement('label');
+                        label.htmlFor = "Id" + i;
                         label.appendChild(document.createTextNode(valor['respuesta'][i]));
 
                         cell1.appendChild(label);

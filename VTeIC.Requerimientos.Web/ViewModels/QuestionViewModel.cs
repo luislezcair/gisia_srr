@@ -10,22 +10,24 @@ namespace VTeIC.Requerimientos.Web.ViewModels
     {
         public QuestionViewModel(Question question)
         {
-            id = question.Id;
-            text = question.Text;
-            questionType = question.QuestionType.Type;
-            title = question.Title;
+            Id = question.Id;
+            Text = question.Text;
+            QuestionType = question.QuestionType.Type;
+            Title = question.Title;
+            IsPivot = question.IsPivot;
 
-            choiceOptions = new List<QuestionChoiceViewModel>();
+            ChoiceOptions = new List<QuestionChoiceViewModel>();
             foreach (var choice in question.ChoiceOptions)
             {
-                choiceOptions.Add(new QuestionChoiceViewModel(choice));
+                ChoiceOptions.Add(new QuestionChoiceViewModel(choice));
             }
         }
 
-        public int id { get; set; }
-        public string text { get; set; }
-        public QuestionTypes questionType { get; set; }
-        public List<QuestionChoiceViewModel> choiceOptions { get; set; }
-        public string title { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public QuestionTypes QuestionType { get; set; }
+        public List<QuestionChoiceViewModel> ChoiceOptions { get; set; }
+        public string Title { get; set; }
+        public bool IsPivot { get; set; }
     }
 }
