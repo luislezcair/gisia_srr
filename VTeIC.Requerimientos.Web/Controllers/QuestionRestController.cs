@@ -29,7 +29,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             return questionViews;
         }
-
+/*
         [Route("api/QuestionRest/first")]
         [ResponseType(typeof(QuestionViewModel))]
         public IHttpActionResult GetFirstQuestion()
@@ -51,7 +51,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             return questionLinkViews;
         }
-
+*/
         // GET: api/QuestionRest/5
         [ResponseType(typeof(Question))]
         public IHttpActionResult GetQuestion(int id)
