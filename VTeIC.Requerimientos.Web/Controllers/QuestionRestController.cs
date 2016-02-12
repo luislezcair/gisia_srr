@@ -29,7 +29,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             return questionViews;
         }
-
+/*
         [Route("api/QuestionRest/first")]
         [ResponseType(typeof(QuestionViewModel))]
         public IHttpActionResult GetFirstQuestion()
@@ -37,6 +37,21 @@ namespace VTeIC.Requerimientos.Web.Controllers
             return Ok(new QuestionViewModel(_manager.FirstQuestion()));
         }
 
+        [Route("api/QuestionRest/links")]
+        public IEnumerable<QuestionLinkViewModel> GetLinks()
+        {
+            var questionLinkViews = new List<QuestionLinkViewModel>();
+            //var questionLinks = _db.Set<QuestionLink>();
+            var questionLinks = _db.QuestionLinks.ToList();
+
+            foreach (var questionLink in questionLinks)
+            {
+                questionLinkViews.Add(new QuestionLinkViewModel(questionLink));
+            }
+
+            return questionLinkViews;
+        }
+*/
         // GET: api/QuestionRest/5
         [ResponseType(typeof(Question))]
         public IHttpActionResult GetQuestion(int id)

@@ -51,5 +51,13 @@ namespace VTeIC.Requerimientos.Web.Models
 
             return questions;
         }
+
+        /**
+         * Busca la pregunta siguiente a _current_
+         */
+        public Question GetNextQuestion(Question q)
+        {
+            return null;
+        }
     }
 }

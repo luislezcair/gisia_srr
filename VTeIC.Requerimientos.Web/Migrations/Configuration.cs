@@ -45,10 +45,10 @@ namespace VTeIC.Requerimientos.Web.Migrations
         {
             context.Database.ExecuteSqlCommand("DELETE FROM MultipleChoiceAnswers");
             context.Database.ExecuteSqlCommand("DELETE FROM Answers");
-            //context.Database.ExecuteSqlCommand("DELETE FROM QuestionRelationshipOperators");
-            //context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
-            //context.Database.ExecuteSqlCommand("DELETE FROM QuestionTypes");
-            //context.Database.ExecuteSqlCommand("DELETE FROM Questions");
+            context.Database.ExecuteSqlCommand("DELETE FROM QuestionRelationshipOperators");
+            context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
+            context.Database.ExecuteSqlCommand("DELETE FROM QuestionTypes");
+            context.Database.ExecuteSqlCommand("DELETE FROM Questions");
             context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
 
             QuestionType textField = new QuestionType { Description = "Campo de texto", Type = QuestionTypes.TEXT_FIELD };
@@ -134,6 +134,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 IsPivot = false,
                 Weight = 1000,
                 Title = "Acción",
+                HasManyAnswers = false,
                 ChoiceOptions = { actionBuy, actionSell, actionHire, actionKnow }
             };
 
@@ -143,6 +144,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = textField,
                 IsPivot = false,
                 Weight = 0,
+                HasManyAnswers = false,
                 Title = "Datos adicionales sobre la fuente"
             };
 
@@ -153,6 +155,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 IsPivot = false,
                 Weight = 0,
                 Title = "Fuentes de información",
+                HasManyAnswers = false,
                 ChoiceOptions = { sourcePaper, sourcePatents, sourceOthers, sourceDocuments }
             };
 
@@ -162,7 +165,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = textField,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Características"
+                Title = "Características",
+                HasManyAnswers = true
             };
 
             Question anotherFeatureQ = new Question
@@ -171,7 +175,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = booleanQuestion,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Características"
+                Title = "Características",
+                HasManyAnswers = false,
             };
 
             Question particularFeatureQ = new Question
@@ -180,7 +185,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = booleanQuestion,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Características"
+                Title = "Características",
+                HasManyAnswers = false
             };
 
             Question subjectQ = new Question
@@ -189,7 +195,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = textField,
                 IsPivot = true,
                 Weight = 0,
-                Title = "Tema"
+                Title = "Tema",
+                HasManyAnswers = false
             };
 
             Question regionQ = new Question
@@ -198,7 +205,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 QuestionType = textField,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Región o país"
+                Title = "Región o país",
+                HasManyAnswers = false
             };
 
             context.Questions.AddOrUpdate(
