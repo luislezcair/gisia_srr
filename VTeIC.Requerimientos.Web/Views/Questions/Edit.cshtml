@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.QuestionTypeId, "Tipo de pregunta", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("QuestionTypeId", null, new { @onchange = "nq=$('#nq'); if(this.value == 2) nq.show(); else nq.hide();" })
@@ -46,7 +46,7 @@
                 @Html.DropDownList("NextQuestionNegativeId", String.Empty)
                 @Html.ValidationMessageFor(model => model.NextQuestionNegativeId)
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.IsPivot, "¿Pregunta pivot?", htmlAttributes: new { @class = "control-label col-md-2" })

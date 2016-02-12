@@ -15,13 +15,13 @@
         <dt>Tipo de pregunta</dt>
         <dd>@Html.DisplayFor(model => model.QuestionType.Description)</dd>
         <dt>Siguiente pregunta</dt>
-        <dd>@Html.DisplayFor(model => model.NextQuestion.Text)</dd>
+        <@*dd>@Html.DisplayFor(model => model.NextQuestion.Text)</dd>*@
 
-        @if (Model.QuestionTypeId == 2)
+        @*@if (Model.QuestionTypeId == 2)
         {
             <dt>Siguiente pregunta por negación</dt>
             <dd>@Html.DisplayFor(model => model.NextQuestionNegative.Text)</dd>
-        }
+        }*@
         <dt>Pregunta pivot</dt>
         <dd>@(Model.IsPivot ? "Sí" : "No")</dd>
     </dl>

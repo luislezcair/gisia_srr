@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
+    [Authorize]
     public class VTeICController : Controller
     {
         // GET: VTeIC

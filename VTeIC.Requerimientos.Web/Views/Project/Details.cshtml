@@ -1,0 +1,49 @@
+﻿@model VTeIC.Requerimientos.Entidades.Project
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h4>Proyecto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Directorio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Directorio)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>*@
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edicion", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Volver al Listado", "Index")
+</p>

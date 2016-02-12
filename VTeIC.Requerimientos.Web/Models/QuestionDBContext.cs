@@ -14,6 +14,8 @@ namespace VTeIC.Requerimientos.Web.Models
         public DbSet<QuestionRelationshipOperator> Operators { get; set; }
         public DbSet<QuestionLink> QuestionLinks { get; set; }
 
+        public DbSet<Project> Projects { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Question>()

@@ -32,7 +32,8 @@ namespace VTeIC.Requerimientos.Web.Models
             {
                 return HttpNotFound();
             }
-            return View(choiceOption);
+            return HttpNotFound();
+            //return View();
         }
 
         // GET: QuestionChoice/Create
