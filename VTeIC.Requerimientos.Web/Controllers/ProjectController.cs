@@ -58,19 +58,22 @@ namespace VTeIC.Requerimientos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Directorio = project.Nombre.Replace(" ","");
+
                 string path1 = VTeIC.Requerimientos.Web.Properties.Settings.Default.PathDeDirectorios;
 
-                bool exists = System.IO.Directory.Exists(path1 + "\\" + project.Directorio);
-
+                string userName = User.Identity.GetUserName();
+                //me fijo si esta la carpeta de usuario
+                bool exists = System.IO.Directory.Exists(path1 + "\\" + userName);
                 if (!exists)
-                    System.IO.Directory.CreateDirectory(path1 + "\\" + project.Directorio);
-
-                //bool exists = System.IO.Directory.Exists(Server.MapPath("\\Images\\" + project.Directorio));
-
-                //if (!exists)
-                //    System.IO.Directory.CreateDirectory(Server.MapPath("\\Images\\" + project.Directorio));
+                    System.IO.Directory.CreateDirectory(path1 + "\\" + userName);
+                //me fijo si esta la carpeta de proyecto
+                exists = System.IO.Directory.Exists(path1 + "\\" + userName + "\\" + project.Directorio);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(path1 + "\\" + userName + "\\" + project.Directorio);
                 
                 project.Activo = true;
+                
                 db.Projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");
