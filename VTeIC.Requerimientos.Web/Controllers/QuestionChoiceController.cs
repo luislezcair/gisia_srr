@@ -7,6 +7,7 @@ using VTeIC.Requerimientos.Web.ViewModels;
 
 namespace VTeIC.Requerimientos.Web.Models
 {
+    [Authorize]
     public class QuestionChoiceController : Controller
     {
         private QuestionDBContext db = new QuestionDBContext();

@@ -10,6 +10,7 @@ using VTeIC.Requerimientos.Web.ViewModels;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private QuestionDBContext db = new QuestionDBContext();
