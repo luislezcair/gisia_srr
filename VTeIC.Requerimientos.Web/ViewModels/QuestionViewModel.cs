@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using VTeIC.Requerimientos.Entidades;
+using VTeIC.Requerimientos.Web.Controllers;
 using VTeIC.Requerimientos.Web.Models;
 
 namespace VTeIC.Requerimientos.Web.ViewModels

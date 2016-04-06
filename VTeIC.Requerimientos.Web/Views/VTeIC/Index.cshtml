@@ -1,4 +1,5 @@
 ﻿@using VTeIC.Requerimientos.Entidades
+@model IEnumerable<Question>
 
 @{
     ViewBag.Title = "VTeIC";
@@ -6,19 +7,207 @@
 
 @Styles.Render("~/Content/jquery.steps")
 
-@section scripts {
-    @Scripts.Render("~/Scripts/jquery.steps.js")
-    @Scripts.Render("~/Scripts/jquery.validate.min.js")
-    @Scripts.Render("~/Scripts/app/wizard.js")
-}
-
 <h2 class="srr">Sistema de Recopilación de Requerimientos</h2>
 
-<div id="bodyContainer" ng-app="WizardApp">
-    <section id="content">
-        <form>
-            <div id="wizard" class="container">
-            </div>
-        </form>
-    </section>
-</div>
+<form>
+    <div id="wizard" class="wizard clearfix vertical">
+        <div class="steps clearfix">
+            <ul role="tablist">
+                @{ int index = 0; }
+                @foreach (var question in Model)
+                {
+                    bool first = question.Equals(Model.First());
+                    <li role="tab" data-question="@(question.Id)" class="@( first ? "first current" : "disabled" )" aria-disabled="false" aria-selected="true">
+                        <a href="#" data-question="@(question.Id)">
+                            <span class="number">@(++index). </span>@question.Title
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="content clearfix">
+            @foreach(var question in Model)
+            {
+                bool first = question.Equals(Model.First());
+                
+                <section role="tabpanel" data-question="@(question.Id)" class="body current @(first ? "" : "hidden")" aria-hidden="false">
+                    <div class="text-center col-md-12">
+                        <p id="question-text-q@(question.Id)" class="lead">@(question.Text)</p>
+                        <div class="answer-field">
+                            @if(question.QuestionType.Type == QuestionTypes.TEXT_FIELD)
+                            {
+                                <input type="text" class="form-control input-lg" id="text-q-@(question.Id)">
+                            }
+                            else if (question.QuestionType.Type == QuestionTypes.BOOLEAN)
+                            {
+                                <button type="button" class="btn btn-sm btn-primary btn-answer-yes">Sí</button>
+                                <button type="button" class="btn btn-sm btn-primary btn-answer-no">No</button>
+                            }
+                            else
+                            {
+                                foreach (var choice in question.ChoiceOptions)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-offset-5 col-sm-7 choice-list">
+                                            <input type="checkbox" value="@(choice.Id)" data-question="@(question.Id)" id="choice-q@(question.Id)-@(choice.Id)" />
+                                            <label for="choice-q@(question.Id)-@(choice.Id)">@choice.Text</label>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </section>
+            }
+            <section role="tabpanel" class="body current" id="search-keys" style="display: none">
+                <div class="row">
+                    <div class="col-sm-12 align-left">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="actions clearfix">
+            <ul role="menu" aria-label="Pagination">
+                <li class="disabled" aria-disabled="true">
+                    <a id="btn-previous" href="#" role="menuitem">Anterior</a>
+                </li>
+                <li aria-hidden="false" aria-disabled="false">
+                    <a id="btn-next" href="#" role="menuitem">Siguiente</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</form>
+
+@section scripts {
+<script>
+    var QuestionType = { Text: @((int)QuestionTypes.TEXT_FIELD), Boolean: @((int)QuestionTypes.BOOLEAN), MultipleChoice: @((int)QuestionTypes.MULTIPLE_CHOICE) };
+    var CurrentQuestion = {
+        Id: @(Model.First().Id),
+        Type: @((int)Model.First().QuestionType.Type)
+        }
+    var BooleanAnswer = null;
+
+    $('.btn-answer-yes').click(function() {
+        BooleanAnswer = true;
+        $('#btn-next').click();
+    });
+
+    $('.btn-answer-no').click(function() {
+        BooleanAnswer = false;
+        $('#btn-next').click();
+    });
+
+    $('#btn-next').click(function () {
+        var answer = {
+            QuestionId: CurrentQuestion.Id,
+            TextAnswer: '',
+            BooleanAnswer: null,
+            OptionsAnswer: []
+        }
+
+        fill_answer(answer);
+
+        $.ajax({
+            url: '/VTeIC/PostAnswer',
+            data: JSON.stringify(answer),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: true,
+            type: 'POST',
+            success: function(response) {
+                // Si fue la última pregunta, solicitamos las claves de búsqueda
+                if(response.Finished) {
+                    $.post('/VTeIC/SearchKey', null, function(response) {
+                        find_question_section(CurrentQuestion.Id).hide();
+                        show_search_keys(response.searchKeys);
+                    });
+                    return;
+                }
+
+                if(response.LastQuestion) {
+                    $('#btn-next').text('Finalizar');
+                }
+
+                var nextQuestion = response.Question;
+                switch_question(nextQuestion.Id);
+
+                CurrentQuestion.Id = nextQuestion.Id;
+                CurrentQuestion.Type = nextQuestion.QuestionType;
+
+                // Actualiza el texto de la pregunta por si es pivot
+                $('#question-text-q' + nextQuestion.Id).html(nextQuestion.Text);
+            }
+        });
+    });
+
+    /**
+    * Obtiene la respuesta de los campos correspondientes de acuerdo al tipo de pregunta
+    **/
+    function fill_answer(answer) {
+        if(CurrentQuestion.Type == QuestionType.Text) {
+            answer.TextAnswer = $('#text-q-' + CurrentQuestion.Id).val();
+        } else if(CurrentQuestion.Type == QuestionType.Boolean) {
+            answer.BooleanAnswer = BooleanAnswer;
+        } else {
+            answer.OptionsAnswer = get_choices();
+        }
+    }
+
+    /**
+    * Oculta la pregunta anterior y muestra la próxima
+    **/
+    function switch_question(next_question) {
+        var currentTab = find_question_tab(CurrentQuestion.Id);
+        var currentSection = find_question_section(CurrentQuestion.Id);
+
+        var nextTab = find_question_tab(next_question);
+        var nextSection = find_question_section(next_question);
+
+        currentTab.removeClass('current')
+                  .addClass('done');
+
+        nextTab.addClass('current')
+               .removeClass('disabled')
+               .removeClass('done');
+
+        currentSection.hide();
+        nextSection.removeClass('hidden').show();
+
+        // Si la pregunta ya fue respondida limpia los campos de respuesta
+        nextSection.find('input[type=text]').val('');
+        nextSection.find('input[type=checkbox]').prop('checked', false);
+    }
+
+    // Obtiene el tab correspondiente a la pregunta q
+    function find_question_tab(q) {
+        return $("li[data-question=" + q + "]");
+    }
+
+    // Obtiene la section correspondiente a la pregunta q
+    function find_question_section(q) {
+        return $("section[data-question=" + q + "]");
+    }
+
+    // Devuelve un arreglo con los valores de los checkboxes seleccionados como respuesta
+    function get_choices() {
+        var options = $('input[data-question=' + CurrentQuestion.Id + ']:checked');
+        return $.map(options, function(v) {
+            return Number($(v).val());
+        });
+    }
+
+    // Muestra las claves de búsqueda devueltas
+    function show_search_keys(search_keys) {
+        var section = $('#search-keys');
+        section.html("");
+        
+        for(i = 0; i < search_keys.length; i++) {
+            section.append("<p>" + search_keys[i] + "</p>");
+        }
+
+        section.show();
+    }
+</script>
+}

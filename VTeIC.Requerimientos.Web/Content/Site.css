@@ -61,3 +61,15 @@ input[type="checkbox"].input-validation-error {
 #choiceQuestion input {
     margin-right: 10px;
 }
+
+.answer-field .form-control {
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.choice-list {
+    text-align: left;
+}

@@ -35,14 +35,14 @@ namespace VTeIC.Requerimientos.Web.SerachKey
         {
             // Ordena las respuestas por peso y omite las respuestas booleanas, las respuestas vacías
             // y las respuestas de opciones múltiples sin opciones últiles seleccionadas
-            IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType.Id != 2)
-                                                                .Where(a => !(a.AnswerType.Id == 1 && a.TextAnswer == null))
-                                                                .Where(a => !(a.AnswerType.Id == 3 && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
+            IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType.Type != QuestionTypes.BOOLEAN)
+                                                                .Where(a => !(a.AnswerType.Type == QuestionTypes.TEXT_FIELD && a.TextAnswer == null))
+                                                                .Where(a => !(a.AnswerType.Type == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
                                                                 .OrderBy(a => a.Question.Weight);
 
             Node rootNode = BuildSearchKeyTree(weightedAnswers);
 
-            Tree.Tree.Traverse(rootNode);
+            //Tree.Tree.Traverse(rootNode);
 
             SearchKeyGenericStrategy strategy = new SearchKeyGenericStrategy();
             List<string> genericSearchKey = strategy.BuildSearchKey(rootNode);
@@ -64,7 +64,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             foreach (Answer answer in answers)
             {
                 // Pregunta con varias opciones: OR entre las opciones seleccionadas.
-                if(answer.AnswerType.Id == 3)
+                if(answer.AnswerType.Type == QuestionTypes.MULTIPLE_CHOICE)
                 {
                     var options = answer.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null);
 
@@ -88,13 +88,14 @@ namespace VTeIC.Requerimientos.Web.SerachKey
                 {
                     if (previousAnswer != null) 
                     {
-                        QuestionRelationshipOperator op = db.Operators.Where(o => (o.First.Id == previousAnswer.Question.Id && o.Second.Id == answer.Question.Id) ||
-                                                                                   o.First.Id == answer.Question.Id && o.Second.Id == previousAnswer.Question.Id)
-                                                                      .First();
+                        QuestionRelationshipOperator db_op = db.Operators.Where(o => (o.First.Id == previousAnswer.Question.Id && o.Second.Id == answer.Question.Id) ||
+                                                                                      o.First.Id == answer.Question.Id && o.Second.Id == previousAnswer.Question.Id)
+                                                                         .FirstOrDefault();
+                        QuestionOperator op = db_op != null ? db_op.Operator : QuestionOperator.AND;
 
-                        if (op.Operator != currentNode.GetQuestionOperator())
+                        if (op != currentNode.GetQuestionOperator())
                         {
-                            currentNode = OperatorNode.CreateFromOperator(op.Operator);
+                            currentNode = OperatorNode.CreateFromOperator(op);
                             root.Children.Add(currentNode);
                         }                        
                     }
