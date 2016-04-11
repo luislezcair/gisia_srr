@@ -23,12 +23,11 @@ namespace VTeIC.Requerimientos.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery.steps").Include(
-                "~/Scripts/jquery.steps.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css").Include(
+                      "~/Content/css/font-awesome.css", new CssRewriteUrlTransform())
+                      );
 
             bundles.Add(new StyleBundle("~/Content/jquery.steps").Include(
                 "~/Content/jquery.steps.css"));

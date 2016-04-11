@@ -9,6 +9,7 @@ using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
 using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
+using VTeIC.Requerimientos.Web.Views.WebService;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -72,7 +73,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             QuestionLink qln = _db.QuestionLinks.FirstOrDefault(a => a.Question.Id == next.Id);
             QuestionViewModel qvm = new QuestionViewModel(next);
 
-            qvm.Text = qvm.Text.Replace("[previous_answer]", Session["pivot"].ToString());
+            qvm.Text = qvm.Text.Replace("[previous_answer]", "<em>" + Session["pivot"].ToString() + "</em>");
 
             return Json(new
             {
@@ -130,9 +131,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
             Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
             SearchKeyGenerator generator = new SearchKeyGenerator();
 
+            var searchKeys = generator.BuildSearchKey(session.Answers);
+
+            GisiaClient webservice = new GisiaClient();
+            webservice.SendKeys(searchKeys);
+
             return Json(new
             {
-                searchKeys = generator.BuildSearchKey(session.Answers)
+                searchKeys = searchKeys
             });
         }
     }

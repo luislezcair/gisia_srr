@@ -142,7 +142,7 @@
     background: #eee;
     display: block;
     margin: 0.5em;
-    min-height: 35em;
+    min-height: 20em;
     overflow: hidden;
     position: relative;
     width: auto;
@@ -230,7 +230,7 @@
     display: inline;
     float: right;
     margin: 0 2.5%;
-    width: 95%;
+    width: 65%;
 }
 
 .wizard > .actions > ul
@@ -255,8 +255,8 @@
 {
     background: #2184be;
     color: #fff;
-    display: block;
-    padding: 0.5em 1em;
+    /*display: block;
+    padding: 0.5em 1em;*/
     text-decoration: none;
 
     -webkit-border-radius: 5px;

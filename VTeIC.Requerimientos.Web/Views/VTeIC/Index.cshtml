@@ -25,7 +25,7 @@
                 }
             </ul>
         </div>
-        <div class="content clearfix">
+        <div class="content clearfix well">
             @foreach(var question in Model)
             {
                 bool first = question.Equals(Model.First());
@@ -36,12 +36,12 @@
                         <div class="answer-field">
                             @if(question.QuestionType.Type == QuestionTypes.TEXT_FIELD)
                             {
-                                <input type="text" class="form-control input-lg" id="text-q-@(question.Id)">
+                                <input type="text" class="form-control input-lg" id="text-q-@(question.Id)" @(question.IsPivot ? "required" : "") autocomplete="off" autofocus>
                             }
                             else if (question.QuestionType.Type == QuestionTypes.BOOLEAN)
                             {
-                                <button type="button" class="btn btn-sm btn-primary btn-answer-yes">Sí</button>
-                                <button type="button" class="btn btn-sm btn-primary btn-answer-no">No</button>
+                                <button type="button" class="btn btn-primary btn-answer-yes">Sí</button>
+                                <button type="button" class="btn btn-primary btn-answer-no">No</button>
                             }
                             else
                             {
@@ -67,15 +67,10 @@
             </section>
         </div>
 
-        <div class="actions clearfix">
-            <ul role="menu" aria-label="Pagination">
-                <li class="disabled" aria-disabled="true">
-                    <a id="btn-previous" href="#" role="menuitem">Anterior</a>
-                </li>
-                <li aria-hidden="false" aria-disabled="false">
-                    <a id="btn-next" href="#" role="menuitem">Siguiente</a>
-                </li>
-            </ul>
+        <div class="actions clearfix well">
+            <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
+            <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
+            <a type="button" id="btn-back" class="btn btn-primary" href="" style="display: none">Volver</a>
         </div>
     </div>
 </form>
@@ -91,15 +86,16 @@
 
     $('.btn-answer-yes').click(function() {
         BooleanAnswer = true;
-        $('#btn-next').click();
+        $('#btn-next').prop('disabled', false).click();
     });
 
     $('.btn-answer-no').click(function() {
         BooleanAnswer = false;
-        $('#btn-next').click();
+        $('#btn-next').prop('disabled', false).click();
     });
 
-    $('#btn-next').click(function () {
+    // Click en Next o Finish
+    $('form').submit(function(event) { 
         var answer = {
             QuestionId: CurrentQuestion.Id,
             TextAnswer: '',
@@ -122,6 +118,9 @@
                     $.post('/VTeIC/SearchKey', null, function(response) {
                         find_question_section(CurrentQuestion.Id).hide();
                         show_search_keys(response.searchKeys);
+
+                        $('#btn-next').hide();
+                        $('#btn-back').show();
                     });
                     return;
                 }
@@ -136,10 +135,15 @@
                 CurrentQuestion.Id = nextQuestion.Id;
                 CurrentQuestion.Type = nextQuestion.QuestionType;
 
+                if(CurrentQuestion.Type == QuestionType.Boolean) {
+                    $('#btn-next').prop('disabled', true);
+                }
+
                 // Actualiza el texto de la pregunta por si es pivot
                 $('#question-text-q' + nextQuestion.Id).html(nextQuestion.Text);
             }
         });
+        event.preventDefault();
     });
 
     /**
@@ -176,7 +180,7 @@
         nextSection.removeClass('hidden').show();
 
         // Si la pregunta ya fue respondida limpia los campos de respuesta
-        nextSection.find('input[type=text]').val('');
+        nextSection.find('input[type=text]').val('').focus();
         nextSection.find('input[type=checkbox]').prop('checked', false);
     }
 

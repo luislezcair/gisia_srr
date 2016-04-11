@@ -73,3 +73,12 @@ input[type="checkbox"].input-validation-error {
 .choice-list {
     text-align: left;
 }
+
+.choice-list input[type=checkbox] {
+    height: 20px;
+    width: 20px;
+}
+
+.choice-list label {
+    vertical-align: super;
+}
