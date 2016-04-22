@@ -80,8 +80,7 @@
     var QuestionType = { Text: @((int)QuestionTypes.TEXT_FIELD), Boolean: @((int)QuestionTypes.BOOLEAN), MultipleChoice: @((int)QuestionTypes.MULTIPLE_CHOICE) };
     var CurrentQuestion = {
         Id: @(Model.First().Id),
-        Type: @((int)Model.First().QuestionType.Type)
-        }
+        Type: @((int)Model.First().QuestionType.Type) };
     var BooleanAnswer = null;
 
     $('.btn-answer-yes').click(function() {

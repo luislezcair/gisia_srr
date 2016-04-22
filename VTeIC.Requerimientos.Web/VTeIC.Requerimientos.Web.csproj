@@ -221,8 +221,9 @@
     <Compile Include="ViewModels\QuestionChoiceViewModel.cs" />
     <Compile Include="ViewModels\QuestionLinkViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
-    <Compile Include="Views\WebService\GisiaClient.cs" />
-    <Compile Include="Views\WebService\RequestObject.cs" />
+    <Compile Include="WebService\GisiaClient.cs" />
+    <Compile Include="WebService\RequestObject.cs" />
+    <Compile Include="WebService\URLMerger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -306,6 +307,7 @@
     <Content Include="Views\Project\Details.cshtml" />
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\Work.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

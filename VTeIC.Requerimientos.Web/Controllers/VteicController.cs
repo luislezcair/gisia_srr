@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
 using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
-using VTeIC.Requerimientos.Web.Views.WebService;
+using VTeIC.Requerimientos.Web.WebService;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -60,7 +57,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             Question next;
 
             // Determina la próxima pregunta de acuerdo a la respuesta Sí / No
-            if (q.QuestionType.Type == QuestionTypes.BOOLEAN && !answer.BooleanAnswer.Value)
+            if (q.QuestionType.Type == QuestionTypes.BOOLEAN && answer.BooleanAnswer != null && !answer.BooleanAnswer.Value)
             {
                 next = ql.NextNegative; 
             }
@@ -73,7 +70,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             QuestionLink qln = _db.QuestionLinks.FirstOrDefault(a => a.Question.Id == next.Id);
             QuestionViewModel qvm = new QuestionViewModel(next);
 
-            qvm.Text = qvm.Text.Replace("[previous_answer]", "<em>" + Session["pivot"].ToString() + "</em>");
+            qvm.Text = qvm.Text.Replace("[previous_answer]", "<em>" + Session["pivot"] + "</em>");
 
             return Json(new
             {
@@ -96,7 +93,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 AnswerType = question.QuestionType,
                 TextAnswer = answer.TextAnswer,
                 BooleanAnswer = answer.BooleanAnswer,
-                MultipleChoiceAnswer = GetDBChoices(answer.OptionsAnswer)
+                MultipleChoiceAnswer = GetDbChoices(answer.OptionsAnswer)
             };
 
             session.Answers.Add(dbAnswer);
@@ -110,16 +107,13 @@ namespace VTeIC.Requerimientos.Web.Controllers
         /**
          * Transforma la lista de enteros con IDs de opciones en una lista de ChoiceOptions
          **/
-        private List<ChoiceOption> GetDBChoices(List<int> ids)
+        private List<ChoiceOption> GetDbChoices(List<int> ids)
         {
-            List<ChoiceOption> options = new List<ChoiceOption>();
+            var options = new List<ChoiceOption>();
 
             if (ids != null)
             {
-                foreach (int id in ids)
-                {
-                    options.Add(_db.QuestionChoices.Find(id));
-                }
+                options.AddRange(ids.Select(id => _db.QuestionChoices.Find(id)));
             }
 
             return options;

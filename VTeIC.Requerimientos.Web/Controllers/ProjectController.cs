@@ -139,6 +139,23 @@ namespace VTeIC.Requerimientos.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Work(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Project project = db.Projects.Find(id);
+
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(project);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
