@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace VTeIC.Requerimientos.Web.WebService
 {
@@ -30,6 +31,11 @@ namespace VTeIC.Requerimientos.Web.WebService
     {
         public string buscador { get; set; }
         public IEnumerable<Url> urls { get; set; }
+
+        public List<string> GetUrlsAsStringList()
+        {
+            return (from u in urls select u.url).ToList();
+        }
 
     }
 

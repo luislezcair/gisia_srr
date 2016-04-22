@@ -224,6 +224,7 @@
     <Compile Include="WebService\GisiaClient.cs" />
     <Compile Include="WebService\RequestObject.cs" />
     <Compile Include="WebService\URLMerger.cs" />
+    <Compile Include="WebService\WeightedURL.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
