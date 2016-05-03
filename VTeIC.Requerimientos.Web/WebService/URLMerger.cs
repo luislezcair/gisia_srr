@@ -7,7 +7,8 @@ namespace VTeIC.Requerimientos.Web.WebService
 {
     public class UrlMerger
     {
-        public static List<WeightedURL> Procesar(IEnumerable<SearchEngineResult> buscadores)
+        //public static List<WeightedURL> Procesar(IEnumerable<SearchEngineResult> buscadores)
+        public static IOrderedEnumerable<WeightedURL> Procesar(IEnumerable<SearchEngineResult> buscadores)
         {
             var searchEngineList = buscadores.ToList();
             var distinctUrls = (from resultado in searchEngineList from url in resultado.urls select url.url).Distinct().ToList();
@@ -36,7 +37,8 @@ namespace VTeIC.Requerimientos.Web.WebService
             // TODO: Falta considerar el contenido de la clave de búsqueda para ponderar las URLs
 
             // Devolver la lista de URLs y sus pesos ordenados de forma descendente
-            return weightedUrls.OrderByDescending(v => v.Weight).ToList();
+            //return weightedUrls.OrderByDescending(v => v.Weight).ToList();
+            return weightedUrls.OrderByDescending(v => v.Weight);
         }
     }
 }

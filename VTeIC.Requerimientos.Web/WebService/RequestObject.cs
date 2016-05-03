@@ -16,7 +16,7 @@ namespace VTeIC.Requerimientos.Web.WebService
         public string clave { get; set; }
     }
 
-    public class ResponseObject
+    public class WsOkResponse
     {
         public string status { get; set; }
     }
@@ -42,5 +42,18 @@ namespace VTeIC.Requerimientos.Web.WebService
     public class Url
     {
         public string url { get; set; }
+    }
+
+    public class WsFilteredUrl
+    {
+        public int orden { get; set; }
+        public string url { get; set; }
+    }
+
+    public class WSFilteredUrlsRequest
+    {
+        public int id_proyecto { get; set; }
+        public string nombre_directorio { get; set; }
+        public List<WsFilteredUrl> urls { get; set; }
     }
 }

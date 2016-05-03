@@ -194,7 +194,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 Text = "Introduzca el tema",
                 QuestionType = textField,
                 IsPivot = true,
-                Weight = 0,
+                Weight = 999,
                 Title = "Tema",
                 HasManyAnswers = false
             };

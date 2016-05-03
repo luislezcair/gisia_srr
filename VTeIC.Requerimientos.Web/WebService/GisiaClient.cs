@@ -39,6 +39,33 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
+        public void SendMergedUrls(List<WsFilteredUrl> urls)
+        {
+            var request = new WSFilteredUrlsRequest
+            {
+                id_proyecto = 1,
+                nombre_directorio = "proyecto_1",
+                urls = urls
+            };
+
+            var client = new HttpClient { BaseAddress = new Uri(Url) };
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // Esta llamada se bloquea hasta obtener la respuesta
+            HttpResponseMessage response = client.PostAsJsonAsync("wsfilteredurlsrequests/", request).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsAsync<WsOkResponse>().Result;
+                Debug.WriteLine("Status = {0}", data.status);
+            }
+            else
+            {
+                Debug.WriteLine((int)response.StatusCode, response.ReasonPhrase);
+            }
+        }
+
         private void ProcessResponse(WSResponse response)
         {
             var result = UrlMerger.Procesar(response.buscadores);
@@ -48,6 +75,21 @@ namespace VTeIC.Requerimientos.Web.WebService
             {
                 Debug.WriteLine("URL = {0}, Value = {1}", url.Url, url.Weight);
             }
+
+            // Pasar la lista ordenada de URLs por peso a la lista en formato esperado por el WS
+            var wsFilteredUrlList = new List<WsFilteredUrl>();
+            for (int i = 0; i < result.Count(); i++)
+            {
+                wsFilteredUrlList.Add(new WsFilteredUrl {orden = i + 1, url = result.ElementAt(i).Url});
+            }
+
+            Debug.WriteLine("------------- ORDENADAS ---------------");
+            foreach (var wsFilteredUrl in wsFilteredUrlList)
+            {
+                Debug.WriteLine("Orden = {0}, URL = {1}", wsFilteredUrl.orden, wsFilteredUrl.url);
+            }
+
+            SendMergedUrls(wsFilteredUrlList);
         }
     }
 }
