@@ -1,0 +1,15 @@
+﻿@using VTeIC.Requerimientos.Entidades
+@model VTeIC.Requerimientos.Entidades.DisplayFile
+
+@{
+    ViewBag.Title = "Archivos";
+}
+
+<h2>Archivos</h2>
+
+<ul>
+    @foreach (DownloadableFile file in Model.FileList)
+    {
+        <li><a target="_blank" href="@file.Path">@file.FileName</a></li>
+    }
+</ul>

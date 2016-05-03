@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Answer.cs" />
     <Compile Include="ChoiceOption.cs" />
+    <Compile Include="DisplayFile.cs" />
+    <Compile Include="DownloadableFile.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />

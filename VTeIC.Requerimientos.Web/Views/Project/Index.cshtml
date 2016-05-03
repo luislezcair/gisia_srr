@@ -43,7 +43,8 @@
         <td>
             @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Borrar", "Delete", new { id=item.Id })
+            @Html.ActionLink("Borrar", "Delete", new { id=item.Id }) |
+            @Html.ActionLink("Ver Archivos", "Index","DisplayFile", new { directorio = item.Directorio },null)
         </td>
     </tr>
 }
