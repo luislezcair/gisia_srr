@@ -232,7 +232,7 @@
     <Compile Include="ViewModels\QuestionLinkViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
     <Compile Include="WebService\GisiaClient.cs" />
-    <Compile Include="WebService\RequestObject.cs" />
+    <Compile Include="WebService\WsRequest.cs" />
     <Compile Include="WebService\URLMerger.cs" />
     <Compile Include="WebService\WeightedURL.cs" />
   </ItemGroup>
@@ -323,7 +323,6 @@
     <Content Include="Views\QuestionChoice\Index.cshtml" />
     <Content Include="Views\Questions\_ChoiceOptionsPartial.cshtml" />
     <Content Include="Scripts\version.json" />
-    <Content Include="Views\VTeIC\Index.cshtml" />
     <Content Include="Views\Project\Create.cshtml" />
     <Content Include="Views\Project\Delete.cshtml" />
     <Content Include="Views\Project\Details.cshtml" />
@@ -332,6 +331,7 @@
     <Content Include="Views\Project\Work.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\DisplayFile\Index.cshtml" />
+    <Content Include="Views\Project\VTeIC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

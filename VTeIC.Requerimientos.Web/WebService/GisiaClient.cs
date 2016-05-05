@@ -9,12 +9,11 @@ namespace VTeIC.Requerimientos.Web.WebService
 {
     public class GisiaClient
     {
-        public const string Url = "http://localhost:8000/api/";
-        //public const string Url = "http://181.14.196.108:33122/api/";
+        public string Url = Properties.Settings.Default.WebServiceURLTesting;
 
         public void SendKeys(List<string> searchKeys)
         {
-            var request = new RequestObject
+            var request = new WsRequest
             {
                 id_proyecto = 1,
                 nombre_directorio = "proyecto_1",
@@ -30,7 +29,7 @@ namespace VTeIC.Requerimientos.Web.WebService
 
             if(response.IsSuccessStatusCode)
             {
-                var data = response.Content.ReadAsAsync<WSResponse>().Result;
+                var data = response.Content.ReadAsAsync<WsResponse>().Result;
                 ProcessResponse(data);
             }
             else
@@ -41,7 +40,7 @@ namespace VTeIC.Requerimientos.Web.WebService
 
         public void SendMergedUrls(List<WsFilteredUrl> urls)
         {
-            var request = new WSFilteredUrlsRequest
+            var request = new WsFilteredUrlsRequest
             {
                 id_proyecto = 1,
                 nombre_directorio = "proyecto_1",
@@ -66,7 +65,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        private void ProcessResponse(WSResponse response)
+        private void ProcessResponse(WsResponse response)
         {
             var result = UrlMerger.Procesar(response.buscadores);
 

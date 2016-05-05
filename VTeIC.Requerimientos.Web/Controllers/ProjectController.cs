@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
@@ -16,13 +11,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
     [Authorize]
     public class ProjectController : Controller
     {
-        private QuestionDBContext db = new QuestionDBContext();
+        private readonly QuestionDBContext _db = new QuestionDBContext();
+        private readonly QuestionManager _manager = new QuestionManager();
 
         // GET: Project
         public ActionResult Index()
         {
             string userid = User.Identity.GetUserId(); 
-            return View(db.Projects.Where(t => t.UserId == userid ));
+            return View(_db.Projects.Where(t => t.UserId == userid ));
         }
 
         // GET: Project/Details/5
@@ -32,7 +28,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Find(id);
+            Project project = _db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -43,9 +39,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            Project project = new Project();
-            project.UserId = User.Identity.GetUserId();
-
+            Project project = new Project { UserId = User.Identity.GetUserId() };
             return View(project);
         }
 
@@ -60,7 +54,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 project.Directorio = project.Nombre.Replace(" ","");
 
-                string path1 = VTeIC.Requerimientos.Web.Properties.Settings.Default.PathDeDirectorios;
+                string path1 = Properties.Settings.Default.PathDeDirectorios;
 
                 string userName = User.Identity.GetUserName();
                 //me fijo si esta la carpeta de usuario
@@ -74,8 +68,8 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 
                 project.Activo = true;
                 
-                db.Projects.Add(project);
-                db.SaveChanges();
+                _db.Projects.Add(project);
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -89,7 +83,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Find(id);
+            Project project = _db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -106,8 +100,8 @@ namespace VTeIC.Requerimientos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(project).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(project).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(project);
@@ -120,7 +114,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Find(id);
+            Project project = _db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -133,34 +127,35 @@ namespace VTeIC.Requerimientos.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Project project = db.Projects.Find(id);
-            db.Projects.Remove(project);
-            db.SaveChanges();
+            Project project = _db.Projects.Find(id);
+            _db.Projects.Remove(project);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        public ActionResult Work(int? id)
+        [Route("Project/VTeIC/{projectId:int}")]
+        public ActionResult VTeIC(int projectId)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Project project = db.Projects.Find(id);
+            Project project = _db.Projects.Find(projectId);
 
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            return View(project);
+            Session session = new Session();
+            _db.Sessions.Add(session);
+            _db.SaveChanges();
+
+            var questions = _manager.QuestionList();
+            return View(questions);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
