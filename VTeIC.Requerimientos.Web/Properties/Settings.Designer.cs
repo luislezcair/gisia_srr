@@ -31,5 +31,25 @@ namespace VTeIC.Requerimientos.Web.Properties {
                 return ((string)(this["PathDeDirectorios"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://181.14.196.108:33122/api/")]
+        public string WebServiceURL {
+            get {
+                return ((string)(this["WebServiceURL"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8000/api/")]
+        public string WebServiceURLTesting {
+            get {
+                return ((string)(this["WebServiceURLTesting"]));
+            }
+        }
     }
 }

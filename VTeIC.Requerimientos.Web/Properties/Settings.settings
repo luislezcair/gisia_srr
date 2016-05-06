@@ -5,5 +5,11 @@
     <Setting Name="PathDeDirectorios" Type="System.String" Scope="Application">
       <Value Profile="(Default)">D:\ArchivosVTeIC</Value>
     </Setting>
+    <Setting Name="WebServiceURL" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://181.14.196.108:33122/api/</Value>
+    </Setting>
+    <Setting Name="WebServiceURLTesting" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:8000/api/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

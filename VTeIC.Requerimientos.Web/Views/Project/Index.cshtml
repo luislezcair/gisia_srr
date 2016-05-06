@@ -29,7 +29,8 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
+            @*@Html.DisplayFor(modelItem => item.Nombre)*@
+            @Html.ActionLink(item.Nombre, "VTeIC", new { id=item.Id })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Directorio)

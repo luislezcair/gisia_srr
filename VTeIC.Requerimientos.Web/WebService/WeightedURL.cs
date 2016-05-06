@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace VTeIC.Requerimientos.Web.WebService
+﻿namespace VTeIC.Requerimientos.Web.WebService
 {
     public class WeightedURL
     {

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace VTeIC.Requerimientos.Web.WebService
 {
-    public class RequestObject
+    public class WsRequest
     {
         public int id_proyecto { get; set; }
         public string nombre_directorio { get; set; }
@@ -16,12 +16,12 @@ namespace VTeIC.Requerimientos.Web.WebService
         public string clave { get; set; }
     }
 
-    public class ResponseObject
+    public class WsOkResponse
     {
         public string status { get; set; }
     }
 
-    public class WSResponse
+    public class WsResponse
     {
         public int id_proyecto { get; set; }
         public IEnumerable<SearchEngineResult> buscadores { get; set; }
@@ -42,5 +42,18 @@ namespace VTeIC.Requerimientos.Web.WebService
     public class Url
     {
         public string url { get; set; }
+    }
+
+    public class WsFilteredUrl
+    {
+        public int orden { get; set; }
+        public string url { get; set; }
+    }
+
+    public class WsFilteredUrlsRequest
+    {
+        public int id_proyecto { get; set; }
+        public string nombre_directorio { get; set; }
+        public List<WsFilteredUrl> urls { get; set; }
     }
 }
