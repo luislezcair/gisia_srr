@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;  
-using System.IO; //GetFiles()
+using System.IO;
 using VTeIC.Requerimientos.Entidades;
 
 namespace VTeIC.Requerimientos.Web.Controllers
@@ -38,9 +35,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 listaArchivos.Add(newFile);
             }
             vm.FileList = listaArchivos;
-
-//return (vm);
-            //String RelativePath = Request.ServerVariables["APPL_PHYSICAL_PATH"];
 
             return View(vm);
         }

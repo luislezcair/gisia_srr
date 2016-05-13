@@ -30,7 +30,7 @@
     <tr>
         <td>
             @*@Html.DisplayFor(modelItem => item.Nombre)*@
-            @Html.ActionLink(item.Nombre, "VTeIC", new { id=item.Id })
+            @Html.ActionLink(item.Nombre, "VTeIC", new { projectId=item.Id })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Directorio)

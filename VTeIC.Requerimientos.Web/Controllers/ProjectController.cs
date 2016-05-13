@@ -1,10 +1,14 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
+using VTeIC.Requerimientos.Web.SerachKey;
+using VTeIC.Requerimientos.Web.ViewModels;
+using VTeIC.Requerimientos.Web.WebService;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -133,7 +137,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("Project/VTeIC/{projectId:int}")]
+        [Route("Project/{projectId:int}/VTeIC")]
         public ActionResult VTeIC(int projectId)
         {
             Project project = _db.Projects.Find(projectId);
@@ -147,8 +151,28 @@ namespace VTeIC.Requerimientos.Web.Controllers
             _db.Sessions.Add(session);
             _db.SaveChanges();
 
-            var questions = _manager.QuestionList();
-            return View(questions);
+            var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList());
+            return View("Work", vteic);
+        }
+
+        [HttpPost]
+        [Route("Project/{projectId:int}/SearchKey")]
+        public ActionResult SearchKey(int projectId)
+        {
+            Debug.WriteLine("ID: {0}", projectId);
+
+            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
+            SearchKeyGenerator generator = new SearchKeyGenerator();
+
+            var searchKeys = generator.BuildSearchKey(session.Answers);
+
+            GisiaClient webservice = new GisiaClient();
+            webservice.SendKeys(searchKeys);
+
+            return Json(new
+            {
+                searchKeys = searchKeys
+            });
         }
 
         protected override void Dispose(bool disposing)

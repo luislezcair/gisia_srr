@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using VTeIC.Requerimientos.Entidades;
@@ -15,17 +14,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
     {
         private readonly QuestionDBContext _db = new QuestionDBContext();
         private readonly QuestionManager _manager = new QuestionManager();
-
-        // GET: VTeIC
-        public ActionResult Index()
-        {
-            Session session = new Session();
-            _db.Sessions.Add(session);
-            _db.SaveChanges();
-
-            var questions = _manager.QuestionList();
-            return View((IEnumerable)questions);
-        }
 
         [HttpPost]
         public ActionResult PostAnswer(AnswerViewModel answer)

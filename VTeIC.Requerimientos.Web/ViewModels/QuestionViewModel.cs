@@ -23,17 +23,17 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
             Link = new QuestionLinkViewModel(_db.QuestionLinks.FirstOrDefault(q => q.Question.Id == question.Id));
 
-            ChoiceOptions = new List<QuestionChoiceViewModel>();
+            ChoiceOptions = new List<ChoiceViewModel>();
             foreach (var choice in question.ChoiceOptions)
             {
-                ChoiceOptions.Add(new QuestionChoiceViewModel(choice));
+                ChoiceOptions.Add(new ChoiceViewModel(choice));
             }
         }
 
         public int Id { get; set; }
         public string Text { get; set; }
         public QuestionTypes QuestionType { get; set; }
-        public List<QuestionChoiceViewModel> ChoiceOptions { get; set; }
+        public List<ChoiceViewModel> ChoiceOptions { get; set; }
         public string Title { get; set; }
         public bool IsPivot { get; set; }
         public bool HasManyAnswers { get; set; }

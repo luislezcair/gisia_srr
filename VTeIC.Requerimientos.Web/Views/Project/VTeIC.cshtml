@@ -1,5 +1,6 @@
 ﻿@using VTeIC.Requerimientos.Entidades
-@model List<Question>
+@using VTeIC.Requerimientos.Web.ViewModels
+@model List<QuestionViewModel>
 
 @{
     ViewBag.Title = "VTeIC";
@@ -9,7 +10,7 @@
 
 <h2 class="srr">Sistema de Recopilación de Requerimientos</h2>
 
-<form>
+<form action="/VTeIC/PostAnswer" method="post" id="form-vteic">
     <div id="wizard" class="wizard clearfix vertical">
         <div class="steps clearfix">
             <ul role="tablist">
@@ -26,19 +27,19 @@
             </ul>
         </div>
         <div class="content clearfix well">
-            @foreach(var question in Model)
+            @foreach (var question in Model)
             {
                 bool first = question.Equals(Model.First());
-                
+
                 <section role="tabpanel" data-question="@(question.Id)" class="body current @(first ? "" : "hidden")" aria-hidden="false">
                     <div class="text-center col-md-12">
                         <p id="question-text-q@(question.Id)" class="lead">@(question.Text)</p>
                         <div class="answer-field">
-                            @if(question.QuestionType.Type == QuestionTypes.TEXT_FIELD)
+                            @if (question.QuestionType == QuestionTypes.TEXT_FIELD)
                             {
                                 <input type="text" class="form-control input-lg" id="text-q-@(question.Id)" @(question.IsPivot ? "required" : "") autocomplete="off" autofocus>
                             }
-                            else if (question.QuestionType.Type == QuestionTypes.BOOLEAN)
+                            else if (question.QuestionType == QuestionTypes.BOOLEAN)
                             {
                                 <button type="button" class="btn btn-primary btn-answer-yes">Sí</button>
                                 <button type="button" class="btn btn-primary btn-answer-no">No</button>
@@ -49,7 +50,7 @@
                                 {
                                     <div class="row">
                                         <div class="col-sm-offset-5 col-sm-7 choice-list">
-                                            <input type="checkbox" value="@(choice.Id)" data-question="@(question.Id)" id="choice-q@(question.Id)-@(choice.Id)" />
+                                            <input type="checkbox" value="@(choice.Id)" data-question="@(question.Id)" id="choice-q@(question.Id)-@(choice.Id)"/>
                                             <label for="choice-q@(question.Id)-@(choice.Id)">@choice.Text</label>
                                         </div>
                                     </div>
@@ -75,12 +76,16 @@
     </div>
 </form>
 
-@section scripts {
 <script>
-    var QuestionType = { Text: @((int)QuestionTypes.TEXT_FIELD), Boolean: @((int)QuestionTypes.BOOLEAN), MultipleChoice: @((int)QuestionTypes.MULTIPLE_CHOICE) };
+    var QuestionType = {
+        Text: @((int) QuestionTypes.TEXT_FIELD),
+        Boolean: @((int) QuestionTypes.BOOLEAN),
+        MultipleChoice: @((int) QuestionTypes.MULTIPLE_CHOICE) };
+
     var CurrentQuestion = {
         Id: @(Model.First().Id),
-        Type: @((int)Model.First().QuestionType.Type) };
+        Type: @((int) Model.First().QuestionType) };
+
     var BooleanAnswer = null;
 
     $('.btn-answer-yes').click(function() {
@@ -94,13 +99,13 @@
     });
 
     // Click en Next o Finish
-    $('form').submit(function(event) { 
+    $('#form-vteic').submit(function(event) {
         var answer = {
             QuestionId: CurrentQuestion.Id,
             TextAnswer: '',
             BooleanAnswer: null,
             OptionsAnswer: []
-        }
+        };
 
         fill_answer(answer);
 
@@ -113,18 +118,18 @@
             type: 'POST',
             success: function(response) {
                 // Si fue la última pregunta, solicitamos las claves de búsqueda
-                if(response.Finished) {
+                if (response.Finished) {
                     $.post('/VTeIC/SearchKey', null, function(response) {
-                        find_question_section(CurrentQuestion.Id).hide();
-                        show_search_keys(response.searchKeys);
+                            find_question_section(CurrentQuestion.Id).hide();
+                            show_search_keys(response.searchKeys);
 
-                        $('#btn-next').hide();
-                        $('#btn-back').show();
+                            $('#btn-next').hide();
+                            $('#btn-back').show();
                     });
                     return;
                 }
 
-                if(response.LastQuestion) {
+                if (response.LastQuestion) {
                     $('#btn-next').text('Finalizar');
                 }
 
@@ -134,7 +139,7 @@
                 CurrentQuestion.Id = nextQuestion.Id;
                 CurrentQuestion.Type = nextQuestion.QuestionType;
 
-                if(CurrentQuestion.Type == QuestionType.Boolean) {
+                if (CurrentQuestion.Type == QuestionType.Boolean) {
                     $('#btn-next').prop('disabled', true);
                 }
 
@@ -146,12 +151,12 @@
     });
 
     /**
-    * Obtiene la respuesta de los campos correspondientes de acuerdo al tipo de pregunta
-    **/
+     * Obtiene la respuesta de los campos correspondientes de acuerdo al tipo de pregunta
+     **/
     function fill_answer(answer) {
-        if(CurrentQuestion.Type == QuestionType.Text) {
+        if (CurrentQuestion.Type == QuestionType.Text) {
             answer.TextAnswer = $('#text-q-' + CurrentQuestion.Id).val();
-        } else if(CurrentQuestion.Type == QuestionType.Boolean) {
+        } else if (CurrentQuestion.Type == QuestionType.Boolean) {
             answer.BooleanAnswer = BooleanAnswer;
         } else {
             answer.OptionsAnswer = get_choices();
@@ -159,8 +164,8 @@
     }
 
     /**
-    * Oculta la pregunta anterior y muestra la próxima
-    **/
+     * Oculta la pregunta anterior y muestra la próxima
+     **/
     function switch_question(next_question) {
         var currentTab = find_question_tab(CurrentQuestion.Id);
         var currentSection = find_question_section(CurrentQuestion.Id);
@@ -169,11 +174,11 @@
         var nextSection = find_question_section(next_question);
 
         currentTab.removeClass('current')
-                  .addClass('done');
+            .addClass('done');
 
         nextTab.addClass('current')
-               .removeClass('disabled')
-               .removeClass('done');
+            .removeClass('disabled')
+            .removeClass('done');
 
         currentSection.hide();
         nextSection.removeClass('hidden').show();
@@ -196,21 +201,21 @@
     // Devuelve un arreglo con los valores de los checkboxes seleccionados como respuesta
     function get_choices() {
         var options = $('input[data-question=' + CurrentQuestion.Id + ']:checked');
-        return $.map(options, function(v) {
-            return Number($(v).val());
-        });
+        return $.map(options,
+            function(v) {
+                return Number($(v).val());
+            });
     }
 
     // Muestra las claves de búsqueda devueltas
     function show_search_keys(search_keys) {
         var section = $('#search-keys');
         section.html("");
-        
-        for(i = 0; i < search_keys.length; i++) {
+
+        for (var i = 0; i < search_keys.length; i++) {
             section.append("<p>" + search_keys[i] + "</p>");
         }
 
         section.show();
     }
 </script>
-}

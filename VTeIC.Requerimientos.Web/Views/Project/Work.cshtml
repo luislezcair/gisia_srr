@@ -1,7 +1,14 @@
-﻿@model VTeIC.Requerimientos.Entidades.Project
+﻿@using VTeIC.Requerimientos.Web.ViewModels;
+@model ProjectVTeICViewModel
 
 @{
-    ViewBag.Title = "Creacion";
+    ViewBag.Title = "VTeIC";
 }
 
-<h2>Create</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+    <li>@Html.ActionLink("Proyectos", "Index", "Project")</li>
+    <li class="active">@Model.Project.ProjectName</li>
+</ol>
+
+@Html.Partial("VTeIC", Model.Questions)

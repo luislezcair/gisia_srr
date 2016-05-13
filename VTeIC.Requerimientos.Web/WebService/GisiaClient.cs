@@ -9,7 +9,7 @@ namespace VTeIC.Requerimientos.Web.WebService
 {
     public class GisiaClient
     {
-        public string Url = Properties.Settings.Default.WebServiceURLTesting;
+        public string Url = Properties.Settings.Default.WebServiceURL;
 
         public void SendKeys(List<string> searchKeys)
         {
@@ -67,6 +67,16 @@ namespace VTeIC.Requerimientos.Web.WebService
 
         private void ProcessResponse(WsResponse response)
         {
+            Debug.WriteLine("---------BUSCADORES---------: {0}", response.buscadores.Count());
+            foreach (var searchEngineResult in response.buscadores)
+            {
+                Debug.WriteLine("BUSCADOR: {0}, URLS: {1}", searchEngineResult.buscador, searchEngineResult.urls.Count());
+                foreach (var url in searchEngineResult.urls)
+                {
+                    Debug.WriteLine("URL: {0}", url.url);
+                }
+            }
+
             var result = UrlMerger.Procesar(response.buscadores);
 
             // Imprimir los resultados
