@@ -10,7 +10,7 @@ namespace VTeIC.Requerimientos.Web.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection")
+            : base("QuestionDBContext")
         {
         }
     }

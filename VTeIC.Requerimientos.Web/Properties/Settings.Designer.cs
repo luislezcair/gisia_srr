@@ -25,7 +25,7 @@ namespace VTeIC.Requerimientos.Web.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\temp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\ArchivosVTeIC")]
         public string PathDeDirectorios {
             get {
                 return ((string)(this["PathDeDirectorios"]));
