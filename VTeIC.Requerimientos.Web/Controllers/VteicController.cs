@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Mvc;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
@@ -115,11 +118,23 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             var searchKeys = generator.BuildSearchKey(session.Answers);
 
-            GisiaClient webservice = new GisiaClient();
-            webservice.SendKeys(searchKeys);
+            try
+            {
+                GisiaClient webservice = new GisiaClient();
+                webservice.SendKeys(searchKeys);
+            }
+            catch(AggregateException e)
+            {
+                return Json(new
+                {
+                    result = false,
+                    error = "No se ha podido conectar con el servicio web"
+                });
+            }
 
             return Json(new
             {
+                result = true,
                 searchKeys = searchKeys
             });
         }

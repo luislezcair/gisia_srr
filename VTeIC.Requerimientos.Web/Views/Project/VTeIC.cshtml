@@ -119,12 +119,17 @@
             success: function(response) {
                 // Si fue la última pregunta, solicitamos las claves de búsqueda
                 if (response.Finished) {
-                    $.post('/VTeIC/SearchKey', null, function(response) {
-                            find_question_section(CurrentQuestion.Id).hide();
-                            show_search_keys(response.searchKeys);
+                    $.post('/VTeIC/SearchKey', null, function(keyResponse) {
+                        if (!keyResponse.result) {
+                            alert(keyResponse.error);
+                            return;
+                        }
 
-                            $('#btn-next').hide();
-                            $('#btn-back').show();
+                        find_question_section(CurrentQuestion.Id).hide();
+                        show_search_keys(keyResponse.searchKeys);
+
+                        $('#btn-next').hide();
+                        $('#btn-back').show();
                     });
                     return;
                 }
