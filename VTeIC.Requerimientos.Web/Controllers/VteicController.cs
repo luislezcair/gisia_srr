@@ -123,7 +123,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 GisiaClient webservice = new GisiaClient();
                 webservice.SendKeys(searchKeys);
             }
-            catch(AggregateException e)
+            catch(Exception e)
             {
                 return Json(new
                 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Diagnostics;
+using System.Web;
 
 namespace VTeIC.Requerimientos.Web.WebService
 {
@@ -34,7 +35,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
             else
             {
-                Debug.WriteLine((int)response.StatusCode, response.ReasonPhrase);
+                throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
             }
         }
 
@@ -61,7 +62,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
             else
             {
-                Debug.WriteLine((int)response.StatusCode, response.ReasonPhrase);
+                throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
             }
         }
 
