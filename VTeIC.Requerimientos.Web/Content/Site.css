@@ -82,3 +82,10 @@ input[type="checkbox"].input-validation-error {
 .choice-list label {
     vertical-align: super;
 }
+
+.srr-alert {
+    display: inline;
+    float: right;
+    margin: 0 2.5% 5px;
+    width: 65%;
+}

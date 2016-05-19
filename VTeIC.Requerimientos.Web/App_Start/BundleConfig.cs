@@ -25,7 +25,7 @@ namespace VTeIC.Requerimientos.Web
 
             bundles.Add(new StyleBundle("~/Content/estilos").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css").Include(
+                      "~/Content/Site.css").Include(
                       "~/Content/css/font-awesome.css", new CssRewriteUrlTransform())
                       );
 
