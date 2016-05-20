@@ -21,7 +21,8 @@ namespace VTeIC.Requerimientos.Web.WebService
                 claves = from s in searchKeys select new SearchKeyRequest { id = 1, clave = s }
             };
 
-            var client = new HttpClient { BaseAddress = new Uri(Url) };
+            var client = new HttpClient { BaseAddress = new Uri(Url),
+                                          Timeout = new TimeSpan(0, 0, 20) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -48,7 +49,8 @@ namespace VTeIC.Requerimientos.Web.WebService
                 urls = urls
             };
 
-            var client = new HttpClient { BaseAddress = new Uri(Url) };
+            var client = new HttpClient { BaseAddress = new Uri(Url),
+                                          Timeout = new TimeSpan(0, 0, 20) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

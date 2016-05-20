@@ -8,7 +8,9 @@
 
 @Styles.Render("~/Content/jquerysteps")
 
-<h2 class="srr">Sistema de Recopilación de Requerimientos</h2>
+<div class="page-header">
+    <h2>Asistente de Recopilación de Requerimientos</h2>
+</div>
 
 <form action="/VTeIC/PostAnswer" method="post" id="form-vteic">
     <div id="wizard" class="wizard clearfix vertical">
@@ -76,9 +78,14 @@
         </div>
 
         <div class="actions clearfix well">
-            <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
-            <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
-            <a type="button" id="btn-back" class="btn btn-primary" href="" style="display: none">Volver</a>
+            <div id="div-buttons">
+                <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
+                <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
+                <a type="button" id="btn-back" class="btn btn-primary" href="" style="display: none">Volver</a>
+            </div>
+            <div id="div-indicator" class="pull-left" style="display: none">
+                <p><i class="fa fa-spinner fa-spin fa-3x"></i> <span class="working-text">Trabajando...</span></p>
+            </div>
         </div>
     </div>
 </form>
@@ -105,12 +112,15 @@
         $('#btn-next').prop('disabled', false).click();
     });
 
-    function show_error() {
-        $('#error-alert').fadeIn();
-    }
-
     // Click en Next o Finish
     $('#form-vteic').submit(function(event) {
+        var divIndicator = $('#div-indicator');
+        var divButtons = $('#div-buttons');
+        var errorAlert = $('#error-alert');
+
+        if (errorAlert.is(':visible'))
+            errorAlert.fadeOut();
+
         var answer = {
             QuestionId: CurrentQuestion.Id,
             TextAnswer: '',
@@ -130,10 +140,15 @@
             success: function(response) {
                 // Si fue la última pregunta, solicitamos las claves de búsqueda
                 if (response.Finished) {
+                    divButtons.hide();
+                    divIndicator.fadeIn();
+
                     $.post('/VTeIC/SearchKey', null, function(keyResponse) {
+                        divIndicator.hide();
+                        divButtons.fadeIn();
+
                         if (!keyResponse.result) {
-                            show_error();
-                            //alert(keyResponse.error);
+                            errorAlert.fadeIn();
                             return;
                         }
 
@@ -237,10 +252,8 @@
     }
 
     $(function(){
-        $("[data-hide]").on("click", function(){
-            //$("." + $(this).attr("data-hide")).hide();
-            // -or-, see below
-             $(this).closest("." + $(this).attr("data-hide")).hide();
+        $("[data-hide]").on("click", function() {
+            $(this).closest("." + $(this).attr("data-hide")).hide();
         });
     });
 </script>
