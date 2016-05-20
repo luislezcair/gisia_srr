@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: 'Open Sans', 'Helvetica', 'Arial', sans;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -41,10 +42,6 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
-.srr {
-    text-align: center;
-}
-
 #booleanQuestion button {
     margin: auto;
     width: 500px;
@@ -81,4 +78,60 @@ input[type="checkbox"].input-validation-error {
 
 .choice-list label {
     vertical-align: super;
+}
+
+.srr-alert {
+    display: inline;
+    float: right;
+    margin: 0 2.5% 5px;
+    width: 65%;
+}
+
+#div-indicator i {
+    vertical-align: middle;
+}
+
+#div-indicator p {
+    color: #2184be;
+    margin: 0;
+}
+
+.working-text {
+    font-weight: bold;
+}
+
+.page-header h2 {
+    font-size: 26px;
+    text-transform: uppercase;
+    color: #2679b5;
+    text-shadow: 1px 1px #ddd;
+}
+
+.lead {
+    text-shadow: 1px 1px #ccc;
+}
+
+.green {
+    color: green;
+}
+
+.dark-red {
+    color: #cc0000;
+}
+
+.blue {
+    color: #337ab7;
+}
+
+.action-button {
+    margin-right: 5px;
+    text-shadow: 1px 1px #bbb;
+}
+
+.action-button:hover {
+    text-decoration: none;
+}
+
+.no-border-top {
+    border-top: hidden;
 }

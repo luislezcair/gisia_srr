@@ -4,12 +4,11 @@
     ViewBag.Title = "Proyectos";
 }
 
-<h2>Proyectos</h2>
+<div class="page-header">
+    <h2>Proyectos</h2>
+</div>
 
-<p>
-    @Html.ActionLink("Nuevo", "Create")
-</p>
-<table class="table">
+<table class="table no-border-top">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Nombre)
@@ -17,37 +16,42 @@
         <th>
             @Html.DisplayNameFor(model => model.Directorio)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.UserId)
-        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Activo)
         </th>
-        <th></th>
+        <th>Acciones</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @*@Html.DisplayFor(modelItem => item.Nombre)*@
-            @Html.ActionLink(item.Nombre, "VTeIC", new { projectId=item.Id })
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Directorio)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.Activo)
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Borrar", "Delete", new { id=item.Id }) |
-            @Html.ActionLink("Ver Archivos", "Index","DisplayFile", new { directorio = item.Directorio },null)
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Nombre, "VTeIC", new {projectId = item.Id})
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Directorio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activo)
+            </td>
+            <td>
+                <a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar"></a>
+                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles"></a>
+                <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
+                <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Index", "DisplayFile", new {directorio = item.Directorio})" data-toggle="tooltip" data-placement="top" title="Ver archivos"></a>
+            </td>
+        </tr>
+    }
 </table>
+
+<div class="clearfix">
+    <div class="pull-right">
+        <a href="@Url.Action("Create")" class="btn btn-sm btn-success">Nuevo Proyecto</a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>

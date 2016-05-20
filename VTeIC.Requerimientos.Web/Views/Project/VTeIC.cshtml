@@ -8,7 +8,9 @@
 
 @Styles.Render("~/Content/jquerysteps")
 
-<h2 class="srr">Sistema de Recopilación de Requerimientos</h2>
+<div class="page-header">
+    <h2>Asistente de Recopilación de Requerimientos</h2>
+</div>
 
 <form action="/VTeIC/PostAnswer" method="post" id="form-vteic">
     <div id="wizard" class="wizard clearfix vertical">
@@ -68,10 +70,22 @@
             </section>
         </div>
 
+        <div id="error-alert" class="alert alert-danger srr-alert" style="display: none">
+            <button type="button" class="close" data-hide="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p><strong>¡Atención!</strong> No se ha podido establecer la conexión con el servicio de obtención y análisis de datos.</p>
+        </div>
+
         <div class="actions clearfix well">
-            <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
-            <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
-            <a type="button" id="btn-back" class="btn btn-primary" href="" style="display: none">Volver</a>
+            <div id="div-buttons">
+                <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
+                <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
+                <a type="button" id="btn-back" class="btn btn-primary" href="" style="display: none">Volver</a>
+            </div>
+            <div id="div-indicator" class="pull-left" style="display: none">
+                <p><i class="fa fa-spinner fa-spin fa-3x"></i> <span class="working-text">Trabajando...</span></p>
+            </div>
         </div>
     </div>
 </form>
@@ -100,6 +114,13 @@
 
     // Click en Next o Finish
     $('#form-vteic').submit(function(event) {
+        var divIndicator = $('#div-indicator');
+        var divButtons = $('#div-buttons');
+        var errorAlert = $('#error-alert');
+
+        if (errorAlert.is(':visible'))
+            errorAlert.fadeOut();
+
         var answer = {
             QuestionId: CurrentQuestion.Id,
             TextAnswer: '',
@@ -119,9 +140,15 @@
             success: function(response) {
                 // Si fue la última pregunta, solicitamos las claves de búsqueda
                 if (response.Finished) {
+                    divButtons.hide();
+                    divIndicator.fadeIn();
+
                     $.post('/VTeIC/SearchKey', null, function(keyResponse) {
+                        divIndicator.hide();
+                        divButtons.fadeIn();
+
                         if (!keyResponse.result) {
-                            alert(keyResponse.error);
+                            errorAlert.fadeIn();
                             return;
                         }
 
@@ -144,7 +171,7 @@
                 CurrentQuestion.Id = nextQuestion.Id;
                 CurrentQuestion.Type = nextQuestion.QuestionType;
 
-                if (CurrentQuestion.Type == QuestionType.Boolean) {
+                if (CurrentQuestion.Type === QuestionType.Boolean) {
                     $('#btn-next').prop('disabled', true);
                 }
 
@@ -159,9 +186,9 @@
      * Obtiene la respuesta de los campos correspondientes de acuerdo al tipo de pregunta
      **/
     function fill_answer(answer) {
-        if (CurrentQuestion.Type == QuestionType.Text) {
+        if (CurrentQuestion.Type === QuestionType.Text) {
             answer.TextAnswer = $('#text-q-' + CurrentQuestion.Id).val();
-        } else if (CurrentQuestion.Type == QuestionType.Boolean) {
+        } else if (CurrentQuestion.Type === QuestionType.Boolean) {
             answer.BooleanAnswer = BooleanAnswer;
         } else {
             answer.OptionsAnswer = get_choices();
@@ -223,4 +250,10 @@
 
         section.show();
     }
+
+    $(function(){
+        $("[data-hide]").on("click", function() {
+            $(this).closest("." + $(this).attr("data-hide")).hide();
+        });
+    });
 </script>
