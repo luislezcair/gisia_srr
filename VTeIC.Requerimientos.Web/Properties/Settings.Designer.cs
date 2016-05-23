@@ -3,8 +3,8 @@
 //     Este código fue generado por una herramienta.
 //     Versión de runtime:4.0.30319.42000
 //
-//     Los cambios en este archivo podrían causar un comportamiento incorrecto y se perderán si
-//     se vuelve a generar el código.
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace VTeIC.Requerimientos.Web.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\ArchivosVTeIC")]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\ArchivosVTeIC")]
         public string PathDeDirectorios {
             get {
                 return ((string)(this["PathDeDirectorios"]));
