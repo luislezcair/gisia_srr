@@ -38,7 +38,5 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             return View(vm);
         }
-
-        
     }
 }

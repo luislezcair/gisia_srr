@@ -4,12 +4,13 @@
     ViewBag.Title = "Borrado";
 }
 
-<h2>Borrado</h2>
+<div class="page-header">
+    <h2>Borrar proyecto</h2>
+</div>
 
-<h3>Esta seguro de querer borrar esto?</h3>
+<h3>¿Está seguro que desea borrar este proyecto?</h3>
+
 <div>
-    <h4>Proyecto</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Nombre)
@@ -26,23 +27,14 @@
         <dd>
             @Html.DisplayFor(model => model.Directorio)
         </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
-        </dd>*@
-
     </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Borrar" class="btn btn-default" /> |
-            @Html.ActionLink("Volver al Listado", "Index")
+            <input type="submit" value="Borrar" class="btn btn-danger" />
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-info" })
         </div>
     }
 </div>

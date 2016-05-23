@@ -40,12 +40,13 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        public void SendMergedUrls(List<WsFilteredUrl> urls)
+        public void SendMergedUrls(List<WsFilteredUrl> urls, int requestId)
         {
             var request = new WsFilteredUrlsRequest
             {
                 id_proyecto = 1,
                 nombre_directorio = "proyecto_1",
+                request = requestId,
                 urls = urls
             };
 
@@ -101,7 +102,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("Orden = {0}, URL = {1}", wsFilteredUrl.orden, wsFilteredUrl.url);
             }
 
-            SendMergedUrls(wsFilteredUrlList);
+            SendMergedUrls(wsFilteredUrlList, response.id_request);
         }
     }
 }

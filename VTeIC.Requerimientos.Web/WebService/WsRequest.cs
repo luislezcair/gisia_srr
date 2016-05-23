@@ -24,6 +24,7 @@ namespace VTeIC.Requerimientos.Web.WebService
     public class WsResponse
     {
         public int id_proyecto { get; set; }
+        public int id_request { get; set; }
         public IEnumerable<SearchEngineResult> buscadores { get; set; }
     }
 
@@ -54,6 +55,7 @@ namespace VTeIC.Requerimientos.Web.WebService
     {
         public int id_proyecto { get; set; }
         public string nombre_directorio { get; set; }
+        public int request { get; set; }
         public List<WsFilteredUrl> urls { get; set; }
     }
 }
