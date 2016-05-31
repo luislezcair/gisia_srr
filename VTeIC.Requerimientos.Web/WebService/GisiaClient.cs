@@ -5,19 +5,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Diagnostics;
 using System.Web;
+using VTeIC.Requerimientos.Entidades;
 
 namespace VTeIC.Requerimientos.Web.WebService
 {
     public class GisiaClient
     {
-        public string Url = Properties.Settings.Default.WebServiceURL;
+        public string Url = Properties.Settings.Default.WebServiceURLTesting;
 
-        public void SendKeys(List<string> searchKeys)
+        public void SendRequest(Project project, List<string> searchKeys)
         {
             var request = new WsRequest
             {
-                id_proyecto = 1,
-                nombre_directorio = "proyecto_1",
+                id_proyecto = project.Id,
+                nombre_directorio = project.Directorio,
                 claves = from s in searchKeys select new SearchKeyRequest { id = 1, clave = s }
             };
 
@@ -32,7 +33,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             if(response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsAsync<WsResponse>().Result;
-                ProcessResponse(data);
+                ProcessResponse(project, data);
             }
             else
             {
@@ -40,12 +41,12 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        public void SendMergedUrls(List<WsFilteredUrl> urls, int requestId)
+        public void SendMergedUrls(Project project, List<WsFilteredUrl> urls, int requestId)
         {
             var request = new WsFilteredUrlsRequest
             {
-                id_proyecto = 1,
-                nombre_directorio = "proyecto_1",
+                id_proyecto = project.Id,
+                nombre_directorio = project.Directorio,
                 request = requestId,
                 urls = urls
             };
@@ -69,7 +70,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        private void ProcessResponse(WsResponse response)
+        private void ProcessResponse(Project project, WsResponse response)
         {
             Debug.WriteLine("---------BUSCADORES---------: {0}", response.buscadores.Count());
             foreach (var searchEngineResult in response.buscadores)
@@ -102,7 +103,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("Orden = {0}, URL = {1}", wsFilteredUrl.orden, wsFilteredUrl.url);
             }
 
-            SendMergedUrls(wsFilteredUrlList, response.id_request);
+            SendMergedUrls(project, wsFilteredUrlList, response.id_request);
         }
     }
 }

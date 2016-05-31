@@ -9,6 +9,8 @@ using VTeIC.Requerimientos.Web.Models;
 using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
 using VTeIC.Requerimientos.Web.WebService;
+using System.Web;
+using System;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -159,18 +161,37 @@ namespace VTeIC.Requerimientos.Web.Controllers
         [Route("Project/{projectId:int}/SearchKey")]
         public ActionResult SearchKey(int projectId)
         {
-            Debug.WriteLine("ID: {0}", projectId);
-
             Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
             SearchKeyGenerator generator = new SearchKeyGenerator();
 
             var searchKeys = generator.BuildSearchKey(session.Answers);
+            var project = _db.Projects.Find(projectId);
 
-            GisiaClient webservice = new GisiaClient();
-            webservice.SendKeys(searchKeys);
+            try
+            {
+                GisiaClient webservice = new GisiaClient();
+                webservice.SendRequest(project, searchKeys);
+            }
+            catch (HttpException httpError)
+            {
+                return Json(new
+                {
+                    result = false,
+                    error = "No se ha podido conectar con el servicio web. " + httpError.Message
+                });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    result = false,
+                    error = "No se ha podido conectar con el servicio web. " + e.Message
+                });
+            }
 
             return Json(new
             {
+                result = true,
                 searchKeys = searchKeys
             });
         }

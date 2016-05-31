@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using System.Web.Mvc;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
@@ -108,35 +109,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
             }
 
             return options;
-        }
-
-        [HttpPost]
-        public ActionResult SearchKey()
-        {
-            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
-            SearchKeyGenerator generator = new SearchKeyGenerator();
-
-            var searchKeys = generator.BuildSearchKey(session.Answers);
-
-            try
-            {
-                GisiaClient webservice = new GisiaClient();
-                webservice.SendKeys(searchKeys);
-            }
-            catch(Exception e)
-            {
-                return Json(new
-                {
-                    result = false,
-                    error = "No se ha podido conectar con el servicio web"
-                });
-            }
-
-            return Json(new
-            {
-                result = true,
-                searchKeys = searchKeys
-            });
         }
     }
 }

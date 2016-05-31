@@ -143,21 +143,21 @@
                     divButtons.hide();
                     divIndicator.fadeIn();
 
-                    $.post('/VTeIC/SearchKey', null, function(keyResponse) {
-                        divIndicator.hide();
-                        divButtons.fadeIn();
+                    $.post('SearchKey', null, function(keyResponse) {
+                            divIndicator.hide();
+                            divButtons.fadeIn();
 
-                        if (!keyResponse.result) {
-                            errorAlert.fadeIn();
-                            return;
-                        }
+                            if (!keyResponse.result) {
+                                errorAlert.fadeIn();
+                                return;
+                            }
 
-                        find_question_section(CurrentQuestion.Id).hide();
-                        show_search_keys(keyResponse.searchKeys);
+                            find_question_section(CurrentQuestion.Id).hide();
+                            show_search_keys(keyResponse.searchKeys);
 
-                        $('#btn-next').hide();
-                        $('#btn-back').show();
-                    });
+                            $('#btn-next').hide();
+                            $('#btn-back').show();
+                        });
                     return;
                 }
 

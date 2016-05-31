@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using VTeIC.Requerimientos.Entidades;
+﻿using VTeIC.Requerimientos.Entidades;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -10,9 +6,11 @@ namespace VTeIC.Requerimientos.Web.ViewModels
     {
         public ProjectViewModel(Project project)
         {
+            Id = project.Id;
             ProjectName = project.Nombre;
         }
 
+        public int Id { get; set; }
         public string ProjectName { get; set; }
     }
 }
