@@ -9,6 +9,7 @@ namespace VTeIC.Requerimientos.Web.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<ChoiceOption> QuestionChoices { get; set; }
+        public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<QuestionRelationshipOperator> Operators { get; set; }
@@ -21,21 +22,14 @@ namespace VTeIC.Requerimientos.Web.Models
             modelBuilder.Entity<Question>()
                 .HasRequired<QuestionType>(q => q.QuestionType);
 
+            modelBuilder.Entity<QuestionGroup>()
+                .HasMany(q => q.Questions)
+                .WithOptional(q => q.QuestionGroup);
+
             modelBuilder.Entity<ChoiceOption>()
                 .HasRequired<Question>(q => q.Question)
                 .WithMany(c => c.ChoiceOptions)
                 .WillCascadeOnDelete(false);
-
-            //modelBuilder.Entity<Question>()
-            //    .HasOptional(q => q.NextQuestion)
-            //    .WithMany()
-            //    .HasForeignKey(q => q.NextQuestionId);
-
-            //modelBuilder.Entity<Question>()
-            //    .HasOptional(q => q.NextQuestionNegative);
-                //.WithMany()
-                //.HasForeignKey(q => q.NextQuestionNegativeId)
-                //.WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Answer>()
                 .HasRequired<Question>(q => q.Question)

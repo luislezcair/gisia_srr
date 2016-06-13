@@ -12,18 +12,26 @@ namespace VTeIC.Requerimientos.Web.WebService
     public class GisiaClient
     {
         public string Url = Properties.Settings.Default.WebServiceURLTesting;
+        private string _userName;
+        private Project _project;
 
-        public void SendRequest(Project project, List<string> searchKeys)
+        public GisiaClient(string user, Project project)
+        {
+            _userName = user;
+            _project = project;
+        }
+
+        public void SendRequest(List<string> searchKeys)
         {
             var request = new WsRequest
             {
-                id_proyecto = project.Id,
-                nombre_directorio = project.Directorio,
+                id_proyecto = _project.Id,
+                nombre_directorio = _userName + "/" + _project.Directorio,
                 claves = from s in searchKeys select new SearchKeyRequest { id = 1, clave = s }
             };
 
             var client = new HttpClient { BaseAddress = new Uri(Url),
-                                          Timeout = new TimeSpan(0, 0, 20) };
+                                          Timeout = new TimeSpan(0, 1, 30) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -33,7 +41,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             if(response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsAsync<WsResponse>().Result;
-                ProcessResponse(project, data);
+                ProcessResponse(data);
             }
             else
             {
@@ -41,18 +49,18 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        public void SendMergedUrls(Project project, List<WsFilteredUrl> urls, int requestId)
+        public void SendMergedUrls(List<WsFilteredUrl> urls, int requestId)
         {
             var request = new WsFilteredUrlsRequest
             {
-                id_proyecto = project.Id,
-                nombre_directorio = project.Directorio,
+                id_proyecto = _project.Id,
+                nombre_directorio = _userName + "/" + _project.Directorio,
                 request = requestId,
                 urls = urls
             };
 
             var client = new HttpClient { BaseAddress = new Uri(Url),
-                                          Timeout = new TimeSpan(0, 0, 20) };
+                                          Timeout = new TimeSpan(0, 1, 30) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -70,7 +78,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
-        private void ProcessResponse(Project project, WsResponse response)
+        private void ProcessResponse(WsResponse response)
         {
             Debug.WriteLine("---------BUSCADORES---------: {0}", response.buscadores.Count());
             foreach (var searchEngineResult in response.buscadores)
@@ -103,7 +111,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("Orden = {0}, URL = {1}", wsFilteredUrl.orden, wsFilteredUrl.url);
             }
 
-            SendMergedUrls(project, wsFilteredUrlList, response.id_request);
+            SendMergedUrls(wsFilteredUrlList, response.id_request);
         }
     }
 }

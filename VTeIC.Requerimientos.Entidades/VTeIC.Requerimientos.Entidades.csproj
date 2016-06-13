@@ -59,6 +59,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
+    <Compile Include="QuestionGroup.cs" />
     <Compile Include="QuestionLink.cs" />
     <Compile Include="QuestionRelationshipOperator.cs" />
     <Compile Include="QuestionType.cs" />

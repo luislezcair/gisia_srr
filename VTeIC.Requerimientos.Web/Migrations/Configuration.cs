@@ -221,6 +221,16 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 regionQ
             );
 
+            context.QuestionGroups.AddOrUpdate(
+                q => q.Id,
+                new QuestionGroup { Title = "Tema", Questions = { subjectQ } },
+                new QuestionGroup { Title = "Características", Questions = { particularFeatureQ, featureQ, anotherFeatureQ } },
+                new QuestionGroup { Title = "Fuentes de Información", Questions = { sourcesQ } },
+                new QuestionGroup { Title = "Datos adicionales sobre la fuente", Questions = { sourceDataQ } },
+                new QuestionGroup { Title = "Acción", Questions = { actionQ } },
+                new QuestionGroup { Title = "Región geográfica", Questions = { regionQ } }
+            );
+
             context.QuestionLinks.AddOrUpdate(
                 ql => ql.Id,
                 new QuestionLink { Question = subjectQ, Next = particularFeatureQ },

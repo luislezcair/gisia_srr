@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 
 namespace VTeIC.Requerimientos.Entidades
 {
@@ -28,5 +24,7 @@ namespace VTeIC.Requerimientos.Entidades
         public virtual QuestionType QuestionType { get; set; }
 
         public virtual ICollection<ChoiceOption> ChoiceOptions { get; set; }
+
+        public virtual QuestionGroup QuestionGroup { get; set; }
     }
 }
