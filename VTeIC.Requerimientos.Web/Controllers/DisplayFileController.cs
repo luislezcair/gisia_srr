@@ -27,6 +27,9 @@ namespace VTeIC.Requerimientos.Web.Controllers
             //iterate through each file, get its name and set its path, and add to my VM
             foreach (FileInfo file in files2 )
             {
+                if(file.FullName.EndsWith("json"))
+                    continue;
+
                 DownloadableFile newFile = new DownloadableFile();
                 newFile.FileName = Path.GetFileNameWithoutExtension(file.FullName);  //remove the file extension for the name
                 newFile.Path = filePath + "/" +  User.Identity.Name + "/" + directorio + "/" + file.Name; //set path to virtual directory + file name

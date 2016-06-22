@@ -63,14 +63,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 string path1 = Properties.Settings.Default.PathDeDirectorios;
 
                 string userName = User.Identity.GetUserName();
-                //me fijo si esta la carpeta de usuario
-                bool exists = System.IO.Directory.Exists(path1 + "\\" + userName);
-                if (!exists)
-                    System.IO.Directory.CreateDirectory(path1 + "\\" + userName);
-                //me fijo si esta la carpeta de proyecto
-                exists = System.IO.Directory.Exists(path1 + "\\" + userName + "\\" + project.Directorio);
-                if (!exists)
-                    System.IO.Directory.CreateDirectory(path1 + "\\" + userName + "\\" + project.Directorio);
+                ////me fijo si esta la carpeta de usuario
+                //bool exists = System.IO.Directory.Exists(path1 + "\\" + userName);
+                //if (!exists)
+                //    System.IO.Directory.CreateDirectory(path1 + "\\" + userName);
+                ////me fijo si esta la carpeta de proyecto
+                //exists = System.IO.Directory.Exists(path1 + "\\" + userName + "\\" + project.Directorio);
+                //if (!exists)
+                //    System.IO.Directory.CreateDirectory(path1 + "\\" + userName + "\\" + project.Directorio);
                 
                 project.Activo = true;
                 
@@ -177,7 +177,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return Json(new
                 {
                     result = false,
-                    error = "No se ha podido conectar con el servicio web. " + httpError.Message
+                    error = "No se ha podido conectar con el servicio web. ERROR: " + httpError.Message
                 });
             }
             catch (Exception e)
@@ -185,7 +185,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return Json(new
                 {
                     result = false,
-                    error = "No se ha podido conectar con el servicio web. " + e.Message
+                    error = "No se ha podido conectar con el servicio web. ERROR: " + e.Message
                 });
             }
 

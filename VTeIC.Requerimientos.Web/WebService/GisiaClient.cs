@@ -11,7 +11,7 @@ namespace VTeIC.Requerimientos.Web.WebService
 {
     public class GisiaClient
     {
-        public string Url = Properties.Settings.Default.WebServiceURLTesting;
+        public string Url = Properties.Settings.Default.WebServiceURL;
         private string _userName;
         private Project _project;
 
@@ -34,6 +34,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                                           Timeout = new TimeSpan(0, 1, 30) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
 
             // Esta llamada se bloquea hasta obtener la respuesta
             HttpResponseMessage response = client.PostAsJsonAsync("wsrequests/", request).Result;

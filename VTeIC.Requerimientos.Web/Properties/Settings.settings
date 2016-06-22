@@ -2,17 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VTeIC.Requerimientos.Web.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="PathDeDirectorios" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">D:\ArchivosVTeIC</Value>
-    </Setting>
-    <Setting Name="Web" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://181.14.196.108:33122/api/</Value>
-    </Setting>
     <Setting Name="WebServiceURLTesting" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:8000/api/</Value>
     </Setting>
     <Setting Name="WebServiceURL" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://181.14.196.108:33122/api/</Value>
+    </Setting>
+    <Setting Name="PathDeDirectorios" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">E:\ArchivosVTeIC</Value>
     </Setting>
   </Settings>
 </SettingsFile>
