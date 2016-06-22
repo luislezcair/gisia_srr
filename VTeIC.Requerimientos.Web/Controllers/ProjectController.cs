@@ -153,7 +153,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             _db.Sessions.Add(session);
             _db.SaveChanges();
 
-            var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList());
+            var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList(), _db.QuestionGroups.ToList());
             return View("Work", vteic);
         }
 

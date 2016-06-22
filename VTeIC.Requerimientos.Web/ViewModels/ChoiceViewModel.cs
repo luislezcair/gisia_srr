@@ -8,6 +8,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         {
             Id = choice.Id;
             Text = choice.Text;
+            Weight = choice.Weight;
             QuestionId = choice.Question.Id;
             UseInSearchKey = choice.UseInSearchKey;
             UseInSearchKeyAs = choice.UseInSearchKeyAs;
@@ -19,5 +20,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         public bool UseInSearchKey { get; set; }
         public string UseInSearchKeyAs { get; set; }
+
+        public int Weight { get; set; }
     }
 }

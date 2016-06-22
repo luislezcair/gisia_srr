@@ -6,13 +6,13 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 {
     public class ProjectVTeICViewModel
     {
-        public ProjectVTeICViewModel(Project project, List<Question> questions)
+        public ProjectVTeICViewModel(Project project, List<Question> questions, List<QuestionGroup> groups)
         {
             Project = new ProjectViewModel(project);
-            Questions = (from q in questions select new QuestionViewModel(q)).ToList();
+            VTeIC = new VTeICViewModel(questions, groups);
         }
 
         public ProjectViewModel Project { get; set; }
-        public List<QuestionViewModel> Questions { get; set; }
+        public VTeICViewModel VTeIC { get; set; }
     }
 }

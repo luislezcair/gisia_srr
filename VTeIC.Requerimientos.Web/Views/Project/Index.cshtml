@@ -35,10 +35,10 @@
                 @Html.DisplayFor(modelItem => item.Activo)
             </td>
             <td>
-                <a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar"></a>
-                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles"></a>
-                <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
-                <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Index", "DisplayFile", new {directorio = item.Directorio})" data-toggle="tooltip" data-placement="top" title="Ver archivos"></a>
+                @*<a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar proyecto"></a>*@
+@*                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles del proyecto"></a>*@
+                <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Borrar proyecto"></a>
+                <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Index", "DisplayFile", new {directorio = item.Directorio})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
             </td>
         </tr>
     }
@@ -46,7 +46,7 @@
 
 <div class="clearfix">
     <div class="pull-right">
-        <a href="@Url.Action("Create")" class="btn btn-sm btn-success">Nuevo Proyecto</a>
+        <a href="@Url.Action("Create")" class="btn btn-sm btn-success">Crear nuevo proyecto</a>
     </div>
 </div>
 

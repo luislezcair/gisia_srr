@@ -112,7 +112,15 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("Orden = {0}, URL = {1}", wsFilteredUrl.orden, wsFilteredUrl.url);
             }
 
-            SendMergedUrls(wsFilteredUrlList, response.id_request);
+            if(wsFilteredUrlList.Any())
+            {
+                SendMergedUrls(wsFilteredUrlList, response.id_request);
+                Debug.WriteLine("Se enviaron {0} URLs", wsFilteredUrlList.Count);
+            }
+            else
+            {
+                Debug.WriteLine("El WS no devolvió ninguna URLs");
+            }
         }
     }
 }

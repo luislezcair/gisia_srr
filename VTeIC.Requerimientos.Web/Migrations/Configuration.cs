@@ -50,6 +50,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
             context.Database.ExecuteSqlCommand("DELETE FROM QuestionTypes");
             context.Database.ExecuteSqlCommand("DELETE FROM Questions");
             context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
+            context.Database.ExecuteSqlCommand("DELETE FROM QuestionGroups");
 
             QuestionType textField = new QuestionType { Description = "Campo de texto", Type = QuestionTypes.TEXT_FIELD };
             QuestionType booleanQuestion = new QuestionType { Description = "Sí / No", Type = QuestionTypes.BOOLEAN };
@@ -66,26 +67,30 @@ namespace VTeIC.Requerimientos.Web.Migrations
             {
                 Text = "Papers",
                 UseInSearchKey = true,
-                UseInSearchKeyAs = "paper OR cite"
+                UseInSearchKeyAs = "paper OR cite",
+                Weight = 1
             };
 
             ChoiceOption sourcePatents = new ChoiceOption
             {
                 Text = "Patentes",
                 UseInSearchKey = true,
-                UseInSearchKeyAs = "patents"
-            };
-
-            ChoiceOption sourceOthers = new ChoiceOption
-            {
-                Text = "Otros",
-                UseInSearchKey = false
+                UseInSearchKeyAs = "patents",
+                Weight = 2
             };
 
             ChoiceOption sourceDocuments = new ChoiceOption
             {
                 Text = "Documentos",
-                UseInSearchKey = false
+                UseInSearchKey = false,
+                Weight = 3
+            };
+
+            ChoiceOption sourceOthers = new ChoiceOption
+            {
+                Text = "Otros",
+                UseInSearchKey = false,
+                Weight = 4
             };
 
             ChoiceOption actionBuy = new ChoiceOption
@@ -201,11 +206,11 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question regionQ = new Question
             {
-                Text = "Especifique la región por la que desea filtrar los resultados",
+                Text = "Especifique la región geográfica por la que desea filtrar los resultados",
                 QuestionType = textField,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Región o país",
+                Title = "Región geográfica",
                 HasManyAnswers = false
             };
 

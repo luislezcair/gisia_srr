@@ -19,6 +19,8 @@ namespace VTeIC.Requerimientos.Entidades
 
         public bool UseInSearchKey { get; set; }
         public string UseInSearchKeyAs { get; set; }
+
+        public int Weight { get; set; }
     }
 
     public class EnforceQuestionType : ValidationAttribute

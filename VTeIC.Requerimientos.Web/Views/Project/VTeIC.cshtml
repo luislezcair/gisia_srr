@@ -1,6 +1,6 @@
 ﻿@using VTeIC.Requerimientos.Entidades
 @using VTeIC.Requerimientos.Web.ViewModels
-@model List<QuestionViewModel>
+@model VTeICViewModel
 
 @{
     ViewBag.Title = "VTeIC";
@@ -17,21 +17,21 @@
         <div class="steps clearfix">
             <ul role="tablist">
                 @{ int index = 0; }
-                @foreach (var question in Model)
+                @foreach (var group in Model.Groups)
                 {
-                    bool first = question.Equals(Model.First());
-                    <li role="tab" data-question="@(question.Id)" class="@( first ? "first current" : "disabled" )" aria-disabled="false" aria-selected="true">
-                        <a href="#" data-question="@(question.Id)">
-                            <span class="number">@(++index). </span>@question.Title
+                    bool first = group.Equals(Model.Groups.First());
+                    <li role="tab" data-group="@(group.Id)" class="@( first ? "first current" : "disabled" )" aria-disabled="false" aria-selected="true">
+                        <a href="#" data-group="@(group.Id)">
+                            <span class="number">@(++index). </span>@group.Title
                         </a>
                     </li>
                 }
             </ul>
         </div>
         <div class="content clearfix well">
-            @foreach (var question in Model)
+            @foreach (var question in Model.Questions)
             {
-                bool first = question.Equals(Model.First());
+                bool first = question.Equals(Model.Questions.First());
 
                 <section role="tabpanel" data-question="@(question.Id)" class="body current @(first ? "" : "hidden")" aria-hidden="false">
                     <div class="text-center col-md-12">
@@ -48,7 +48,7 @@
                             }
                             else
                             {
-                                foreach (var choice in question.ChoiceOptions)
+                                foreach (var choice in question.ChoiceOptions.OrderBy(c => c.Weight))
                                 {
                                     <div class="row">
                                         <div class="col-sm-offset-5 col-sm-7 choice-list">
@@ -97,8 +97,9 @@
         MultipleChoice: @((int) QuestionTypes.MULTIPLE_CHOICE) };
 
     var CurrentQuestion = {
-        Id: @(Model.First().Id),
-        Type: @((int) Model.First().QuestionType) };
+        Id: @(Model.Questions.First().Id),
+        Type: @((int) Model.Questions.First().QuestionType),
+        Group: @(Model.Questions.First().Group) };
 
     var BooleanAnswer = null;
 
@@ -166,10 +167,11 @@
                 }
 
                 var nextQuestion = response.Question;
-                switch_question(nextQuestion.Id);
+                switch_question(nextQuestion.Id, nextQuestion.Group);
 
                 CurrentQuestion.Id = nextQuestion.Id;
                 CurrentQuestion.Type = nextQuestion.QuestionType;
+                CurrentQuestion.Group = nextQuestion.Group;
 
                 if (CurrentQuestion.Type === QuestionType.Boolean) {
                     $('#btn-next').prop('disabled', true);
@@ -198,12 +200,12 @@
     /**
      * Oculta la pregunta anterior y muestra la próxima
      **/
-    function switch_question(next_question) {
-        var currentTab = find_question_tab(CurrentQuestion.Id);
+    function switch_question(next_question_id, next_group) {
+        var currentTab = find_group_tab(CurrentQuestion.Group);
         var currentSection = find_question_section(CurrentQuestion.Id);
 
-        var nextTab = find_question_tab(next_question);
-        var nextSection = find_question_section(next_question);
+        var nextTab = find_group_tab(next_group);
+        var nextSection = find_question_section(next_question_id);
 
         currentTab.removeClass('current')
             .addClass('done');
@@ -221,8 +223,8 @@
     }
 
     // Obtiene el tab correspondiente a la pregunta q
-    function find_question_tab(q) {
-        return $("li[data-question=" + q + "]");
+    function find_group_tab(g) {
+        return $("li[data-group=" + g + "]");
     }
 
     // Obtiene la section correspondiente a la pregunta q
