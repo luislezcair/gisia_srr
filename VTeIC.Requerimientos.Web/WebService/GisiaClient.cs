@@ -87,7 +87,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("BUSCADOR: {0}, URLS: {1}", searchEngineResult.buscador, searchEngineResult.urls.Count());
                 foreach (var url in searchEngineResult.urls)
                 {
-                    Debug.WriteLine("URL: {0}", url.url);
+                    Debug.WriteLine("URL = {0}", url.url);
                 }
             }
 

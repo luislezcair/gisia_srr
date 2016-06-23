@@ -236,7 +236,6 @@
     <Compile Include="ViewModels\QuestionGroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionLinkViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
-    <Compile Include="ViewModels\VTeICViewModel.cs" />
     <Compile Include="WebService\GisiaClient.cs" />
     <Compile Include="WebService\WsRequest.cs" />
     <Compile Include="WebService\URLMerger.cs" />

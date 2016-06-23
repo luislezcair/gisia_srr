@@ -8,9 +8,11 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         {
             Id = project.Id;
             ProjectName = project.Nombre;
+            Directorio = project.Directorio;
         }
 
         public int Id { get; set; }
         public string ProjectName { get; set; }
+        public string Directorio { get; set; }
     }
 }

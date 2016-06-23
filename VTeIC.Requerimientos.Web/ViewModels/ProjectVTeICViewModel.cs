@@ -9,10 +9,12 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public ProjectVTeICViewModel(Project project, List<Question> questions, List<QuestionGroup> groups)
         {
             Project = new ProjectViewModel(project);
-            VTeIC = new VTeICViewModel(questions, groups);
+            Questions = (from q in questions select new QuestionViewModel(q)).ToList();
+            Groups = (from g in groups select new QuestionGroupViewModel(g)).ToList();
         }
 
         public ProjectViewModel Project { get; set; }
-        public VTeICViewModel VTeIC { get; set; }
+        public List<QuestionViewModel> Questions { get; set; }
+        public List<QuestionGroupViewModel> Groups { get; set; }
     }
 }

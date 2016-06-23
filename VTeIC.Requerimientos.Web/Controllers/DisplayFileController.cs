@@ -2,6 +2,9 @@
 using System.Web.Mvc;  
 using System.IO;
 using VTeIC.Requerimientos.Entidades;
+using System.Collections;
+using System;
+using System.Linq;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -24,8 +27,9 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             DisplayFile vm = new DisplayFile();
             List<DownloadableFile> listaArchivos = new List<DownloadableFile>();
+
             //iterate through each file, get its name and set its path, and add to my VM
-            foreach (FileInfo file in files2 )
+            foreach (FileInfo file in files2)
             {
                 if(file.FullName.EndsWith("json"))
                     continue;

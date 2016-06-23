@@ -1,6 +1,6 @@
 ﻿@using VTeIC.Requerimientos.Entidades
 @using VTeIC.Requerimientos.Web.ViewModels
-@model VTeICViewModel
+@model ProjectVTeICViewModel
 
 @{
     ViewBag.Title = "VTeIC";
@@ -28,7 +28,7 @@
                 }
             </ul>
         </div>
-        <div class="content clearfix well">
+        <div class="content clearfix well" id="question-container">
             @foreach (var question in Model.Questions)
             {
                 bool first = question.Equals(Model.Questions.First());
@@ -62,12 +62,6 @@
                     </div>
                 </section>
             }
-            <section role="tabpanel" class="body current" id="search-keys" style="display: none">
-                <div class="row">
-                    <div class="col-sm-12 align-left">
-                    </div>
-                </div>
-            </section>
         </div>
 
         <div id="error-alert" class="alert alert-danger srr-alert" style="display: none">
@@ -75,6 +69,11 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <p><strong>¡Atención!</strong> No se ha podido establecer la conexión con el servicio de obtención y análisis de datos.</p>
+        </div>
+
+        <div id="working-alert" class="alert alert-success srr-alert" style="display: none">
+            <p><strong>¡Listo!</strong> Se ha iniciado el proceso de búsqueda y análisis de información.</p>
+            <p>Esto puede demorar un tiempo. Cuando finalice el proceso podrá ver los archivos obtenidos ingresando a <a href="@Url.Action("Index", "DisplayFile", new {directorio = Model.Project.Directorio})">archivos del proyecto</a></p>
         </div>
 
         <div class="actions clearfix well">
@@ -154,7 +153,7 @@
                             }
 
                             find_question_section(CurrentQuestion.Id).hide();
-                            show_search_keys(keyResponse.searchKeys);
+                            show_working_dialog();
 
                             $('#btn-next').hide();
                             $('#btn-back').show();
@@ -241,16 +240,11 @@
             });
     }
 
-    // Muestra las claves de búsqueda devueltas
-    function show_search_keys(search_keys) {
-        var section = $('#search-keys');
-        section.html("");
-
-        for (var i = 0; i < search_keys.length; i++) {
-            section.append("<p>" + search_keys[i] + "</p>");
-        }
-
-        section.show();
+    // Muestra el mensaje cuando se inició el proceso de búsqueda.
+    function show_working_dialog() {
+        $('#question-container').fadeOut(400, function() {
+            $('#working-alert').fadeIn();
+        });
     }
 
     $(function(){
