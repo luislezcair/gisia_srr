@@ -29,7 +29,10 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public void RemoveProjectDirectory()
         {
             DirectoryInfo dir = new DirectoryInfo(GetAbsoluteDirectoryPath());
-            dir.Delete(true);
+            if(dir.Exists)
+            {
+                dir.Delete(true);
+            }
         }
 
         private string GetAbsoluteDirectoryPath()
