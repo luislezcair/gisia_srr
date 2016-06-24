@@ -11,6 +11,8 @@ using VTeIC.Requerimientos.Web.ViewModels;
 using VTeIC.Requerimientos.Web.WebService;
 using System.Web;
 using System;
+using System.IO;
+using System.Collections.Generic;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -24,7 +26,9 @@ namespace VTeIC.Requerimientos.Web.Controllers
         public ActionResult Index()
         {
             string userid = User.Identity.GetUserId(); 
-            return View(_db.Projects.Where(t => t.UserId == userid ));
+            var projects = _db.Projects.Where(t => t.UserId == userid).ToList();
+
+            return View((from p in projects select new ProjectViewModel(p)).ToList());
         }
 
         // GET: Project/Details/5
@@ -59,23 +63,11 @@ namespace VTeIC.Requerimientos.Web.Controllers
             if (ModelState.IsValid)
             {
                 project.Directorio = project.Nombre.Replace(" ","");
-
-                string path1 = Properties.Settings.Default.PathDeDirectorios;
-
-                string userName = User.Identity.GetUserName();
-                ////me fijo si esta la carpeta de usuario
-                //bool exists = System.IO.Directory.Exists(path1 + "\\" + userName);
-                //if (!exists)
-                //    System.IO.Directory.CreateDirectory(path1 + "\\" + userName);
-                ////me fijo si esta la carpeta de proyecto
-                //exists = System.IO.Directory.Exists(path1 + "\\" + userName + "\\" + project.Directorio);
-                //if (!exists)
-                //    System.IO.Directory.CreateDirectory(path1 + "\\" + userName + "\\" + project.Directorio);
-                
                 project.Activo = true;
                 
                 _db.Projects.Add(project);
                 _db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -137,6 +129,45 @@ namespace VTeIC.Requerimientos.Web.Controllers
             _db.Projects.Remove(project);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [Route("Project/{projectId:int}/Files")]
+        public ActionResult Files(int projectId)
+        {
+            Project project = _db.Projects.Find(projectId);
+
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            var fileList = new List<DownloadableFile>();
+
+            //identify the virtual path
+            string filePath = "/Archivos";
+            string absoluteDir = Server.MapPath(filePath) + "\\" + User.Identity.Name + "\\" + project.Directorio;
+            DirectoryInfo dir = new DirectoryInfo(absoluteDir);
+
+            if (!dir.Exists)
+            {
+                return View(fileList);
+            }
+
+            FileInfo[] files = dir.GetFiles();
+
+            //iterate through each file, get its name and set its path, and add to my VM
+            foreach (FileInfo file in files)
+            {
+                if (file.FullName.EndsWith("json"))
+                    continue;
+
+                DownloadableFile newFile = new DownloadableFile();
+                newFile.FileName = Path.GetFileNameWithoutExtension(file.FullName);  //remove the file extension for the name
+                newFile.Path = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name; //set path to virtual directory + file name
+                fileList.Add(newFile);
+            }
+
+            return View(fileList);
         }
 
         [Route("Project/{projectId:int}/VTeIC")]

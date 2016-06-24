@@ -1,4 +1,5 @@
-﻿@model IEnumerable<VTeIC.Requerimientos.Entidades.Project>
+﻿@using VTeIC.Requerimientos.Web.ViewModels
+@model List<ProjectViewModel>
 
 @{
     ViewBag.Title = "Proyectos";
@@ -10,15 +11,9 @@
 
 <table class="table no-border-top">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Directorio)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Activo)
-        </th>
+        <th>Nombre</th>
+        <th>Directorio</th>
+        <th>¿Activo?</th>
         <th>Acciones</th>
     </tr>
 
@@ -38,7 +33,11 @@
                 @*<a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar proyecto"></a>*@
 @*                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles del proyecto"></a>*@
                 <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Borrar proyecto"></a>
-                <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Index", "DisplayFile", new {directorio = item.Directorio})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
+
+                @if (item.DirectoryExists())
+                {
+                    <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
+                }
             </td>
         </tr>
     }

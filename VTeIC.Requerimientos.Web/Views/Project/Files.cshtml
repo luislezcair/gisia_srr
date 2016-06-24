@@ -1,5 +1,5 @@
 ﻿@using VTeIC.Requerimientos.Entidades
-@model DisplayFile
+@model List<DownloadableFile>
 
 @{
     ViewBag.Title = "Archivos";
@@ -10,7 +10,7 @@
 </div>
 
 <ul>
-    @foreach (DownloadableFile file in Model.FileList)
+    @foreach (DownloadableFile file in Model)
     {
         <li><a target="_blank" href="@file.Path">@file.FileName</a></li>
     }

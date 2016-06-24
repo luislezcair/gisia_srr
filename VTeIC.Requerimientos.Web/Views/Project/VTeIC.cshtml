@@ -73,7 +73,7 @@
 
         <div id="working-alert" class="alert alert-success srr-alert" style="display: none">
             <p><strong>¡Listo!</strong> Se ha iniciado el proceso de búsqueda y análisis de información.</p>
-            <p>Esto puede demorar un tiempo. Cuando finalice el proceso podrá ver los archivos obtenidos ingresando a <a href="@Url.Action("Index", "DisplayFile", new {directorio = Model.Project.Directorio})">archivos del proyecto</a></p>
+            <p>Esto puede demorar un tiempo. Cuando finalice el proceso podrá ver los archivos obtenidos ingresando a <a href="@Url.Action("Files", new {projectId = Model.Project.Id})">archivos del proyecto</a></p>
         </div>
 
         <div class="actions clearfix well">

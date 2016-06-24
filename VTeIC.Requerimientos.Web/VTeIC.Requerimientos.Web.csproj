@@ -193,7 +193,6 @@
     <Compile Include="Controllers\AccountController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controllers\DisplayFileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
@@ -328,9 +327,9 @@
     <Content Include="Views\Project\Index.cshtml" />
     <Content Include="Views\Project\Work.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
-    <Content Include="Views\DisplayFile\Index.cshtml" />
     <Content Include="Views\Project\VTeIC.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Project\Files.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
