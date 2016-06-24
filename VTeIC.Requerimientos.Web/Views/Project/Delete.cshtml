@@ -19,15 +19,11 @@
         <dd>
             @Html.DisplayFor(model => model.Nombre)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Directorio)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Directorio)
-        </dd>
     </dl>
+
+    <div class="alert alert-danger">
+        <p><strong>¡Atención!</strong> Se borrarán todos los archivos que hayan sido descargados. Esta acción no se puede deshacer.</p>
+    </div>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()

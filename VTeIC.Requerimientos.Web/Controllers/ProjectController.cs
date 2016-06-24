@@ -112,11 +112,13 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Project project = _db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
             }
+
             return View(project);
         }
 
@@ -126,6 +128,10 @@ namespace VTeIC.Requerimientos.Web.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = _db.Projects.Find(id);
+
+            var projectVM = new ProjectViewModel(project);
+            projectVM.RemoveProjectDirectory();
+
             _db.Projects.Remove(project);
             _db.SaveChanges();
             return RedirectToAction("Index");

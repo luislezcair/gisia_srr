@@ -22,10 +22,19 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         public bool DirectoryExists()
         {
-            string filePath = "/Archivos";
-            string absoluteDir = HttpContext.Current.Server.MapPath(filePath) + '\\' + HttpContext.Current.User.Identity.Name + '\\' + Directorio;
-            DirectoryInfo dir = new DirectoryInfo(absoluteDir);
+            DirectoryInfo dir = new DirectoryInfo(GetAbsoluteDirectoryPath());
             return dir.Exists;
+        }
+
+        public void RemoveProjectDirectory()
+        {
+            DirectoryInfo dir = new DirectoryInfo(GetAbsoluteDirectoryPath());
+            dir.Delete(true);
+        }
+
+        private string GetAbsoluteDirectoryPath()
+        {
+            return HttpContext.Current.Server.MapPath("/Archivos") + '\\' + HttpContext.Current.User.Identity.Name + '\\' + Directorio;
         }
     }
 }
