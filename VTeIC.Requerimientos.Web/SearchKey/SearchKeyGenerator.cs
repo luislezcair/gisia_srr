@@ -40,6 +40,8 @@ namespace VTeIC.Requerimientos.Web.SerachKey
                                                                 .Where(a => !(a.AnswerType.Type == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
                                                                 .OrderBy(a => a.Question.Weight);
 
+            var pivotAnswer = answers.FirstOrDefault(a => a.Question.IsPivot);
+
             Node rootNode = BuildSearchKeyTree(weightedAnswers);
 
             //Tree.Tree.Traverse(rootNode);
@@ -51,6 +53,11 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             List<string> orKeys = orStrategy.BuildSearchKey(rootNode);
 
             genericSearchKey.AddRange(orKeys);
+
+            if (pivotAnswer != null)
+            {
+                genericSearchKey.Insert(0, pivotAnswer.TextAnswer);
+            }
 
             return genericSearchKey.ConvertAll<string>(s => RemoveDiacritics(s));
         }
