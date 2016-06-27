@@ -135,3 +135,8 @@ input[type="checkbox"].input-validation-error {
 .no-border-top {
     border-top: hidden;
 }
+
+tfoot > tr > td.list-count {
+    font-size: 11px;
+    text-align: right;
+}

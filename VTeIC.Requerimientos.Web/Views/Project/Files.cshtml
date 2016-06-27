@@ -9,9 +9,36 @@
     <h2>Archivos del proyecto</h2>
 </div>
 
-<ul>
-    @foreach (DownloadableFile file in Model)
-    {
-        <li><a target="_blank" href="@file.Path">@file.FileName</a></li>
-    }
-</ul>
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 3%"></th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 0; }
+            @foreach (DownloadableFile file in Model)
+            {
+                <tr>
+                    <td>@(++i)</td>
+                    <td><a target="_blank" href="@file.Path">@file.FileName</a></td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="list-count">Se encontraron @Model.Count archivos</td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        Este proyecto aún no tiene archivos.
+    </div>
+}
+

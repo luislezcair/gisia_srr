@@ -33,11 +33,7 @@
                 @*<a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar proyecto"></a>*@
 @*                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles del proyecto"></a>*@
                 <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Borrar proyecto"></a>
-
-                @if (item.DirectoryExists())
-                {
-                    <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
-                }
+                <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
             </td>
         </tr>
     }
