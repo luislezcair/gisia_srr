@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
-using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
-using VTeIC.Requerimientos.Web.WebService;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {

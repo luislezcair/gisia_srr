@@ -1,9 +1,6 @@
 namespace VTeIC.Requerimientos.Web.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class AutenticationConfiguration : DbMigrationsConfiguration<VTeIC.Requerimientos.Web.Models.ApplicationDbContext>
     {

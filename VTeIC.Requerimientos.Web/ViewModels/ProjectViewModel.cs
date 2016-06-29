@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using VTeIC.Requerimientos.Entidades;
 using System.Web;
-using System.Diagnostics;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
