@@ -7,7 +7,6 @@ namespace VTeIC.Requerimientos.Web.Models
     public class QuestionDBContext : DbContext
     {
         public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionType> QuestionTypes { get; set; }
         public DbSet<ChoiceOption> QuestionChoices { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<Answer> Answers { get; set; }
@@ -19,9 +18,6 @@ namespace VTeIC.Requerimientos.Web.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Question>()
-                .HasRequired<QuestionType>(q => q.QuestionType);
-
             modelBuilder.Entity<QuestionGroup>()
                 .HasMany(q => q.Questions)
                 .WithOptional(q => q.QuestionGroup);
@@ -35,10 +31,6 @@ namespace VTeIC.Requerimientos.Web.Models
                 .HasRequired<Question>(q => q.Question)
                 .WithMany()
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Answer>()
-                .HasRequired<QuestionType>(a => a.AnswerType)
-                .WithMany();
 
             modelBuilder.Entity<Answer>()
                 .HasMany<ChoiceOption>(c => c.MultipleChoiceAnswer)

@@ -13,10 +13,8 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         {
             Id = question.Id;
             Text = question.Text;
-            QuestionType = question.QuestionType.Type;
-            Title = question.Title;
+            QuestionType = question.QuestionType;
             IsPivot = question.IsPivot;
-            HasManyAnswers = question.HasManyAnswers;
             Group = question.QuestionGroup.Id;
 
             Link = new QuestionLinkViewModel(_db.QuestionLinks.FirstOrDefault(q => q.Question.Id == question.Id));
@@ -32,9 +30,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public string Text { get; set; }
         public QuestionTypes QuestionType { get; set; }
         public List<ChoiceViewModel> ChoiceOptions { get; set; }
-        public string Title { get; set; }
         public bool IsPivot { get; set; }
-        public bool HasManyAnswers { get; set; }
         public QuestionLinkViewModel Link { get; set; }
         public int Group { get; set; }
     }

@@ -35,7 +35,6 @@ namespace VTeIC.Requerimientos.Web.WebService
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-
             // Esta llamada se bloquea hasta obtener la respuesta
             HttpResponseMessage response = client.PostAsJsonAsync("wsrequests/", request).Result;
 
@@ -71,7 +70,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsAsync<WsOkResponse>().Result;
-                Debug.WriteLine("Status = {0}", data.status);
+                Debug.WriteLine("Status = {0}", data.status, "");
             }
             else
             {
@@ -87,7 +86,7 @@ namespace VTeIC.Requerimientos.Web.WebService
                 Debug.WriteLine("BUSCADOR: {0}, URLS: {1}", searchEngineResult.buscador, searchEngineResult.urls.Count());
                 foreach (var url in searchEngineResult.urls)
                 {
-                    Debug.WriteLine("URL = {0}", url.url);
+                    Debug.WriteLine("URL = {0}", url.url, "");
                 }
             }
 

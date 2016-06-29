@@ -43,7 +43,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
             Question next;
 
             // Determina la próxima pregunta de acuerdo a la respuesta Sí / No
-            if (q.QuestionType.Type == QuestionTypes.BOOLEAN && answer.BooleanAnswer != null && !answer.BooleanAnswer.Value)
+            if (q.QuestionType == QuestionTypes.BOOLEAN && answer.BooleanAnswer != null && !answer.BooleanAnswer.Value)
             {
                 next = ql.NextNegative; 
             }

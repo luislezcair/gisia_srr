@@ -30,7 +30,7 @@ namespace VTeIC.Requerimientos.Entidades
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var q = (Question)value;
-            return q.QuestionType.Type != this.QuestionType ?
+            return q.QuestionType != this.QuestionType ?
                 new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName)) : null;
         }
     }

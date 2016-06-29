@@ -9,7 +9,7 @@ namespace VTeIC.Requerimientos.Entidades
         public virtual Session Session { get; set; }
 
         public virtual Question Question { get; set; }
-        public virtual QuestionType AnswerType { get; set; }
+        public QuestionTypes AnswerType { get; set; }
 
         public string TextAnswer { get; set; }
         public bool? BooleanAnswer { get; set; }

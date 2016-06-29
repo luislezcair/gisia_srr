@@ -16,15 +16,18 @@ namespace VTeIC.Requerimientos.Entidades
         // de las siguientes preguntas
         public bool IsPivot { get; set; }
 
-        // Indica si la pregunta puede responderse varias veces, como en el caso de "Ingrese característica"
-        public bool HasManyAnswers { get; set; }
         public int Weight { get; set; }
-        public string Title { get; set; }
-
-        public virtual QuestionType QuestionType { get; set; }
+        public QuestionTypes QuestionType { get; set; }
 
         public virtual ICollection<ChoiceOption> ChoiceOptions { get; set; }
-
         public virtual QuestionGroup QuestionGroup { get; set; }
+    }
+
+    public enum QuestionTypes
+    {
+        TEXT_FIELD,
+        BOOLEAN,
+        MULTIPLE_CHOICE,
+        EXCLUSION_TERMS
     }
 }

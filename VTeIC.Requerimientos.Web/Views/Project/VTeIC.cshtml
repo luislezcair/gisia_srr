@@ -37,7 +37,7 @@
                     <div class="text-center col-md-12">
                         <p id="question-text-q@(question.Id)" class="lead">@(question.Text)</p>
                         <div class="answer-field">
-                            @if (question.QuestionType == QuestionTypes.TEXT_FIELD)
+                            @if (question.QuestionType == QuestionTypes.TEXT_FIELD || question.QuestionType == QuestionTypes.EXCLUSION_TERMS)
                             {
                                 <input type="text" class="form-control input-lg" id="text-q-@(question.Id)" @(question.IsPivot ? "required" : "") autocomplete="off" autofocus>
                             }
@@ -93,7 +93,8 @@
     var QuestionType = {
         Text: @((int) QuestionTypes.TEXT_FIELD),
         Boolean: @((int) QuestionTypes.BOOLEAN),
-        MultipleChoice: @((int) QuestionTypes.MULTIPLE_CHOICE) };
+        MultipleChoice: @((int) QuestionTypes.MULTIPLE_CHOICE),
+        ExclusionTerms: @((int) QuestionTypes.EXCLUSION_TERMS) };
 
     var CurrentQuestion = {
         Id: @(Model.Questions.First().Id),
@@ -187,7 +188,8 @@
      * Obtiene la respuesta de los campos correspondientes de acuerdo al tipo de pregunta
      **/
     function fill_answer(answer) {
-        if (CurrentQuestion.Type === QuestionType.Text) {
+        if (CurrentQuestion.Type === QuestionType.Text ||
+            CurrentQuestion.Type === QuestionType.ExclusionTerms) {
             answer.TextAnswer = $('#text-q-' + CurrentQuestion.Id).val();
         } else if (CurrentQuestion.Type === QuestionType.Boolean) {
             answer.BooleanAnswer = BooleanAnswer;

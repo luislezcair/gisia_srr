@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -34,9 +35,9 @@ namespace VTeIC.Requerimientos.Web.SerachKey
         {
             // Ordena las respuestas por peso y omite las respuestas booleanas, las respuestas vacías
             // y las respuestas de opciones múltiples sin opciones últiles seleccionadas
-            IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType.Type != QuestionTypes.BOOLEAN)
-                                                                .Where(a => !(a.AnswerType.Type == QuestionTypes.TEXT_FIELD && a.TextAnswer == null))
-                                                                .Where(a => !(a.AnswerType.Type == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
+            IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType != QuestionTypes.BOOLEAN)
+                                                                .Where(a => !(a.AnswerType == QuestionTypes.TEXT_FIELD && a.TextAnswer == null))
+                                                                .Where(a => !(a.AnswerType == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
                                                                 .OrderBy(a => a.Question.Weight);
 
             var pivotAnswer = answers.FirstOrDefault(a => a.Question.IsPivot);
@@ -70,7 +71,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             foreach (Answer answer in answers)
             {
                 // Pregunta con varias opciones: OR entre las opciones seleccionadas.
-                if(answer.AnswerType.Type == QuestionTypes.MULTIPLE_CHOICE)
+                if(answer.AnswerType == QuestionTypes.MULTIPLE_CHOICE)
                 {
                     var options = answer.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null);
 

@@ -16,7 +16,7 @@ namespace VTeIC.Requerimientos.Web.Models
         public ActionResult Index()
         {
             var questionChoices = db.QuestionChoices.Include(c => c.Question)
-                                                    .Where(c => c.Question.QuestionType.Id == 3)
+                                                    .Where(c => c.Question.QuestionType == QuestionTypes.MULTIPLE_CHOICE)
                                                     .OrderBy(c => c.Question.Text);
             return View(questionChoices.ToList());
         }
@@ -153,7 +153,7 @@ namespace VTeIC.Requerimientos.Web.Models
 
         private void loadQuestionBox(object defaultValue = null) {
             // En el ComboBox de respuestas carga solamente las preguntas del tipo "Opción múltiple"
-            ViewBag.QuestionId = new SelectList(db.Questions.Where(q => q.QuestionType.Id == 3), "Id", "Text", defaultValue);
+            ViewBag.QuestionId = new SelectList(db.Questions.Where(q => q.QuestionType == QuestionTypes.MULTIPLE_CHOICE), "Id", "Text", defaultValue);
         }
     }
 }

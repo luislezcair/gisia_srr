@@ -47,21 +47,9 @@ namespace VTeIC.Requerimientos.Web.Migrations
             context.Database.ExecuteSqlCommand("DELETE FROM Answers");
             context.Database.ExecuteSqlCommand("DELETE FROM QuestionRelationshipOperators");
             context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
-            context.Database.ExecuteSqlCommand("DELETE FROM QuestionTypes");
             context.Database.ExecuteSqlCommand("DELETE FROM Questions");
             context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
             context.Database.ExecuteSqlCommand("DELETE FROM QuestionGroups");
-
-            QuestionType textField = new QuestionType { Description = "Campo de texto", Type = QuestionTypes.TEXT_FIELD };
-            QuestionType booleanQuestion = new QuestionType { Description = "Sí / No", Type = QuestionTypes.BOOLEAN };
-            QuestionType multipleChoice = new QuestionType { Description = "Opciones múltiples", Type = QuestionTypes.MULTIPLE_CHOICE };
-
-			context.QuestionTypes.AddOrUpdate(
-	            qt => qt.Id,
-	                textField,
-	                booleanQuestion,
-	                multipleChoice
-            );
 
             ChoiceOption sourcePaper = new ChoiceOption
             {
@@ -135,83 +123,75 @@ namespace VTeIC.Requerimientos.Web.Migrations
             Question actionQ = new Question
             {
                 Text = "Especifique qué desea hacer con [previous_answer]",
-                QuestionType = multipleChoice,
+                QuestionType = QuestionTypes.MULTIPLE_CHOICE,
                 IsPivot = false,
                 Weight = 1000,
-                Title = "Acción",
-                HasManyAnswers = false,
                 ChoiceOptions = { actionBuy, actionSell, actionHire, actionKnow }
             };
 
             Question sourceDataQ = new Question
             {
                 Text = "Especifique datos adicionales sobre la fuente",
-                QuestionType = textField,
+                QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
-                Weight = 0,
-                HasManyAnswers = false,
-                Title = "Datos adicionales sobre la fuente"
+                Weight = 0
             };
 
             Question sourcesQ = new Question
             {
                 Text = "¿Qué fuentes de información desea consultar?",
-                QuestionType = multipleChoice,
+                QuestionType = QuestionTypes.MULTIPLE_CHOICE,
                 IsPivot = false,
                 Weight = 0,
-                Title = "Fuentes de información",
-                HasManyAnswers = false,
                 ChoiceOptions = { sourcePaper, sourcePatents, sourceOthers, sourceDocuments }
             };
 
             Question featureQ = new Question
             {
                 Text = "Ingrese característica",
-                QuestionType = textField,
+                QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
-                Weight = 0,
-                Title = "Características",
-                HasManyAnswers = true
+                Weight = 0
             };
 
             Question anotherFeatureQ = new Question
             {
                 Text = "¿[previous_answer] posee otra característica de interés?",
-                QuestionType = booleanQuestion,
+                QuestionType = QuestionTypes.BOOLEAN,
                 IsPivot = false,
-                Weight = 0,
-                Title = "Características",
-                HasManyAnswers = false,
+                Weight = 0
             };
 
             Question particularFeatureQ = new Question
             {
                 Text = "¿Le interesa una característica particular de [previous_answer]?",
-                QuestionType = booleanQuestion,
+                QuestionType = QuestionTypes.BOOLEAN,
                 IsPivot = false,
-                Weight = 0,
-                Title = "Características",
-                HasManyAnswers = false
+                Weight = 0
             };
 
             Question subjectQ = new Question
             {
                 Text = "Introduzca el tema",
-                QuestionType = textField,
+                QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = true,
                 Weight = 999,
-                Title = "Tema",
-                HasManyAnswers = false
             };
 
             Question regionQ = new Question
             {
                 Text = "Especifique la región geográfica por la que desea filtrar los resultados",
-                QuestionType = textField,
+                QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
-                Weight = 0,
-                Title = "Región geográfica",
-                HasManyAnswers = false
+                Weight = 0
+            };
+
+            Question exclusionQ = new Question
+            {
+                Text = "¿Desea excluir algún término de la búsqueda?",
+                QuestionType = QuestionTypes.EXCLUSION_TERMS,
+                IsPivot = false,
+                Weight = -1
             };
 
             context.Questions.AddOrUpdate(
@@ -223,7 +203,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 anotherFeatureQ,
                 particularFeatureQ,
                 subjectQ,
-                regionQ
+                regionQ,
+                exclusionQ
             );
 
             context.QuestionGroups.AddOrUpdate(
@@ -233,7 +214,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 new QuestionGroup { Title = "Fuentes de Información", Questions = { sourcesQ } },
                 new QuestionGroup { Title = "Datos adicionales sobre la fuente", Questions = { sourceDataQ } },
                 new QuestionGroup { Title = "Acción", Questions = { actionQ } },
-                new QuestionGroup { Title = "Región geográfica", Questions = { regionQ } }
+                new QuestionGroup { Title = "Región geográfica", Questions = { regionQ } },
+                new QuestionGroup { Title = "Términos a excluir", Questions = { exclusionQ } }
             );
 
             context.QuestionLinks.AddOrUpdate(
@@ -244,7 +226,8 @@ namespace VTeIC.Requerimientos.Web.Migrations
                 new QuestionLink { Question = anotherFeatureQ, Next = featureQ, NextNegative = sourcesQ },
                 new QuestionLink { Question = sourcesQ, Next = sourceDataQ },
                 new QuestionLink { Question = sourceDataQ, Next = actionQ },
-                new QuestionLink { Question = actionQ, Next = regionQ }
+                new QuestionLink { Question = actionQ, Next = regionQ },
+                new QuestionLink { Question = regionQ, Next = exclusionQ }
             );
 
             context.Operators.AddOrUpdate(

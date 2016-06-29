@@ -40,7 +40,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
         {
             ViewBag.NextQuestionId = new SelectList(db.Questions, "Id", "Text");
             ViewBag.NextQuestionNegativeId = new SelectList(db.Questions, "Id", "Text");
-            ViewBag.QuestionTypeId = new SelectList(db.QuestionTypes, "Id", "Description");
             return View();
         }
 
