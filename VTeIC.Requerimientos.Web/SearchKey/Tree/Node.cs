@@ -14,5 +14,10 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Tree
         public bool Visited { get; set; }
 
         public abstract string GetSubKey();
+
+        public virtual bool InsertSubKeySeparator()
+        {
+            return true;
+        }
     }
 }

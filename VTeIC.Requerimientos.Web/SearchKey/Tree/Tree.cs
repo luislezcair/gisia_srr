@@ -9,7 +9,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Tree
     {
         public static void Traverse(Node node)
         {
-            String nodeData = node.GetSubKey();
+            string nodeData = node.GetSubKey();
 
             Debug.WriteLine("Node data: " + nodeData);
 

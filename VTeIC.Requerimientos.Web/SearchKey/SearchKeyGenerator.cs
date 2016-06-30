@@ -36,7 +36,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             // Ordena las respuestas por peso y omite las respuestas booleanas, las respuestas vacías
             // y las respuestas de opciones múltiples sin opciones últiles seleccionadas
             IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType != QuestionTypes.BOOLEAN)
-                                                                .Where(a => !(a.AnswerType == QuestionTypes.TEXT_FIELD && a.TextAnswer == null))
+                                                                .Where(a => !((a.AnswerType == QuestionTypes.TEXT_FIELD || a.AnswerType == QuestionTypes.EXCLUSION_TERMS) && a.TextAnswer == null))
                                                                 .Where(a => !(a.AnswerType == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
                                                                 .OrderBy(a => a.Question.Weight);
 
@@ -54,12 +54,17 @@ namespace VTeIC.Requerimientos.Web.SerachKey
 
             genericSearchKey.AddRange(orKeys);
 
+            foreach (var key in genericSearchKey)
+            {
+                Debug.Print("SEARCH KEY: {0}", key);
+            }
+
             if (pivotAnswer != null)
             {
                 genericSearchKey.Insert(0, pivotAnswer.TextAnswer);
             }
 
-            return genericSearchKey.ConvertAll<string>(s => RemoveDiacritics(s));
+            return genericSearchKey.ConvertAll(s => RemoveDiacritics(s));
         }
 
         private Node BuildSearchKeyTree(IOrderedEnumerable<Answer> answers)
@@ -90,6 +95,19 @@ namespace VTeIC.Requerimientos.Web.SerachKey
                         optionNode = new DataNode(options.First().UseInSearchKeyAs);
                     }
                     root.Children.Add(optionNode);
+                }
+                else if(answer.AnswerType == QuestionTypes.EXCLUSION_TERMS)
+                {
+                    // Si es una pregunta de exclusión se crea un nodo NOT por cada término y
+                    // se lo agrega directamente al nodo raíz.
+                    var wordList = answer.TextAnswer.Split(' ', ',').Where(w => w.Length > 0);
+
+                    NodeNOT nodeNot = new NodeNOT();
+                    foreach (var word in wordList)
+                    {
+                        nodeNot.Children.Add(new DataNode(word));
+                    }
+                    root.Children.Add(nodeNot);
                 }
                 else
                 {

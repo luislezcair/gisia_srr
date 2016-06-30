@@ -9,7 +9,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Tree
             Data = data;
         }
 
-        public String Data { get; set; }
+        public string Data { get; set; }
 
         public override string GetSubKey()
         {

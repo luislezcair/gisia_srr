@@ -13,5 +13,15 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Tree
         {
             return "-";
         }
+
+        public override bool InsertSubKeySeparator()
+        {
+            return false;
+        }
+
+        public override bool CanHaveSingleChild()
+        {
+            return true;
+        }
     }
 }

@@ -19,6 +19,21 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Strategy
             {
                 Node currentNode = stack.Pop();
 
+                // Si este es un operador y le sigue un operador que se aplica sobre cada uno de sus hijos
+                // omitimos este operador.
+                if (currentNode is OperatorNode && stack.Any())
+                {
+                    Node nextNode = stack.Peek();
+                    if (nextNode is OperatorNode)
+                    {
+                        OperatorNode opNode = (OperatorNode)nextNode;
+                        if (opNode.CanHaveSingleChild())
+                        {
+                            continue;
+                        }
+                    }
+                }
+
                 if (!currentNode.Visited && currentNode is OperatorNode)
                 {
                     OperatorNode op = (OperatorNode)currentNode;
@@ -50,11 +65,22 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Strategy
                         }
                         stack.Push(currentNode.Children.Last());
                         currentNode.Visited = true;
+
+                        // Si el operador se aplica sobre cada uno de sus hijos, hay que agregarlo siempre
+                        OperatorNode opNode = (OperatorNode)currentNode;
+                        if (opNode.CanHaveSingleChild())
+                        {
+                            stack.Push(opNode);
+                        }
                     }
                 }
                 else
                 {
-                    key += currentNode.GetSubKey() + " ";
+                    key += currentNode.GetSubKey();
+                    if (currentNode.InsertSubKeySeparator())
+                    {
+                        key += " ";
+                    }
                 }
             }
 

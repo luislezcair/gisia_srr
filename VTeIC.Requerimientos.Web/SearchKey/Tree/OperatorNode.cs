@@ -22,5 +22,10 @@ namespace VTeIC.Requerimientos.Web.SerachKey.Tree
         }
 
         public abstract QuestionOperator GetQuestionOperator();
+
+        public virtual bool CanHaveSingleChild()
+        {
+            return false;
+        }
     }
 }
