@@ -11,13 +11,29 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             Id = project.Id;
             Nombre = project.Nombre;
             Directorio = project.Directorio;
-            Activo = project.Activo;
+            State = project.State;
         }
 
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Directorio { get; set; }
-        public bool Activo { get; set; }
+        public ProjectState State { get; set; }
+
+        public string StateDescription { get
+            {
+                switch (State)
+                {
+                    case ProjectState.ACTIVE:
+                        return "Activo";
+                    case ProjectState.INACTIVE:
+                        return "Inactivo";
+                    case ProjectState.FINISHED:
+                        return "Detenido";
+                    default:
+                        return "Desconocido";
+                }
+            }
+        }
 
         public bool DirectoryExists()
         {

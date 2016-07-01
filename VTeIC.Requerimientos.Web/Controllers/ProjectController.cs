@@ -57,13 +57,12 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Directorio,UserId,Activo")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Nombre,Directorio,UserId")] Project project)
         {
             if (ModelState.IsValid)
             {
                 project.Directorio = project.Nombre.Replace(" ","");
-                project.Activo = true;
-                
+
                 _db.Projects.Add(project);
                 _db.SaveChanges();
 
@@ -93,7 +92,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Directorio,UserId,Activo")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Nombre")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -197,24 +196,20 @@ namespace VTeIC.Requerimientos.Web.Controllers
         [Route("Project/{projectId:int}/SearchKey")]
         public ActionResult SearchKey(int projectId)
         {
-            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
-            SearchKeyGenerator generator = new SearchKeyGenerator();
-
-            var searchKeys = generator.BuildSearchKey(session.Answers);
             var project = _db.Projects.Find(projectId);
+
+            if (project == null || project.State == ProjectState.ACTIVE)
+            {
+                return HttpNotFound();
+            }
+
+            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
+            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers);
 
             try
             {
-                GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
-                webservice.SendRequest(searchKeys);
-            }
-            catch (HttpException httpError)
-            {
-                return Json(new
-                {
-                    result = false,
-                    error = "No se ha podido conectar con el servicio web. ERROR: " + httpError.Message
-                });
+                //GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
+                //webservice.SendRequest(searchKeys);
             }
             catch (Exception e)
             {
@@ -224,6 +219,10 @@ namespace VTeIC.Requerimientos.Web.Controllers
                     error = "No se ha podido conectar con el servicio web. ERROR: " + e.Message
                 });
             }
+
+            // Se inició el proceso de búsqueda. Establecer como activo este proyecto
+            project.State = ProjectState.ACTIVE;
+            _db.SaveChanges();
 
             return Json(new
             {

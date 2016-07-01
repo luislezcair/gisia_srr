@@ -12,9 +12,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
 {
     public class SearchKeyGenerator
     {
-        private QuestionDBContext db = new QuestionDBContext();
-
-        private string RemoveDiacritics(string text)
+        private static string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();
@@ -31,7 +29,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-        public List<string> BuildSearchKey(List<Answer> answers)
+        public static List<string> BuildSearchKey(List<Answer> answers)
         {
             // Ordena las respuestas por peso y omite las respuestas booleanas, las respuestas vacías
             // y las respuestas de opciones múltiples sin opciones últiles seleccionadas
@@ -54,21 +52,25 @@ namespace VTeIC.Requerimientos.Web.SerachKey
 
             genericSearchKey.AddRange(orKeys);
 
-            foreach (var key in genericSearchKey)
-            {
-                Debug.Print("SEARCH KEY: {0}", key);
-            }
-
+            // Genera una clave más con la respuesta a la pregunta pivot (Tema) y la coloca
+            // siempre primera en la lista.
             if (pivotAnswer != null)
             {
                 genericSearchKey.Insert(0, pivotAnswer.TextAnswer);
             }
 
+            foreach (var key in genericSearchKey)
+            {
+                Debug.Print("SEARCH KEY: {0}", key);
+            }
+
             return genericSearchKey.ConvertAll(s => RemoveDiacritics(s));
         }
 
-        private Node BuildSearchKeyTree(IOrderedEnumerable<Answer> answers)
+        private static Node BuildSearchKeyTree(IOrderedEnumerable<Answer> answers)
         {
+            QuestionDBContext db = new QuestionDBContext();
+
             NodeAND root = new NodeAND();
             OperatorNode currentNode = root;
             Answer previousAnswer = null;
