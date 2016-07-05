@@ -27,7 +27,7 @@
                     <td>@(++i)</td>
                     <td><a target="_blank" href="@file.VirtualPath">@file.FileName</a></td>
 
-                    <td><a href="#">@file.SourceURL</a></td>
+                    <td><a href="@file.SourceURL" target="_blank">@(file.SourceURL.Truncate(50))</a></td>
                 </tr>
             }
         </tbody>
