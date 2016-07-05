@@ -145,7 +145,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
-            var fileList = new List<DownloadableFile>();
+            var fileList = new List<FileViewModel>();
 
             //identify the virtual path
             string filePath = "/Archivos";
@@ -165,9 +165,8 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 if (file.FullName.EndsWith("json"))
                     continue;
 
-                DownloadableFile newFile = new DownloadableFile();
-                newFile.FileName = Path.GetFileNameWithoutExtension(file.FullName);  //remove the file extension for the name
-                newFile.Path = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name; //set path to virtual directory + file name
+                FileViewModel newFile = new FileViewModel(file.FullName);
+                newFile.VirtualPath = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name; //set path to virtual directory + file name
                 fileList.Add(newFile);
             }
 

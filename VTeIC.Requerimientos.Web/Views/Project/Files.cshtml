@@ -1,5 +1,5 @@
-﻿@using VTeIC.Requerimientos.Entidades
-@model List<DownloadableFile>
+﻿@using VTeIC.Requerimientos.Web.ViewModels
+@model List<FileViewModel>
 
 @{
     ViewBag.Title = "Archivos";
@@ -16,21 +16,24 @@
             <tr>
                 <th style="width: 3%"></th>
                 <th>Nombre</th>
+                <th>Origen</th>
             </tr>
         </thead>
         <tbody>
             @{int i = 0; }
-            @foreach (DownloadableFile file in Model)
+            @foreach (FileViewModel file in Model)
             {
                 <tr>
                     <td>@(++i)</td>
-                    <td><a target="_blank" href="@file.Path">@file.FileName</a></td>
+                    <td><a target="_blank" href="@file.VirtualPath">@file.FileName</a></td>
+
+                    <td><a href="#">@file.SourceURL</a></td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2" class="list-count">Se encontraron @Model.Count archivos</td>
+                <td colspan="3" class="list-count">Se encontraron @Model.Count archivos</td>
             </tr>
         </tfoot>
     </table>
