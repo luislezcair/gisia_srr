@@ -15,8 +15,8 @@
         <thead>
             <tr>
                 <th style="width: 3%"></th>
-                @*<th>Nombre</th>*@
                 <th>Origen</th>
+                <th>Nombre de archivo</th>
             </tr>
         </thead>
         <tbody>
@@ -25,14 +25,14 @@
             {
                 <tr>
                     <td>@(++i)</td>
-                    @*<td><a target="_blank" href="@file.VirtualPath">@file.FileName</a></td>*@
-                    <td><a href="@file.SourceURL" target="_blank">@(file.SourceURL.Truncate(60))</a></td>
+                    <td><a href="@file.SourceURL" target="_blank">@(file.SourceURL.Truncate(70))</a></td>
+                    <td><a target="_blank" href="@file.VirtualPath">@file.FileName</a></td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2" class="list-count">Se encontraron @Model.Count archivos</td>
+                <td colspan="3" class="list-count">Se encontraron @Model.Count archivos</td>
             </tr>
         </tfoot>
     </table>
