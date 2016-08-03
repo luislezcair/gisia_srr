@@ -16,29 +16,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
         private void SaveChanges(DbContext context)
         {
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                StringBuilder sb = new StringBuilder();
-
-                foreach (var failure in ex.EntityValidationErrors)
-                {
-                    sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
-                    foreach (var error in failure.ValidationErrors)
-                    {
-                        sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
-                        sb.AppendLine();
-                    }
-                }
-
-                throw new DbEntityValidationException(
-                    "Entity Validation Failed - errors follow:\n" +
-                    sb.ToString(), ex
-                ); // Add the original exception as the innerException
-            }
+            context.SaveChanges();
         }
 
         protected override void Seed(VTeIC.Requerimientos.Web.Models.QuestionDBContext context)
@@ -46,13 +24,80 @@ namespace VTeIC.Requerimientos.Web.Migrations
             context.Database.ExecuteSqlCommand("DELETE FROM MultipleChoiceAnswers");
             context.Database.ExecuteSqlCommand("DELETE FROM Answers");
             context.Database.ExecuteSqlCommand("DELETE FROM QuestionRelationshipOperators");
-            context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
+            //context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
             context.Database.ExecuteSqlCommand("DELETE FROM Questions");
             context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
             context.Database.ExecuteSqlCommand("DELETE FROM QuestionGroups");
+            //context.Database.ExecuteSqlCommand("DELETE FROM SearchKeyStrings");
+            //context.Database.ExecuteSqlCommand("DELETE FROM Languages");
+
+            Language english = new Language
+            {
+                Id = 1,
+                Name = "Inglés"
+            };
+
+            Language spanish = new Language
+            {
+                Id = 2,
+                Name = "Español"
+            };
+
+            context.Languages.AddOrUpdate(l => l.Id, english, spanish);
+
+            SearchKeyString keyBuy = new SearchKeyString
+            {
+                Id = 1,
+                Language = english,
+                SearchKeyParam = "buy"
+            };
+
+            SearchKeyString keyBuy2 = new SearchKeyString
+            {
+                Id = 2,
+                Language = spanish,
+                SearchKeyParam = "comprar"
+            };
+
+            SearchKeyString keySell = new SearchKeyString
+            {
+                Id = 3,
+                Language = english,
+                SearchKeyParam = "sell"
+            };
+
+            SearchKeyString keySell2 = new SearchKeyString
+            {
+                Id = 4,
+                Language = spanish,
+                SearchKeyParam = "vender"
+            };
+
+            SearchKeyString keyHire = new SearchKeyString
+            {
+                Id = 5,
+                Language = english,
+                SearchKeyParam = "hire"
+            };
+
+            SearchKeyString keyHire2 = new SearchKeyString
+            {
+                Id = 6,
+                Language = spanish,
+                SearchKeyParam = "contratar"
+            };
+
+            context.SearchKeyStrings.AddOrUpdate(s => s.Id,
+                keyBuy,
+                keyBuy2,
+                keyHire,
+                keyHire2,
+                keySell,
+                keySell2);
 
             ChoiceOption sourcePaper = new ChoiceOption
             {
+                Id = 1,
                 Text = "Papers",
                 UseInSearchKey = true,
                 UseInSearchKeyAs = "paper OR cite",
@@ -61,6 +106,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             ChoiceOption sourcePatents = new ChoiceOption
             {
+                Id = 2,
                 Text = "Patentes",
                 UseInSearchKey = true,
                 UseInSearchKeyAs = "patents",
@@ -69,6 +115,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             ChoiceOption sourceDocuments = new ChoiceOption
             {
+                Id = 3,
                 Text = "Documentos",
                 UseInSearchKey = false,
                 Weight = 3
@@ -76,6 +123,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             ChoiceOption sourceOthers = new ChoiceOption
             {
+                Id = 4,
                 Text = "Otros",
                 UseInSearchKey = false,
                 Weight = 4
@@ -83,29 +131,36 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             ChoiceOption actionBuy = new ChoiceOption
             {
+                Id = 5,
                 Text = "Comprar",
                 UseInSearchKey = true,
-                UseInSearchKeyAs = "comprar"
+                UseInSearchKeyAs = "comprar",
+                SearchKeyStrings = { keyBuy, keyBuy2 }
             };
 
             ChoiceOption actionSell = new ChoiceOption
             {
+                Id = 6,
                 Text = "Vender",
                 UseInSearchKey = true,
-                UseInSearchKeyAs = "vender"
+                UseInSearchKeyAs = "vender",
+                SearchKeyStrings = { keySell, keySell2 }
             };
 
             ChoiceOption actionHire = new ChoiceOption
             {
+                Id = 7,
                 Text = "Contratar",
                 UseInSearchKey = true,
-                UseInSearchKeyAs = "contratar"
+                UseInSearchKeyAs = "contratar",
+                SearchKeyStrings = { keyHire, keyHire2 } 
             };
 
             ChoiceOption actionKnow = new ChoiceOption
             {
+                Id = 8,
                 Text = "Conocer",
-                UseInSearchKey = false
+                UseInSearchKey = false,
             };
 
             context.QuestionChoices.AddOrUpdate(

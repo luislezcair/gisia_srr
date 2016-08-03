@@ -11,6 +11,7 @@ using VTeIC.Requerimientos.Web.WebService;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -47,7 +48,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            Project project = new Project { UserId = User.Identity.GetUserId() };
+            //Project project = new Project { UserId = User.Identity.GetUserId() };
+            //ViewBag.Languages = _db.Languages.ToList();
+            var project = new ProjectViewModel
+            {
+                UserId = User.Identity.GetUserId(),
+                Langauges = GetLanguages()
+            };
+
             return View(project);
         }
 
@@ -56,12 +64,24 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Directorio,UserId")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Nombre,UserId,LanguageId")] ProjectViewModel projectVM)
         {
+            var lang = _db.Languages.Find(projectVM.LanguageId);
+            if(lang == null)
+            {
+                return View(projectVM);
+            }
+
+            Project project = new Project
+            {
+                Nombre = projectVM.Nombre,
+                UserId = projectVM.UserId,
+                Language = lang,
+                Directorio = projectVM.Nombre.Replace(" ", "")
+            };
+
             if (ModelState.IsValid)
             {
-                project.Directorio = project.Nombre.Replace(" ","");
-
                 _db.Projects.Add(project);
                 _db.SaveChanges();
 
@@ -202,12 +222,12 @@ namespace VTeIC.Requerimientos.Web.Controllers
             }
 
             Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
-            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers);
+            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
 
             try
             {
-                GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
-                webservice.SendRequest(searchKeys);
+                //GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
+                //webservice.SendRequest(searchKeys);
             }
             catch (Exception e)
             {
@@ -236,6 +256,19 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private IEnumerable<SelectListItem> GetLanguages()
+        {
+            var lang = _db.Languages
+                .ToList()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name,
+                });
+
+            return new SelectList(lang, "Value", "Text");
         }
     }
 }

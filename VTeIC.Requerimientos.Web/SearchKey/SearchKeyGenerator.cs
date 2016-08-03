@@ -29,18 +29,18 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-        public static List<string> BuildSearchKey(List<Answer> answers)
+        public static List<string> BuildSearchKey(List<Answer> answers, Language lang)
         {
             // Ordena las respuestas por peso y omite las respuestas booleanas, las respuestas vacías
             // y las respuestas de opciones múltiples sin opciones últiles seleccionadas
             IOrderedEnumerable<Answer> weightedAnswers = answers.Where(a => a.AnswerType != QuestionTypes.BOOLEAN)
                                                                 .Where(a => !((a.AnswerType == QuestionTypes.TEXT_FIELD || a.AnswerType == QuestionTypes.EXCLUSION_TERMS) && a.TextAnswer == null))
-                                                                .Where(a => !(a.AnswerType == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null).Any()))
+                                                                .Where(a => !(a.AnswerType == QuestionTypes.MULTIPLE_CHOICE && !a.MultipleChoiceAnswer.Where(c => c.UseInSearchKey).Any()))
                                                                 .OrderBy(a => a.Question.Weight);
 
             var pivotAnswer = answers.FirstOrDefault(a => a.Question.IsPivot);
 
-            Node rootNode = BuildSearchKeyTree(weightedAnswers);
+            Node rootNode = BuildSearchKeyTree(weightedAnswers, lang);
 
             //Tree.Tree.Traverse(rootNode);
 
@@ -67,7 +67,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             return genericSearchKey.ConvertAll(s => RemoveDiacritics(s));
         }
 
-        private static Node BuildSearchKeyTree(IOrderedEnumerable<Answer> answers)
+        private static Node BuildSearchKeyTree(IOrderedEnumerable<Answer> answers, Language lang)
         {
             QuestionDBContext db = new QuestionDBContext();
 
@@ -80,7 +80,7 @@ namespace VTeIC.Requerimientos.Web.SerachKey
                 // Pregunta con varias opciones: OR entre las opciones seleccionadas.
                 if(answer.AnswerType == QuestionTypes.MULTIPLE_CHOICE)
                 {
-                    var options = answer.MultipleChoiceAnswer.Where(c => c.UseInSearchKeyAs != null);
+                    var options = answer.MultipleChoiceAnswer.Where(c => c.UseInSearchKey);
 
                     Node optionNode;
                     if (options.Count() > 1)
@@ -88,12 +88,14 @@ namespace VTeIC.Requerimientos.Web.SerachKey
                         optionNode = new NodeOR();
                         foreach (ChoiceOption choice in options)
                         {
-                            optionNode.Children.Add(new DataNode(choice.UseInSearchKeyAs));
+                            var text = GetTranslatedText(choice, lang);
+                            optionNode.Children.Add(new DataNode(text));
                         }
                     }
                     else
                     {
                         // Si hay una sola opción se la agrega directamente al nodo padre sin un nodo OR
+                        var text = GetTranslatedText(options.First(), lang);
                         optionNode = new DataNode(options.First().UseInSearchKeyAs);
                     }
                     root.Children.Add(optionNode);
@@ -134,6 +136,21 @@ namespace VTeIC.Requerimientos.Web.SerachKey
             }
 
             return root;
+        }
+
+        private static string GetTranslatedText(ChoiceOption choice, Language lang)
+        {
+            var translatedText = choice.SearchKeyStrings.FirstOrDefault(s => s.Language.Id == lang.Id);
+
+            if (translatedText == null)
+            {
+                return choice.UseInSearchKeyAs;
+            }
+            else
+            {
+                return translatedText.SearchKeyParam;
+            }
+
         }
     }
 }

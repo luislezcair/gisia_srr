@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VTeIC.Requerimientos.Entidades
 {
     public class ChoiceOption
     {
+        public ChoiceOption()
+        {
+            SearchKeyStrings = new List<SearchKeyString>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -16,6 +22,8 @@ namespace VTeIC.Requerimientos.Entidades
         public string UseInSearchKeyAs { get; set; }
 
         public int Weight { get; set; }
+
+        public virtual ICollection<SearchKeyString> SearchKeyStrings { get; set; }
     }
 
     public class EnforceQuestionType : ValidationAttribute

@@ -13,6 +13,8 @@ namespace VTeIC.Requerimientos.Web.Models
         public DbSet<Session> Sessions { get; set; }
         public DbSet<QuestionRelationshipOperator> Operators { get; set; }
         public DbSet<QuestionLink> QuestionLinks { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<SearchKeyString> SearchKeyStrings { get; set; }
 
         public DbSet<Project> Projects { get; set; }
 
@@ -23,9 +25,15 @@ namespace VTeIC.Requerimientos.Web.Models
                 .WithOptional(q => q.QuestionGroup);
 
             modelBuilder.Entity<ChoiceOption>()
-                .HasRequired<Question>(q => q.Question)
+                .HasRequired(q => q.Question)
                 .WithMany(c => c.ChoiceOptions)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ChoiceOption>()
+                .HasMany(c => c.SearchKeyStrings)
+                .WithOptional();
+                //.WillCascadeOnDelete();
+                //.WithRequired(c => c.choice);
 
             modelBuilder.Entity<Answer>()
                 .HasRequired<Question>(q => q.Question)

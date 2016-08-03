@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using VTeIC.Requerimientos.Entidades;
 using System.Web;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -12,12 +14,20 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             Nombre = project.Nombre;
             Directorio = project.Directorio;
             State = project.State;
+            UserId = project.UserId;
+            LanguageId = project.Language.Id;
         }
+
+        public ProjectViewModel() { }
 
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Directorio { get; set; }
         public ProjectState State { get; set; }
+        public string UserId { get; set; }
+        public int LanguageId { get; set; }
+
+        public IEnumerable<SelectListItem> Langauges { get; set; }
 
         public string StateDescription { get
             {
