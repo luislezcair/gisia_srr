@@ -226,8 +226,8 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             try
             {
-                //GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
-                //webservice.SendRequest(searchKeys);
+                GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
+                webservice.SendRequest(searchKeys);
             }
             catch (Exception e)
             {
