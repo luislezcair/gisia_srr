@@ -31,14 +31,13 @@ namespace VTeIC.Requerimientos.Web.WebService
             };
 
             var client = new HttpClient { BaseAddress = new Uri(Url),
-                                          Timeout = new TimeSpan(0, 1, 30) };
+                                          Timeout = new TimeSpan(0, 3, 0) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            // Esta llamada se bloquea hasta obtener la respuesta
+            // Esta llamada ya no se bloquea hasta obtener la respuesta
             HttpResponseMessage response = client.PostAsJsonAsync("wsrequests/", request).Result;
-
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsAsync<WsResponse>().Result;
                 ProcessResponse(data);
@@ -60,7 +59,7 @@ namespace VTeIC.Requerimientos.Web.WebService
             };
 
             var client = new HttpClient { BaseAddress = new Uri(Url),
-                                          Timeout = new TimeSpan(0, 1, 30) };
+                                          Timeout = new TimeSpan(0, 3, 0) };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

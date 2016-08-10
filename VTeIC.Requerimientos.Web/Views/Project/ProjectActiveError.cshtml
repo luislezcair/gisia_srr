@@ -11,4 +11,7 @@
     <li class="active">@Model.Project.Nombre</li>
 </ol>
 
-@Html.Partial("VTeIC", Model)
+<div class="alert alert-warning">
+    <p>Este proyecto ya tiene un proceso de búsqueda y análisis en curso.</p>
+    <p>Para realizar una nueva búsqueda puede @Html.ActionLink("crear", "Create") otro proyecto.</p>
+</div>

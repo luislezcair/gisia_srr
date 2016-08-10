@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VTeIC.Requerimientos.Entidades
 {
@@ -13,30 +14,36 @@ namespace VTeIC.Requerimientos.Entidades
         public int Id { get; set; }
 
         [Required]
+        [Index(IsUnique = true)]
+        [StringLength(100)]
         public string Nombre { get; set; }
+
         public string Directorio { get; set; }
         public string UserId { get; set; }
         public ProjectState State { get; set; }
 
+        // Cuando no se pudo iniciar el proyecto por algún error, esta propiedad va a
+        // contener la descripción del error.
+        public string StateReason { get; set; }
+
         public virtual Language Language { get; set; }
-
-        //[Display(Name = "Idioma")]
-        //public ProjectLanguage Language { get; set; } 
     }
-
-    //public enum ProjectLanguage
-    //{
-    //    [Display(Name = "Inglés")]
-    //    ENGLISH,
-
-    //    [Display(Name = "Español")]
-    //    SPANISH
-    //}
 
     public enum ProjectState
     {
+        [Display(Name = "Activo")]
         ACTIVE,
+
+        [Display(Name = "Finalizado")]
         FINISHED,
-        INACTIVE
+
+        [Display(Name = "Inactivo")]
+        INACTIVE,
+
+        [Display(Name = "Trabajando")]
+        WORKING,
+
+        [Display(Name = "Error")]
+        ERROR
     }
 }

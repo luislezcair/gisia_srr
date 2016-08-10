@@ -3,6 +3,8 @@ using VTeIC.Requerimientos.Entidades;
 using System.Web;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -21,29 +23,16 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public ProjectViewModel() { }
 
         public int Id { get; set; }
+
+        [Required]
+        [Index(IsUnique = true)]
+        [StringLength(100)]
         public string Nombre { get; set; }
         public string Directorio { get; set; }
         public ProjectState State { get; set; }
         public string UserId { get; set; }
         public int LanguageId { get; set; }
-
         public IEnumerable<SelectListItem> Langauges { get; set; }
-
-        public string StateDescription { get
-            {
-                switch (State)
-                {
-                    case ProjectState.ACTIVE:
-                        return "Activo";
-                    case ProjectState.INACTIVE:
-                        return "Inactivo";
-                    case ProjectState.FINISHED:
-                        return "Detenido";
-                    default:
-                        return "Desconocido";
-                }
-            }
-        }
 
         public bool DirectoryExists()
         {

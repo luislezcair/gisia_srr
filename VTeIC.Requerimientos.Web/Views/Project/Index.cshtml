@@ -25,7 +25,7 @@
             <tr>
                 <td>
                     @if (item.State == ProjectState.ACTIVE)
-                {
+                    {
                         @Html.DisplayFor(modelItem => item.Nombre)
                     }
                     else
@@ -39,16 +39,22 @@
                 <td>
                     @if (item.State == ProjectState.ACTIVE)
                     {
-                        <strong style="color: darkgreen">@Html.DisplayFor(modelItem => item.StateDescription)</strong>
+                        <strong style="color: darkgreen">@Html.DisplayFor(modelItem => item.State)</strong>
+                    }
+                    else if(item.State == ProjectState.ERROR)
+                    {
+                        <strong style="color: darkred">@Html.DisplayFor(modelItem => item.State)</strong>
+                    }
+                    else if(item.State == ProjectState.WORKING)
+                    {
+                        <strong style="color: darkblue">@Html.DisplayFor(modelItem => item.State)...</strong>
                     }
                     else
                     {
-                        @Html.DisplayFor(modelItem => item.StateDescription)
+                        @Html.DisplayFor(modelItem => item.State)
                     }
                 </td>
                 <td>
-                    @*<a class="fa fa-pencil fa-2x blue action-button" href="@Url.Action("Edit", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Editar proyecto"></a>*@
-                    @*                <a class="fa fa-info-circle fa-2x green action-button" href="@Url.Action("Details", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver detalles del proyecto"></a>*@
                     <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Borrar proyecto"></a>
                     <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivos del proyecto"></a>
                 </td>

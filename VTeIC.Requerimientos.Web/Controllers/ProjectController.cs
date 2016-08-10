@@ -8,10 +8,12 @@ using VTeIC.Requerimientos.Web.Models;
 using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
 using VTeIC.Requerimientos.Web.WebService;
-using System;
 using System.IO;
 using System.Collections.Generic;
+using System;
+using Hangfire;
 using System.Diagnostics;
+using VTeIC.Requerimientos.Web.BackgroundJobs;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -48,8 +50,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            //Project project = new Project { UserId = User.Identity.GetUserId() };
-            //ViewBag.Languages = _db.Languages.ToList();
             var project = new ProjectViewModel
             {
                 UserId = User.Identity.GetUserId(),
@@ -202,6 +202,11 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
+            if(project.State == ProjectState.ACTIVE)
+            {
+                return View("ProjectActiveError");
+            }
+
             Session session = new Session();
             _db.Sessions.Add(session);
             _db.SaveChanges();
@@ -221,32 +226,9 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
-            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
-            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
+            BackgroundJob.Enqueue(() => VTeICJob.Perform(projectId, User.Identity.Name));
 
-            try
-            {
-                GisiaClient webservice = new GisiaClient(User.Identity.Name, project);
-                webservice.SendRequest(searchKeys);
-            }
-            catch (Exception e)
-            {
-                return Json(new
-                {
-                    result = false,
-                    error = "No se ha podido conectar con el servicio web. ERROR: " + e.Message
-                });
-            }
-
-            // Se inició el proceso de búsqueda. Establecer como activo este proyecto
-            project.State = ProjectState.ACTIVE;
-            _db.SaveChanges();
-
-            return Json(new
-            {
-                result = true,
-                searchKeys = searchKeys
-            });
+            return Json(new { result = true });
         }
 
         protected override void Dispose(bool disposing)
@@ -258,6 +240,10 @@ namespace VTeIC.Requerimientos.Web.Controllers
             base.Dispose(disposing);
         }
 
+        /**
+         * Transforma la lista de idiomas de la base de datos a una lista de ListItems para
+         * mostrarse en una lista desplegable en la interfaz.
+         */
         private IEnumerable<SelectListItem> GetLanguages()
         {
             var lang = _db.Languages

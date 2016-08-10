@@ -23,13 +23,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
         {
             context.Database.ExecuteSqlCommand("DELETE FROM MultipleChoiceAnswers");
             context.Database.ExecuteSqlCommand("DELETE FROM Answers");
-            context.Database.ExecuteSqlCommand("DELETE FROM QuestionRelationshipOperators");
-            context.Database.ExecuteSqlCommand("DELETE FROM ChoiceOptions");
-            context.Database.ExecuteSqlCommand("DELETE FROM Questions");
             context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
-            context.Database.ExecuteSqlCommand("DELETE FROM QuestionGroups");
-            //context.Database.ExecuteSqlCommand("DELETE FROM SearchKeyStrings");
-            //context.Database.ExecuteSqlCommand("DELETE FROM Languages");
 
             Language english = new Language
             {
@@ -177,6 +171,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question actionQ = new Question
             {
+                Id = 1,
                 Text = "Especifique qué desea hacer con [previous_answer]",
                 QuestionType = QuestionTypes.MULTIPLE_CHOICE,
                 IsPivot = false,
@@ -186,6 +181,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question sourceDataQ = new Question
             {
+                Id = 2,
                 Text = "Especifique datos adicionales sobre la fuente",
                 QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
@@ -194,6 +190,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question sourcesQ = new Question
             {
+                Id = 3,
                 Text = "¿Qué fuentes de información desea consultar?",
                 QuestionType = QuestionTypes.MULTIPLE_CHOICE,
                 IsPivot = false,
@@ -203,6 +200,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question featureQ = new Question
             {
+                Id = 4,
                 Text = "Ingrese característica",
                 QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
@@ -211,6 +209,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question anotherFeatureQ = new Question
             {
+                Id = 5,
                 Text = "¿[previous_answer] posee otra característica de interés?",
                 QuestionType = QuestionTypes.BOOLEAN,
                 IsPivot = false,
@@ -219,6 +218,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question particularFeatureQ = new Question
             {
+                Id = 6,
                 Text = "¿Le interesa una característica particular de [previous_answer]?",
                 QuestionType = QuestionTypes.BOOLEAN,
                 IsPivot = false,
@@ -227,6 +227,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question subjectQ = new Question
             {
+                Id = 7,
                 Text = "Introduzca el tema",
                 QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = true,
@@ -235,6 +236,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question regionQ = new Question
             {
+                Id = 8,
                 Text = "Especifique la región geográfica por la que desea filtrar los resultados",
                 QuestionType = QuestionTypes.TEXT_FIELD,
                 IsPivot = false,
@@ -243,6 +245,7 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             Question exclusionQ = new Question
             {
+                Id = 9,
                 Text = "¿Desea excluir algún término de la búsqueda?",
                 QuestionType = QuestionTypes.EXCLUSION_TERMS,
                 IsPivot = false,
@@ -264,42 +267,42 @@ namespace VTeIC.Requerimientos.Web.Migrations
 
             context.QuestionGroups.AddOrUpdate(
                 q => q.Id,
-                new QuestionGroup { Title = "Tema", Questions = { subjectQ } },
-                new QuestionGroup { Title = "Características", Questions = { particularFeatureQ, featureQ, anotherFeatureQ } },
-                new QuestionGroup { Title = "Fuentes de Información", Questions = { sourcesQ } },
-                new QuestionGroup { Title = "Datos adicionales sobre la fuente", Questions = { sourceDataQ } },
-                new QuestionGroup { Title = "Acción", Questions = { actionQ } },
-                new QuestionGroup { Title = "Región geográfica", Questions = { regionQ } },
-                new QuestionGroup { Title = "Términos a excluir", Questions = { exclusionQ } }
+                new QuestionGroup { Id = 1, Title = "Tema", Questions = { subjectQ } },
+                new QuestionGroup { Id = 2, Title = "Características", Questions = { particularFeatureQ, featureQ, anotherFeatureQ } },
+                new QuestionGroup { Id = 3, Title = "Fuentes de Información", Questions = { sourcesQ } },
+                new QuestionGroup { Id = 4, Title = "Datos adicionales sobre la fuente", Questions = { sourceDataQ } },
+                new QuestionGroup { Id = 5, Title = "Acción", Questions = { actionQ } },
+                new QuestionGroup { Id = 6, Title = "Región geográfica", Questions = { regionQ } },
+                new QuestionGroup { Id = 7, Title = "Términos a excluir", Questions = { exclusionQ } }
             );
 
             context.QuestionLinks.AddOrUpdate(
                 ql => ql.Id,
-                new QuestionLink { Question = subjectQ, Next = particularFeatureQ },
-                new QuestionLink { Question = particularFeatureQ, Next = featureQ, NextNegative = sourcesQ },
-                new QuestionLink { Question = featureQ, Next = anotherFeatureQ },
-                new QuestionLink { Question = anotherFeatureQ, Next = featureQ, NextNegative = sourcesQ },
-                new QuestionLink { Question = sourcesQ, Next = sourceDataQ },
-                new QuestionLink { Question = sourceDataQ, Next = actionQ },
-                new QuestionLink { Question = actionQ, Next = regionQ },
-                new QuestionLink { Question = regionQ, Next = exclusionQ }
+                new QuestionLink { Id = 1, Question = subjectQ, Next = particularFeatureQ },
+                new QuestionLink { Id = 2, Question = particularFeatureQ, Next = featureQ, NextNegative = sourcesQ },
+                new QuestionLink { Id = 3, Question = featureQ, Next = anotherFeatureQ },
+                new QuestionLink { Id = 4, Question = anotherFeatureQ, Next = featureQ, NextNegative = sourcesQ },
+                new QuestionLink { Id = 5, Question = sourcesQ, Next = sourceDataQ },
+                new QuestionLink { Id = 6, Question = sourceDataQ, Next = actionQ },
+                new QuestionLink { Id = 7, Question = actionQ, Next = regionQ },
+                new QuestionLink { Id = 8, Question = regionQ, Next = exclusionQ }
             );
 
             context.Operators.AddOrUpdate(
                 o => o.Id,
-                new QuestionRelationshipOperator { First = subjectQ, Second = featureQ, Operator = QuestionOperator.AND },
-                new QuestionRelationshipOperator { First = subjectQ, Second = sourcesQ, Operator = QuestionOperator.AND },
-                new QuestionRelationshipOperator { First = subjectQ, Second = sourceDataQ, Operator = QuestionOperator.AND },
-                new QuestionRelationshipOperator { First = subjectQ, Second = actionQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 1, First = subjectQ, Second = featureQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 2, First = subjectQ, Second = sourcesQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 3, First = subjectQ, Second = sourceDataQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 4, First = subjectQ, Second = actionQ, Operator = QuestionOperator.AND },
 
-                new QuestionRelationshipOperator { First = featureQ, Second = featureQ, Operator = QuestionOperator.AND },
-                new QuestionRelationshipOperator { First = featureQ, Second = sourcesQ, Operator = QuestionOperator.AND },
-                new QuestionRelationshipOperator { First = featureQ, Second = featureQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 5, First = featureQ, Second = featureQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 6, First = featureQ, Second = sourcesQ, Operator = QuestionOperator.AND },
+                new QuestionRelationshipOperator { Id = 7, First = featureQ, Second = featureQ, Operator = QuestionOperator.AND },
+
+                new QuestionRelationshipOperator { Id = 8, First = sourcesQ, Second = sourcesQ, Operator = QuestionOperator.OR },
+                new QuestionRelationshipOperator { Id = 9, First = sourcesQ, Second = sourceDataQ, Operator = QuestionOperator.AND },
                 
-                new QuestionRelationshipOperator { First = sourcesQ, Second = sourcesQ, Operator = QuestionOperator.OR },
-                new QuestionRelationshipOperator { First = sourcesQ, Second = sourceDataQ, Operator = QuestionOperator.AND },
-                
-                new QuestionRelationshipOperator { First = regionQ, Second = sourceDataQ, Operator = QuestionOperator.AND }
+                new QuestionRelationshipOperator { Id = 10, First = regionQ, Second = sourceDataQ, Operator = QuestionOperator.AND }
             );
 
             SaveChanges(context);
