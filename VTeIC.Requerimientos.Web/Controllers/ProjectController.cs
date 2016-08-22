@@ -14,6 +14,7 @@ using System;
 using Hangfire;
 using System.Diagnostics;
 using VTeIC.Requerimientos.Web.BackgroundJobs;
+using System.Data.Entity.Infrastructure;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -83,12 +84,19 @@ namespace VTeIC.Requerimientos.Web.Controllers
             if (ModelState.IsValid)
             {
                 _db.Projects.Add(project);
-                _db.SaveChanges();
 
-                return RedirectToAction("Index");
+                try
+                {
+                    _db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(DbUpdateException)
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe un proyecto con este nombre.");
+                }
             }
-
-            return View(project);
+            projectVM.Langauges = GetLanguages();
+            return View(projectVM);
         }
 
         // GET: Project/Edit/5

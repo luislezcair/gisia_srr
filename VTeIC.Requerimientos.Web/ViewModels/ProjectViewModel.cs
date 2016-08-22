@@ -3,8 +3,6 @@ using VTeIC.Requerimientos.Entidades;
 using System.Web;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -24,9 +22,6 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         public int Id { get; set; }
 
-        [Required]
-        [Index(IsUnique = true)]
-        [StringLength(100)]
         public string Nombre { get; set; }
         public string Directorio { get; set; }
         public ProjectState State { get; set; }
