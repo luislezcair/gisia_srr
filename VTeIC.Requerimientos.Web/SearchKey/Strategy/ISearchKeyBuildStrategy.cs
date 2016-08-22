@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using VTeIC.Requerimientos.Web.SerachKey.Tree;
+using VTeIC.Requerimientos.Web.SearchKey.Tree;
 
-namespace VTeIC.Requerimientos.Web.SerachKey.Strategy
+namespace VTeIC.Requerimientos.Web.SearchKey.Strategy
 {
     interface ISearchKeyBuildStrategy
     {

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
-using VTeIC.Requerimientos.Web.SerachKey.Strategy;
-using VTeIC.Requerimientos.Web.SerachKey.Tree;
+using VTeIC.Requerimientos.Web.SearchKey.Strategy;
+using VTeIC.Requerimientos.Web.SearchKey.Tree;
 
-namespace VTeIC.Requerimientos.Web.SerachKey
+namespace VTeIC.Requerimientos.Web.SearchKey
 {
     public class SearchKeyGenerator
     {

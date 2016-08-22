@@ -5,14 +5,10 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
-using VTeIC.Requerimientos.Web.SerachKey;
 using VTeIC.Requerimientos.Web.ViewModels;
-using VTeIC.Requerimientos.Web.WebService;
 using System.IO;
 using System.Collections.Generic;
-using System;
 using Hangfire;
-using System.Diagnostics;
 using VTeIC.Requerimientos.Web.BackgroundJobs;
 using System.Data.Entity.Infrastructure;
 
@@ -172,7 +168,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
-            var fileList = new List<FileViewModel>();
+            var projectVM = new ProjectViewModel(project);
 
             //identify the virtual path
             string filePath = "/Archivos";
@@ -181,7 +177,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             if (!dir.Exists)
             {
-                return View(fileList);
+                return View(projectVM);
             }
 
             FileInfo[] files = dir.GetFiles();
@@ -193,11 +189,13 @@ namespace VTeIC.Requerimientos.Web.Controllers
                     continue;
 
                 FileViewModel newFile = new FileViewModel(file.FullName);
-                newFile.VirtualPath = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name; //set path to virtual directory + file name
-                fileList.Add(newFile);
+
+                //set path to virtual directory + file name
+                newFile.VirtualPath = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name;
+                projectVM.Files.Add(newFile);
             }
 
-            return View(fileList);
+            return View(projectVM);
         }
 
         [Route("Project/{projectId:int}/VTeIC")]

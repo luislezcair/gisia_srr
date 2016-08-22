@@ -2,7 +2,7 @@
 using System.Linq;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
-using VTeIC.Requerimientos.Web.SerachKey;
+using VTeIC.Requerimientos.Web.SearchKey;
 using VTeIC.Requerimientos.Web.WebService;
 
 namespace VTeIC.Requerimientos.Web.BackgroundJobs

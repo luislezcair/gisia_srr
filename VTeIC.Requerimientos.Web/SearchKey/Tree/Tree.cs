@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace VTeIC.Requerimientos.Web.SerachKey.Tree
+namespace VTeIC.Requerimientos.Web.SearchKey.Tree
 {
     public class Tree
     {

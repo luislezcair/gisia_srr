@@ -2,7 +2,7 @@
 using VTeIC.Requerimientos.Entidades;
 
 
-namespace VTeIC.Requerimientos.Web.SerachKey.Tree
+namespace VTeIC.Requerimientos.Web.SearchKey.Tree
 {
     public abstract class OperatorNode : Node
     {

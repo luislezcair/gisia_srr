@@ -16,6 +16,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             State = project.State;
             UserId = project.UserId;
             LanguageId = project.Language.Id;
+            Files = new List<FileViewModel>();
         }
 
         public ProjectViewModel() { }
@@ -26,8 +27,11 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public string Directorio { get; set; }
         public ProjectState State { get; set; }
         public string UserId { get; set; }
+
         public int LanguageId { get; set; }
         public IEnumerable<SelectListItem> Langauges { get; set; }
+
+        public List<FileViewModel> Files { get; set; }
 
         public bool DirectoryExists()
         {

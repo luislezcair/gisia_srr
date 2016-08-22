@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace VTeIC.Requerimientos.Web.SerachKey.Tree
+namespace VTeIC.Requerimientos.Web.SearchKey.Tree
 {
     public abstract class Node
     {
