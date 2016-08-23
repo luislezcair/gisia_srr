@@ -27,6 +27,8 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         public string SourceURL { get; private set; }
 
+        public List<string> DomainURLs { get; private set; }
+
         private void LoadMetadata()
         {
             string file = Path.ChangeExtension(FullPath, "json");
@@ -38,6 +40,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
                     string jsonString = r.ReadToEnd();
                     var metadata = JsonConvert.DeserializeObject<MetadataFile>(jsonString);
                     SourceURL = metadata.Metadata.url;
+                    DomainURLs = metadata.Metadata.urlsDominio;
                 }
             }
         }
@@ -62,7 +65,13 @@ namespace VTeIC.Requerimientos.Web.ViewModels
       // "id_request": "12", 
       // "weight": 1.0276595799263404, 
       // "filename": "01_www.youtube.com.html"
+      // urlsDominio: [
+      //    "htpp....",
+      //    "http...."
+      // ]
         public string url { get; set; }
+
+        public List<string> urlsDominio { get; set; }
     }
 
     public static class StringExt

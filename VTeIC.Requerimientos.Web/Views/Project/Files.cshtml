@@ -24,25 +24,91 @@
                 <th style="width: 3%"></th>
                 <th>Origen</th>
                 <th>Nombre de archivo</th>
+                <th style="width: 4%"></th>
             </tr>
         </thead>
         <tbody>
             @{int i = 0; }
-            @foreach (FileViewModel file in Model.Files)
+            @foreach (var file in Model.Files)
             {
                 <tr>
                     <td>@(++i)</td>
-                    <td><a href="@file.SourceURL" target="_blank">@(file.SourceURL.Truncate(70))</a></td>
-                    <td><a target="_blank" href="@file.VirtualPath">@file.FileName</a></td>
+                    <td>
+                        <a href="@file.SourceURL" target="_blank">@(file.SourceURL.Truncate(70))</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="@file.VirtualPath">@file.FileName</a>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-xs btn-primary btn-show-files" data-file-index="@i" data-toggle="tooltip" data-trigger="hover" title="Ver más enlances...">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3" class="list-count">Se encontraron @Model.Files.Count archivos</td>
+                <td colspan="4" class="list-count">Se encontraron @Model.Files.Count sitios relevantes.</td>
             </tr>
         </tfoot>
     </table>
+
+    int j = 0;
+    foreach(var file in Model.Files)
+    {
+        <table id="file-table-@(++j)" style="display: none" class="table no-border-top table-hover table-striped table-condensed">
+            <tbody>
+                @{ int k = 0; }
+                @foreach (var url in file.DomainURLs)
+                {
+                    <tr>
+                        <td>@(++k)</td>
+                        <td>
+                            <a href="@url" target="_blank">@url</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="list-count">Se encontraron @(k) enlaces para el sitio.</td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+<div id="modal-urls" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Otros enlaces del sitio web</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    $(document).on('click', '.btn-show-files', function (e) {
+        var file = $(this).data('file-index');
+        var file_table = $('#file-table-' + file);
+        var modal = $('#modal-urls');
+
+        modal.find('.modal-body').html(file_table.fadeIn());
+        modal.modal('show');
+    })
+
+    $('[data-toggle="tooltip"]').tooltip();
+</script>
+
 }
 else
 {
