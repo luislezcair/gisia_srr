@@ -59,7 +59,7 @@
     {
         <table id="file-table-@(++j)" style="display: none" class="table no-border-top table-hover table-striped table-condensed">
             <tbody>
-                @{ int k = 0; }
+                @{int k = 0;}
                 @foreach (var url in file.DomainURLs)
                 {
                     <tr>
@@ -79,7 +79,7 @@
     }
 
 <div id="modal-urls" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -102,9 +102,13 @@
         var file_table = $('#file-table-' + file);
         var modal = $('#modal-urls');
 
-        modal.find('.modal-body').html(file_table.fadeIn());
+        modal.find('.modal-body').html(file_table.clone().fadeIn());
         modal.modal('show');
     })
+
+    $('#modal-urls').on('hidden.bs.modal', function () {
+        $(this).find('table').remove();
+    });
 
     $('[data-toggle="tooltip"]').tooltip();
 </script>

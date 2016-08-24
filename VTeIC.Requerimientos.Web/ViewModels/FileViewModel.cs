@@ -6,11 +6,10 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 {
     public class FileViewModel
     {
-        private string FullPath { get; set; }
-
         public FileViewModel(string path)
         {
             FullPath = path;
+            DomainURLs = new List<string>();
             LoadMetadata();
         }
 
@@ -22,6 +21,8 @@ namespace VTeIC.Requerimientos.Web.ViewModels
                 return Path.GetFileNameWithoutExtension(FullPath);
             }
         }
+
+        private string FullPath { get; set; }
 
         public string VirtualPath { get; set; }
 
