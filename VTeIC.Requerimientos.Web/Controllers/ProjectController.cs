@@ -12,6 +12,7 @@ using Hangfire;
 using VTeIC.Requerimientos.Web.BackgroundJobs;
 using System.Data.Entity.Infrastructure;
 using VTeIC.Requerimientos.Web.SearchKey;
+using VTeIC.Requerimientos.Web.Util;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -70,12 +71,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return View(projectVM);
             }
 
+            string directory = projectVM.Nombre.Slugify() + "_" + RandomString.GetRandomString(10);
+
             Project project = new Project
             {
                 Nombre = projectVM.Nombre,
                 UserId = projectVM.UserId,
                 Language = lang,
-                Directorio = projectVM.Nombre.Replace(" ", "")
+                Directorio = directory
             };
 
             if (ModelState.IsValid)

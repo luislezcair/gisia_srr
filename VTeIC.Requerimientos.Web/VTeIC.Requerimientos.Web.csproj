@@ -230,6 +230,8 @@
     <Compile Include="SearchKey\Tree\Tree.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Util\RandomString.cs" />
+    <Compile Include="Util\StringExt.cs" />
     <Compile Include="ViewModels\AnswerViewModel.cs" />
     <Compile Include="ViewModels\ChoiceViewModel.cs" />
     <Compile Include="ViewModels\FileViewModel.cs" />
