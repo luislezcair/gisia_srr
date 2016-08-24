@@ -52,7 +52,7 @@
                                 {
                                     <div class="row">
                                         <div class="col-sm-offset-5 col-sm-7 choice-list">
-                                            <input type="checkbox" value="@(choice.Id)" data-question="@(question.Id)" id="choice-q@(question.Id)-@(choice.Id)"/>
+                                            <input type="checkbox" value="@(choice.Id)" data-question="@(question.Id)" id="choice-q@(question.Id)-@(choice.Id)" />
                                             <label for="choice-q@(question.Id)-@(choice.Id)">@choice.Text</label>
                                         </div>
                                     </div>
@@ -88,6 +88,12 @@
         </div>
     </div>
 </form>
+
+<div class="actions clearfix well" id="well-debug" style="display: none; margin-top: 10px">
+    <form action="SearchKeys" method="post" target="_blank">
+        <button type="submit" id="btn-search-keys" class="btn btn-primary">Ver claves</button>
+    </form>
+</div>
 
 <script>
     var QuestionType = {
@@ -145,25 +151,29 @@
                     divIndicator.fadeIn();
 
                     $.post('SearchKey', null, function(keyResponse) {
-                            divIndicator.hide();
-                            divButtons.fadeIn();
+                        divIndicator.hide();
+                        divButtons.fadeIn();
 
-                            if (!keyResponse.result) {
-                                errorAlert.fadeIn();
-                                return;
-                            }
+                        if (!keyResponse.result) {
+                            errorAlert.fadeIn();
+                            return;
+                        }
 
-                            find_question_section(CurrentQuestion.Id).hide();
-                            show_working_dialog();
+                        find_question_section(CurrentQuestion.Id).hide();
+                        show_working_dialog();
 
-                            $('#btn-next').hide();
-                            $('#btn-back').show();
-                        });
+                        $('#btn-next').hide();
+                        $('#btn-back').show();
+                    });
                     return;
                 }
 
                 if (response.LastQuestion) {
                     $('#btn-next').text('Finalizar');
+
+                    if(getParameterByName("debug") === "") {
+                        $('#well-debug').fadeIn();
+                    }
                 }
 
                 var nextQuestion = response.Question;
@@ -254,4 +264,15 @@
             $(this).closest("." + $(this).attr("data-hide")).hide();
         });
     });
+
+    // Parsea la URL actual y devuelve el valor de la variable pasada como parámetro.
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 </script>

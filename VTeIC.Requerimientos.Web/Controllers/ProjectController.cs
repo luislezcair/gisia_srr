@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Hangfire;
 using VTeIC.Requerimientos.Web.BackgroundJobs;
 using System.Data.Entity.Infrastructure;
+using VTeIC.Requerimientos.Web.SearchKey;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -235,6 +236,23 @@ namespace VTeIC.Requerimientos.Web.Controllers
             BackgroundJob.Enqueue(() => VTeICJob.Perform(projectId, User.Identity.Name));
 
             return Json(new { result = true });
+        }
+
+        [HttpPost]
+        [Route("Project/{projectId:int}/SearchKeys")]
+        public ActionResult SearchKeys(int projectId)
+        {
+            var project = _db.Projects.Find(projectId);
+
+            if (project == null || project.State == ProjectState.ACTIVE)
+            {
+                return HttpNotFound();
+            }
+
+            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
+            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
+
+            return View("SearchKeysDebug", searchKeys);
         }
 
         protected override void Dispose(bool disposing)
