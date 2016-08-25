@@ -212,16 +212,17 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
+            var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList(), _db.QuestionGroups.ToList());
+
             if(project.State == ProjectState.ACTIVE)
             {
-                return View("ProjectActiveError");
+                return View("ProjectActiveError", vteic);
             }
 
             Session session = new Session();
             _db.Sessions.Add(session);
             _db.SaveChanges();
 
-            var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList(), _db.QuestionGroups.ToList());
             return View("Work", vteic);
         }
 

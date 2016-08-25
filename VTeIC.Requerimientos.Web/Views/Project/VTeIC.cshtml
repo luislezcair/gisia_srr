@@ -78,6 +78,7 @@
 
         <div class="actions clearfix well">
             <div id="div-buttons">
+                <input type="hidden" id="input-debug-flag" name="debug_flag" />
                 <button type="button" id="btn-prev" class="btn btn-primary" disabled>Anterior</button>
                 <button type="submit" id="btn-next" class="btn btn-primary">Siguiente</button>
                 <a type="button" id="btn-back" class="btn btn-primary" href="@Url.Action("Index")" style="display: none">Volver</a>
@@ -137,6 +138,8 @@
 
         fill_answer(answer);
 
+        var debug = $('#input-debug-flag').val() === "1";
+
         $.ajax({
             url: '/VTeIC/PostAnswer',
             data: JSON.stringify(answer),
@@ -146,7 +149,7 @@
             type: 'POST',
             success: function(response) {
                 // Si fue la última pregunta, solicitamos las claves de búsqueda
-                if (response.Finished) {
+                if (response.Finished && !debug) {
                     divButtons.hide();
                     divIndicator.fadeIn();
 
@@ -166,14 +169,13 @@
                         $('#btn-back').show();
                     });
                     return;
+                } else if(response.Finished && debug) {
+                    $('#well-debug').fadeIn();
+                    return;
                 }
 
                 if (response.LastQuestion) {
                     $('#btn-next').text('Finalizar');
-
-                    if(getParameterByName("debug") === "") {
-                        $('#well-debug').fadeIn();
-                    }
                 }
 
                 var nextQuestion = response.Question;
@@ -275,4 +277,10 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
+
+    $(function() {
+        if(getParameterByName("debug") === "") {
+            $('#input-debug-flag').val(1);
+        }
+    })
 </script>
