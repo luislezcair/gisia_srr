@@ -1,41 +1,66 @@
-﻿@model VTeIC.Requerimientos.Entidades.Project
+﻿@using VTeIC.Requerimientos.Web.ViewModels;
+@model ProjectViewModel
 
 @{
     ViewBag.Title = "Detalles";
 }
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+    <li>@Html.ActionLink("Proyectos", "Index", "Project")</li>
+    <li class="active">@Model.Nombre</li>
+    <li class="active">Detalles</li>
+</ol>
+
 <div class="page-header">
     <h2>Detalles del proyecto</h2>
 </div>
 
-<div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+<table class="table no-border-top">
+    <tbody>
+        <tr>
+            <td class="horizontal-th">@Html.DisplayNameFor(model => model.Nombre)</td>
+            <td>@Html.DisplayFor(model => model.Nombre)</td>
+        </tr>
+        <tr>
+            <td class="horizontal-th">@Html.DisplayNameFor(model => model.Directorio)</td>
+            <td>@Html.DisplayFor(model => model.Directorio)</td>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+        </tr>
+        <tr>
+            <td class="horizontal-th">@Html.DisplayNameFor(model => model.State)</td>
+            <td>@Html.DisplayFor(model => model.State)</td>
+        </tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Directorio)
-        </dt>
+        @if (!Model.StateReason.IsEmpty())
+        {
+            <tr>
+                <td class="horizontal-th">@Html.DisplayNameFor(model => model.StateReason)</td>
+                <td>@Html.DisplayFor(model => model.StateReason)</td>
+            </tr>
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.Directorio)
-        </dd>
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
+        @if (Model.SearchKeys.Any())
+        {
+            <tr>
+                <td class="horizontal-th">Claves de búsqueda</td>
+                <td>
+                    <table class="table no-border-top">
+                        <tbody>
+                            @{ int i = 0; }
+                            @foreach (var s in Model.SearchKeys)
+                            {
+                                <tr>
+                                    <td>@(++i)</td>
+                                    <td>@s</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-        <dd>
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-success" })
-    <a href="@Url.Action("Index")" class="btn btn-info">Volver</a>
-</p>
+<p><a href="@Url.Action("Index")" class="btn btn-info">Volver</a></p>

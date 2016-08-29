@@ -3,6 +3,8 @@ using VTeIC.Requerimientos.Entidades;
 using System.Web;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -14,24 +16,37 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             Nombre = project.Nombre;
             Directorio = project.Directorio;
             State = project.State;
+            StateReason = project.StateReason;
             UserId = project.UserId;
             LanguageId = project.Language.Id;
             Files = new List<FileViewModel>();
+            SearchKeys = (from s in project.SearchKeys select s.KeyString).ToList();
         }
 
         public ProjectViewModel() { }
 
         public int Id { get; set; }
 
+        [Display(Name = "Nombre del proyecto")]
         public string Nombre { get; set; }
+
+        [Display(Name = "Ruta del repositorio de archivos")]
         public string Directorio { get; set; }
+
+        [Display(Name = "Estado")]
         public ProjectState State { get; set; }
+
+        [Display(Name = "Motivo del error")]
+        public string StateReason { get; set; }
+
         public string UserId { get; set; }
 
         public int LanguageId { get; set; }
         public IEnumerable<SelectListItem> Langauges { get; set; }
 
         public List<FileViewModel> Files { get; set; }
+
+        public List<string> SearchKeys { get; set; }
 
         public bool DirectoryExists()
         {

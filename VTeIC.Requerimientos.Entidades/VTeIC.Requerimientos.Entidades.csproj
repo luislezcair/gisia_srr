@@ -56,6 +56,7 @@
     <Compile Include="ChoiceOption.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="ProjectSearchKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionGroup.cs" />

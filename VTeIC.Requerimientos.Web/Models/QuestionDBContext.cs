@@ -72,6 +72,10 @@ namespace VTeIC.Requerimientos.Web.Models
                 .HasOptional<Question>(q => q.Next);
             modelBuilder.Entity<QuestionLink>()
                 .HasOptional<Question>(q => q.NextNegative);
+
+            modelBuilder.Entity<Project>()
+                .HasMany(p => p.SearchKeys)
+                .WithRequired(s => s.Project);
         }
     }
 }

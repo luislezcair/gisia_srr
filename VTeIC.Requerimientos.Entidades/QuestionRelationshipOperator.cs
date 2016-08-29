@@ -13,5 +13,8 @@
         public Question First { get; set; }
         public Question Second { get; set; }
         public QuestionOperator Operator { get; set; }
+
+        public virtual int? FirstId { get; set; }
+        public virtual int? SecondId { get; set; }
     }
 }

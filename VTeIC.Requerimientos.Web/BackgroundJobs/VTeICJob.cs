@@ -21,6 +21,16 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             Session session = db.Sessions.OrderByDescending(s => s.Id).First();
             var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
 
+            // Guardamos las claves de búsqueda asociadas al proyecto
+            project.SearchKeys.Clear();
+            foreach(var key in searchKeys)
+            {
+                project.SearchKeys.Add(new ProjectSearchKey {
+                    Project = project,
+                    KeyString = key
+                });
+            }
+
             try
             {
                 GisiaClient webservice = new GisiaClient(userName, project);

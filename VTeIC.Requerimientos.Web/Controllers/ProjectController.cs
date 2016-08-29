@@ -38,12 +38,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Project project = _db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(project);
+
+            return View(new ProjectViewModel(project));
         }
 
         // GET: Project/Create
@@ -97,37 +99,6 @@ namespace VTeIC.Requerimientos.Web.Controllers
             }
             projectVM.Langauges = GetLanguages();
             return View(projectVM);
-        }
-
-        // GET: Project/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = _db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
-
-        // POST: Project/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre")] Project project)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Entry(project).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(project);
         }
 
         // GET: Project/Delete/5

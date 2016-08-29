@@ -140,3 +140,8 @@ tfoot > tr > td.list-count {
     font-size: 11px;
     text-align: right;
 }
+
+table > tbody > tr > td.horizontal-th {
+    width: 30%;
+    font-weight: 700;
+}
