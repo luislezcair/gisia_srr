@@ -10,7 +10,6 @@ namespace VTeIC.Requerimientos.Web.Models
         public DbSet<ChoiceOption> QuestionChoices { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<Session> Sessions { get; set; }
         public DbSet<QuestionRelationshipOperator> Operators { get; set; }
         public DbSet<QuestionLink> QuestionLinks { get; set; }
         public DbSet<Language> Languages { get; set; }
@@ -52,10 +51,6 @@ namespace VTeIC.Requerimientos.Web.Models
 
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
-            modelBuilder.Entity<Session>()
-                .HasMany<Answer>(a => a.Answers)
-                .WithRequired(s => s.Session);
-
             modelBuilder.Entity<QuestionRelationshipOperator>()
                 .HasRequired<Question>(q => q.First)
                 .WithMany()
@@ -76,6 +71,10 @@ namespace VTeIC.Requerimientos.Web.Models
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.SearchKeys)
                 .WithRequired(s => s.Project);
+
+            modelBuilder.Entity<Project>()
+                .HasMany(a => a.Answers)
+                .WithRequired(p => p.Project);
         }
     }
 }

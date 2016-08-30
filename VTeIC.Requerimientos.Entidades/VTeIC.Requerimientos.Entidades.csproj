@@ -63,7 +63,6 @@
     <Compile Include="QuestionLink.cs" />
     <Compile Include="QuestionRelationshipOperator.cs" />
     <Compile Include="SearchKeyString.cs" />
-    <Compile Include="Session.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

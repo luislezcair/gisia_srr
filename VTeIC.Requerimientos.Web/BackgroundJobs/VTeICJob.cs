@@ -16,10 +16,8 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             var project = db.Projects.Find(projectId);
 
             project.State = ProjectState.WORKING;
-            db.SaveChanges();
 
-            Session session = db.Sessions.OrderByDescending(s => s.Id).First();
-            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
+            var searchKeys = SearchKeyGenerator.BuildSearchKey(project.Answers.ToList(), project.Language);
 
             // Guardamos las claves de búsqueda asociadas al proyecto
             project.SearchKeys.Clear();
@@ -30,6 +28,8 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
                     KeyString = key
                 });
             }
+
+            db.SaveChanges();
 
             try
             {

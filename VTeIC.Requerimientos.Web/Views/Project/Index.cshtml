@@ -23,13 +23,13 @@
         {
             <tr>
                 <td>
-                    @if (item.State == ProjectState.ACTIVE)
+                    @if (item.State == ProjectState.INACTIVE)
                     {
-                        @Html.DisplayFor(modelItem => item.Nombre)
+                        @Html.ActionLink(item.Nombre, "VTeIC", new { projectId = item.Id })
                     }
                     else
                     {
-                        @Html.ActionLink(item.Nombre, "VTeIC", new { projectId = item.Id })
+                        @Html.DisplayFor(modelItem => item.Nombre)
                     }
                 </td>
                 <td>

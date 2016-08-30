@@ -30,6 +30,7 @@ namespace VTeIC.Requerimientos.Entidades
         public virtual Language Language { get; set; }
 
         public virtual ICollection<ProjectSearchKey> SearchKeys { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 
     public enum ProjectState

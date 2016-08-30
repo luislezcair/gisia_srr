@@ -13,6 +13,7 @@ using VTeIC.Requerimientos.Web.BackgroundJobs;
 using System.Data.Entity.Infrastructure;
 using VTeIC.Requerimientos.Web.SearchKey;
 using VTeIC.Requerimientos.Web.Util;
+using System.Diagnostics;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -185,14 +186,20 @@ namespace VTeIC.Requerimientos.Web.Controllers
 
             var vteic = new ProjectVTeICViewModel(project, _manager.QuestionList(), _db.QuestionGroups.ToList());
 
-            if(project.State == ProjectState.ACTIVE)
+            if(project.State != ProjectState.INACTIVE)
             {
                 return View("ProjectActiveError", vteic);
             }
 
-            Session session = new Session();
-            _db.Sessions.Add(session);
-            _db.SaveChanges();
+            // HACK: borrar respuestas anteriores. Puede pasar cuando se respondieron algunas preguntas pero no
+            // se completó el asistente. Habría que ver como reutilizar las respuestas en el asistente.
+            //if(project.Answers.Any())
+            //{
+            //    project.Answers.Clear();
+            //    Debug.Print("Flushing previous answers...");
+            //    _db.Entry(project).State = EntityState.Modified;
+            //    _db.SaveChanges();
+            //}
 
             return View("Work", vteic);
         }
@@ -224,19 +231,65 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 return HttpNotFound();
             }
 
-            Session session = _db.Sessions.OrderByDescending(s => s.Id).First();
-            var searchKeys = SearchKeyGenerator.BuildSearchKey(session.Answers, project.Language);
+            var searchKeys = SearchKeyGenerator.BuildSearchKey(project.Answers.ToList(), project.Language);
 
             return View("SearchKeysDebug", searchKeys);
         }
 
-        protected override void Dispose(bool disposing)
+        [HttpPost]
+        [Route("Project/{projectId:int}/PostAnswer")]
+        public ActionResult PostAnswer(int projectId, AnswerViewModel answer)
         {
-            if (disposing)
+            answer.ProjectId = projectId;
+
+            // Obtiene la pregunta actual
+            Question q = _db.Questions.Find(answer.QuestionId);
+
+            // Guarda la respuesta a esta pregunta
+            SaveAnswer(q, answer);
+
+            // Si es una pregunta pivot almacena la respuesta para usarla en las próximas preguntas
+            if (q.IsPivot)
             {
-                _db.Dispose();
+                Session["pivot"] = answer.TextAnswer;
             }
-            base.Dispose(disposing);
+
+            // Obtiene los enlaces correspondientes a esta pregunta 
+            QuestionLink ql = _db.QuestionLinks.FirstOrDefault(a => a.Question.Id == q.Id);
+
+            // Si la pregunta no tiene enlaces, entonces fue la última del cuestionario
+            if (ql == null)
+            {
+                return Json(new
+                {
+                    Finished = true
+                });
+            }
+
+            Question next;
+
+            // Determina la próxima pregunta de acuerdo a la respuesta Sí / No
+            if (q.QuestionType == QuestionTypes.BOOLEAN && answer.BooleanAnswer != null && !answer.BooleanAnswer.Value)
+            {
+                next = ql.NextNegative;
+            }
+            else
+            {
+                next = ql.Next;
+            }
+
+            // Determinar si es la última pregunta
+            QuestionLink qln = _db.QuestionLinks.FirstOrDefault(a => a.Question.Id == next.Id);
+            QuestionViewModel qvm = new QuestionViewModel(next);
+
+            qvm.Text = qvm.Text.Replace("[previous_answer]", "<em>" + Session["pivot"] + "</em>");
+
+            return Json(new
+            {
+                Question = qvm,
+                Finished = false,
+                LastQuestion = qln == null
+            });
         }
 
         /**
@@ -254,6 +307,55 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 });
 
             return new SelectList(lang, "Value", "Text");
+        }
+
+        /**
+         * Transforma la lista de enteros con IDs de opciones en una lista de ChoiceOptions
+        **/
+        private List<ChoiceOption> GetDbChoices(List<int> ids)
+        {
+            var options = new List<ChoiceOption>();
+
+            if (ids != null)
+            {
+                options.AddRange(ids.Select(id => _db.QuestionChoices.Find(id)));
+            }
+
+            return options;
+        }
+
+        /**
+         * Guarda la respuesta en la base de datos
+        **/
+        private void SaveAnswer(Question question, AnswerViewModel answer)
+        {
+            var project = _db.Projects.Find(answer.ProjectId);
+
+            var dbAnswer = new Answer
+            {
+                Project = project,
+                Question = question,
+                AnswerType = question.QuestionType,
+                TextAnswer = answer.TextAnswer,
+                BooleanAnswer = answer.BooleanAnswer,
+                MultipleChoiceAnswer = GetDbChoices(answer.OptionsAnswer)
+            };
+
+            project.Answers.Add(dbAnswer);
+
+            if (!ModelState.IsValid) return;
+
+            _db.Entry(project).State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

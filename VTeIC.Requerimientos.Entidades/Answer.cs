@@ -6,7 +6,7 @@ namespace VTeIC.Requerimientos.Entidades
     {
         public int Id { get; set; }
 
-        public virtual Session Session { get; set; }
+        public virtual Project Project { get; set; }
 
         public virtual Question Question { get; set; }
         public QuestionTypes AnswerType { get; set; }

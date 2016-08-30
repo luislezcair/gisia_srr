@@ -21,7 +21,6 @@ namespace VTeIC.Requerimientos.Web.Migrations
         {
             context.Database.ExecuteSqlCommand("DELETE FROM MultipleChoiceAnswers");
             context.Database.ExecuteSqlCommand("DELETE FROM Answers");
-            context.Database.ExecuteSqlCommand("DELETE FROM Sessions");
 
             /*
             Language english = new Language

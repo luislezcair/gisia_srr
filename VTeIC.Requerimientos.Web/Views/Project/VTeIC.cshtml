@@ -12,7 +12,7 @@
     <h2>Asistente de Recopilación de Requerimientos</h2>
 </div>
 
-<form action="/VTeIC/PostAnswer" method="post" id="form-vteic">
+<form id="form-vteic">
     <div id="wizard" class="wizard clearfix vertical">
         <div class="steps clearfix">
             <ul role="tablist">
@@ -141,7 +141,7 @@
         var debug = $('#input-debug-flag').val() === "1";
 
         $.ajax({
-            url: '/VTeIC/PostAnswer',
+            url: 'PostAnswer',
             data: JSON.stringify(answer),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
