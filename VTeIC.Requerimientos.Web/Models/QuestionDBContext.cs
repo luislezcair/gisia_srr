@@ -74,7 +74,8 @@ namespace VTeIC.Requerimientos.Web.Models
 
             modelBuilder.Entity<Project>()
                 .HasMany(a => a.Answers)
-                .WithRequired(p => p.Project);
+                .WithRequired(p => p.Project)
+                .WillCascadeOnDelete(false);
         }
     }
 }
