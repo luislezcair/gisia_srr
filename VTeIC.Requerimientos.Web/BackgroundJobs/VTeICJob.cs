@@ -16,6 +16,7 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             var project = db.Projects.Find(projectId);
 
             project.State = ProjectState.WORKING;
+            project.StateTime = DateTime.Now;
 
             var searchKeys = SearchKeyGenerator.BuildSearchKey(project.Answers.ToList(), project.Language);
 
@@ -38,6 +39,7 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
 
                 // Se inició el proceso de búsqueda. Establecer como activo este proyecto
                 project.State = ProjectState.ACTIVE;
+                project.StateTime = DateTime.Now;
                 db.SaveChanges();
             }
             catch(AggregateException e)
@@ -45,6 +47,7 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
                 var ex = e.InnerException;
 
                 project.State = ProjectState.ERROR;
+                project.StateTime = DateTime.Now;
                 project.StateReason = ex.Message;
 
                 db.SaveChanges();

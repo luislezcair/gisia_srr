@@ -14,6 +14,7 @@ using System.Data.Entity.Infrastructure;
 using VTeIC.Requerimientos.Web.SearchKey;
 using VTeIC.Requerimientos.Web.Util;
 using System.Diagnostics;
+using System;
 
 namespace VTeIC.Requerimientos.Web.Controllers
 {
@@ -81,6 +82,8 @@ namespace VTeIC.Requerimientos.Web.Controllers
                 Nombre = projectVM.Nombre,
                 UserId = projectVM.UserId,
                 Language = lang,
+                CreatedAt = DateTime.Now,
+                StateTime = DateTime.Now,
                 Directorio = directory
             };
 
@@ -93,7 +96,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
                     _db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch(DbUpdateException)
+                catch (DbUpdateException)
                 {
                     ModelState.AddModelError("Nombre", "Ya existe un proyecto con este nombre.");
                 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System;
 
 namespace VTeIC.Requerimientos.Web.ViewModels
 {
@@ -17,8 +18,10 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             Directorio = project.Directorio;
             State = project.State;
             StateReason = project.StateReason;
+            StateTime = project.StateTime;
             UserId = project.UserId;
             LanguageId = project.Language.Id;
+            CreatedAt = project.CreatedAt;
             Files = new List<FileViewModel>();
             SearchKeys = (from s in project.SearchKeys select s.KeyString).ToList();
         }
@@ -38,6 +41,12 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         [Display(Name = "Motivo del error")]
         public string StateReason { get; set; }
+
+        [Display(Name = "Último cambio de estado")]
+        public DateTime? StateTime { get; set; }
+
+        [Display(Name = "Fecha y hora de creación")]
+        public DateTime? CreatedAt { get; set; }
 
         public string UserId { get; set; }
 

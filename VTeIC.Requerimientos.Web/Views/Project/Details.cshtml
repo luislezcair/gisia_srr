@@ -22,6 +22,12 @@
             <td class="horizontal-th">@Html.DisplayNameFor(model => model.Nombre)</td>
             <td>@Html.DisplayFor(model => model.Nombre)</td>
         </tr>
+
+        <tr>
+            <td class="horizontal-th">@Html.DisplayNameFor(model => model.CreatedAt)</td>
+            <td>@Html.DisplayFor(model => model.CreatedAt)</td>
+        </tr>
+
         <tr>
             <td class="horizontal-th">@Html.DisplayNameFor(model => model.Directorio)</td>
             <td>@Html.DisplayFor(model => model.Directorio)</td>
@@ -31,6 +37,14 @@
             <td class="horizontal-th">@Html.DisplayNameFor(model => model.State)</td>
             <td>@Html.DisplayFor(model => model.State)</td>
         </tr>
+
+        @if (Model.State != VTeIC.Requerimientos.Entidades.ProjectState.INACTIVE)
+        {
+            <tr>
+                <td class="horizontal-th">@Html.DisplayNameFor(model => model.StateTime)</td>
+                <td>@Html.DisplayFor(model => model.StateTime)</td>
+            </tr>
+        }
 
         @if (!Model.StateReason.IsEmpty())
         {
