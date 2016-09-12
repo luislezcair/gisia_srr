@@ -192,14 +192,14 @@ namespace VTeIC.Requerimientos.Web.Controllers
             }
 
             // HACK: borrar respuestas anteriores. Puede pasar cuando se respondieron algunas preguntas pero no
-            // se completó el asistente. Habría que ver como reutilizar las respuestas en el asistente.
-            //if(project.Answers.Any())
-            //{
-            //    project.Answers.Clear();
-            //    Debug.Print("Flushing previous answers...");
-            //    _db.Entry(project).State = EntityState.Modified;
-            //    _db.SaveChanges();
-            //}
+            // se completó el asistente.
+            // TODO: Habría que ver como reutilizar las respuestas en el asistente.
+            if (project.Answers.Any())
+            {
+                foreach (var a in project.Answers.ToList())
+                    _db.Answers.Remove(a);
+                _db.SaveChanges();
+            }
 
             return View("Work", vteic);
         }

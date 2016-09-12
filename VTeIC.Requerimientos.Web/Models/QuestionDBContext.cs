@@ -1,6 +1,5 @@
 ﻿using System.Data.Entity;
 using VTeIC.Requerimientos.Entidades;
-using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace VTeIC.Requerimientos.Web.Models
 {
@@ -30,43 +29,42 @@ namespace VTeIC.Requerimientos.Web.Models
 
             modelBuilder.Entity<ChoiceOption>()
                 .HasMany(c => c.SearchKeyStrings)
-                .WithOptional();
-                //.WillCascadeOnDelete();
-                //.WithRequired(c => c.choice);
+                .WithOptional()
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Answer>()
-                .HasRequired<Question>(q => q.Question)
+                .HasRequired(q => q.Question)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Answer>()
-                .HasMany<ChoiceOption>(c => c.MultipleChoiceAnswer)
+                .HasMany(c => c.MultipleChoiceAnswer)
                 .WithMany()
                 .Map(x =>
                 {
-                    x.MapLeftKey("AnswerId");
-                    x.MapRightKey("ChoiceId");
+                    x.MapLeftKey("Answer_Id");
+                    x.MapRightKey("ChoiceOption_Id");
                     x.ToTable("MultipleChoiceAnswers");
                 });
 
-            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-
             modelBuilder.Entity<QuestionRelationshipOperator>()
-                .HasRequired<Question>(q => q.First)
+                .HasRequired(q => q.First)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<QuestionRelationshipOperator>()
-                .HasRequired<Question>(q => q.Second)
+                .HasRequired(q => q.Second)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<QuestionLink>()
-                .HasRequired<Question>(q => q.Question);
+                .HasRequired(q => q.Question);
+
             modelBuilder.Entity<QuestionLink>()
-                .HasOptional<Question>(q => q.Next);
+                .HasOptional(q => q.Next);
+
             modelBuilder.Entity<QuestionLink>()
-                .HasOptional<Question>(q => q.NextNegative);
+                .HasOptional(q => q.NextNegative);
 
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.SearchKeys)
@@ -75,7 +73,7 @@ namespace VTeIC.Requerimientos.Web.Models
             modelBuilder.Entity<Project>()
                 .HasMany(a => a.Answers)
                 .WithRequired(p => p.Project)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
         }
     }
 }
