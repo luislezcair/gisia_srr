@@ -21,13 +21,13 @@ namespace VTeIC.Requerimientos.Web.WebService
             _project = project;
         }
 
-        public void SendRequest(List<string> searchKeys)
+        public void SendRequest()
         {
             var request = new WsRequest
             {
                 id_proyecto = _project.Id,
                 nombre_directorio = _userName + "/" + _project.Directorio,
-                claves = from s in searchKeys select new SearchKeyRequest { id = 1, clave = s }
+                claves = from s in _project.SearchKeys select new SearchKeyRequest { id = 1, clave = s.KeyString }
             };
 
             var client = new HttpClient { BaseAddress = new Uri(Url),

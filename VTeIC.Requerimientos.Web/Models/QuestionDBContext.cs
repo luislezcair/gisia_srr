@@ -15,6 +15,7 @@ namespace VTeIC.Requerimientos.Web.Models
         public DbSet<SearchKeyString> SearchKeyStrings { get; set; }
 
         public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectSearchKey> ProjectSearchKeys { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

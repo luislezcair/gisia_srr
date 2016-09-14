@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire;
+using System;
 using System.Linq;
 using VTeIC.Requerimientos.Entidades;
 using VTeIC.Requerimientos.Web.Models;
@@ -9,6 +10,7 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
 {
     public class VTeICJob
     {
+        [AutomaticRetry(Attempts = 2, LogEvents = true)]
         public static void Perform(int projectId, string userName)
         {
             QuestionDBContext db = new QuestionDBContext();
@@ -18,16 +20,21 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             project.State = ProjectState.WORKING;
             project.StateTime = DateTime.Now;
 
-            var searchKeys = SearchKeyGenerator.BuildSearchKey(project.Answers.ToList(), project.Language);
-
-            // Guardamos las claves de búsqueda asociadas al proyecto
-            project.SearchKeys.Clear();
-            foreach(var key in searchKeys)
+            // Si ya se generaron claves de búsqueda para este proyecto, no las generamos de nuevo.
+            // Puede pasar que ya se hayan generado claves si estamos en otro attempt del job.
+            if(!project.SearchKeys.Any())
             {
-                project.SearchKeys.Add(new ProjectSearchKey {
-                    Project = project,
-                    KeyString = key
-                });
+                var searchKeys = SearchKeyGenerator.BuildSearchKey(project.Answers.ToList(), project.Language);
+
+                // Guardamos las claves de búsqueda generadas
+                foreach (var key in searchKeys)
+                {
+                    project.SearchKeys.Add(new ProjectSearchKey
+                    {
+                        Project = project,
+                        KeyString = key
+                    });
+                }
             }
 
             db.SaveChanges();
@@ -35,7 +42,7 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             try
             {
                 GisiaClient webservice = new GisiaClient(userName, project);
-                webservice.SendRequest(searchKeys);
+                webservice.SendRequest();
 
                 // Se inició el proceso de búsqueda. Establecer como activo este proyecto
                 project.State = ProjectState.ACTIVE;
@@ -46,11 +53,17 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             {
                 var ex = e.InnerException;
 
+                if (ex.InnerException != null)
+                    ex = ex.InnerException;
+
                 project.State = ProjectState.ERROR;
                 project.StateTime = DateTime.Now;
                 project.StateReason = ex.Message;
 
                 db.SaveChanges();
+
+                // Debería hacer que el Job falle y se reintente nuevamente después
+                throw ex;
             }
         }
     }
