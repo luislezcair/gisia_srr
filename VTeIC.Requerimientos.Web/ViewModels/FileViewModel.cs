@@ -39,9 +39,19 @@ namespace VTeIC.Requerimientos.Web.ViewModels
                 using (StreamReader r = new StreamReader(file))
                 {
                     string jsonString = r.ReadToEnd();
-                    var metadata = JsonConvert.DeserializeObject<MetadataFile>(jsonString);
-                    SourceURL = metadata.Metadata.url;
-                    DomainURLs = metadata.Metadata.urlsDominio;
+
+                    // Pueden haber archivos JSON vacíos por un bug en el crawler
+                    if(jsonString.Length == 0)
+                    {
+                        SourceURL = "";
+                        DomainURLs = new List<string>();
+                    }
+                    else
+                    {
+                        var metadata = JsonConvert.DeserializeObject<MetadataFile>(jsonString);
+                        SourceURL = metadata.Metadata.url;
+                        DomainURLs = metadata.Metadata.urlsDominio;
+                    }
                 }
             }
         }
