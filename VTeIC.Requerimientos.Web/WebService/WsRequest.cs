@@ -58,4 +58,11 @@ namespace VTeIC.Requerimientos.Web.WebService
         public int request { get; set; }
         public List<WsFilteredUrl> urls { get; set; }
     }
+
+    public class WSProjectState
+    {
+        public string estado { get; set; }
+        public int request { get; set; }
+        public bool stop { get; set; }
+    }
 }

@@ -21,6 +21,10 @@ namespace VTeIC.Requerimientos.Web.WebService
             _project = project;
         }
 
+        /// <summary>
+        /// Envía una solicitud al web service con las claves de búsqueda generadas.
+        /// Espera como respuesta una lista de URLs de cada buscador.
+        /// </summary>
         public void SendRequest()
         {
             var request = new WsRequest
@@ -35,7 +39,7 @@ namespace VTeIC.Requerimientos.Web.WebService
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            // Esta llamada ya no se bloquea hasta obtener la respuesta
+            // Esta llamada se bloquea hasta obtener la respuesta
             HttpResponseMessage response = client.PostAsJsonAsync("wsrequests/", request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -48,6 +52,11 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
+        /// <summary>
+        /// Envía la lista de URLs filtradas al web service. La respuesta es innecesaria
+        /// </summary>
+        /// <param name="urls">Lista filtrada de URLs</param>
+        /// <param name="requestId">Id de request que devuelve el web service en el envío de claves</param>
         public void SendMergedUrls(List<WsFilteredUrl> urls, int requestId)
         {
             var request = new WsFilteredUrlsRequest
@@ -77,6 +86,11 @@ namespace VTeIC.Requerimientos.Web.WebService
             }
         }
 
+        /// <summary>
+        /// Imprime en la salida de depuración la respuesta del web service con las URLs de los buscadores y la lista
+        /// filtrada y ordenada de URLs.
+        /// </summary>
+        /// <param name="response">Objeto que contiene la respuesta del web service</param>
         private void ProcessResponse(WsResponse response)
         {
             Debug.WriteLine("---------BUSCADORES---------: {0}", response.buscadores.Count());
@@ -118,6 +132,69 @@ namespace VTeIC.Requerimientos.Web.WebService
             else
             {
                 Debug.WriteLine("El WS no devolvió ninguna URLs");
+            }
+        }
+
+        /// <summary>
+        /// Envía una consulta al web service para obtener el estado real y una descripción del estado
+        /// para este proyecto.
+        /// </summary>
+        public WSProjectState GetProjectStatus()
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(Url),
+                Timeout = new TimeSpan(0, 3, 0)
+            };
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // Esta llamada se bloquea hasta obtener la respuesta
+            HttpResponseMessage response = client.GetAsync("wsrequeststate/project_status/?id=" + _project.Id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsAsync<List<WSProjectState>>().Result;
+
+                // Por razones históricas, el web service puede devolver varios objetos de "estado", así que tomamos
+                // solamente el primero de ellos.
+                return data.FirstOrDefault();
+            }
+            else
+            {
+                throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+            }
+        }
+
+        /// <summary>
+        /// Envía un objeto WSProjectState con la propiedad 'stop' en true para detener el proyecto
+        /// </summary>
+        public void SendStopSignal()
+        {
+            var stopState = new WSProjectState
+            {
+                stop = true
+            };
+
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(Url),
+                Timeout = new TimeSpan(0, 3, 0)
+            };
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // Esta llamada se bloquea hasta obtener la respuesta
+            HttpResponseMessage response = client.PostAsJsonAsync("wsrequeststate/project_stop/?id=" + _project.Id, stopState).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                Debug.Print("WS stop response: {0}", data);
+            }
+            else
+            {
+                throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
             }
         }
     }

@@ -74,7 +74,67 @@
                 </td>
             </tr>
         }
+
+        <tr>
+            <td class="horizontal-th">Estado detallado</td>
+            <td>
+                @if (Model.WSState != null)
+                {
+                    if (Model.WSStopped)
+                    {
+                        <span class="project-state">Detenido</span>
+                    }
+                    else
+                    {
+                        <span class="project-state">Corriendo</span>
+                    }
+                }
+
+                <form id="form-wsstate" action="@Url.Action("State", new { projectId = Model.Id })" method="post" style="display: inline">
+                    <button type="submit" class="btn btn-sm btn-default" data-toggle="tooltip" title="Consultar estado" data-placement="top" data-trigger="hover">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </form>
+
+                <span id="wsstate-note" style="display: none">Se ha envíado la consulta.</span>
+            </td>
+        </tr>
+
+        @if (Model.State == VTeIC.Requerimientos.Entidades.ProjectState.ACTIVE)
+        {
+            <tr>
+                <td class="horizontal-th"><span style="color: darkred">Detener proyecto</span></td>
+                <td>
+                    <form id="form-wsstop" action="@Url.Action("Stop", new { projectId = Model.Id })" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Enviar orden de detención" data-placement="top" data-trigger="hover">
+                            <i class="fa fa-stop"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 <p><a href="@Url.Action("Index")" class="btn btn-info">Volver</a></p>
+
+<script>
+    $('#form-wsstate').submit(function (e) {
+        $.post('@Url.Action("State", new { projectId = Model.Id })', function (response) {
+            console.log(response);
+            $('#wsstate-note').fadeIn();
+        });
+
+        e.preventDefault();
+    });
+
+    $('#form-wsstop').submit(function (e) {
+        $.post('@Url.Action("Stop", new { projectId = Model.Id })', function (response) {
+            console.log(response);
+        });
+
+        e.preventDefault();
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

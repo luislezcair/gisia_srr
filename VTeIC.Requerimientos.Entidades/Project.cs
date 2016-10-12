@@ -38,6 +38,12 @@ namespace VTeIC.Requerimientos.Entidades
         public virtual ICollection<Answer> Answers { get; set; }
 
         public DateTime? CreatedAt { get; set; }
+
+        // Estado detallado del proyecto informado por el web service
+        public string WSState { get; set; }
+
+        // Devuelve si el proyecto se encuentra detenido o no en el web service
+        public bool WSStopped { get; set; }
     }
 
     public enum ProjectState

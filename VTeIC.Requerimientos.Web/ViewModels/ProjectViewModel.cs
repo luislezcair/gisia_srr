@@ -22,6 +22,8 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             UserId = project.UserId;
             LanguageId = project.Language.Id;
             CreatedAt = project.CreatedAt;
+            WSState = project.WSState;
+            WSStopped = project.WSStopped;
             Files = new List<FileViewModel>();
             SearchKeys = (from s in project.SearchKeys select s.KeyString).ToList();
         }
@@ -47,6 +49,12 @@ namespace VTeIC.Requerimientos.Web.ViewModels
 
         [Display(Name = "Fecha y hora de creación")]
         public DateTime? CreatedAt { get; set; }
+
+        [Display(Name = "Estado detallado")]
+        public string WSState { get; set; }
+
+        [Display(Name = "¿En ejecución?")]
+        public bool WSStopped { get; set; }
 
         public string UserId { get; set; }
 

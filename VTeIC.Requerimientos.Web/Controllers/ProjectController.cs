@@ -137,6 +137,30 @@ namespace VTeIC.Requerimientos.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [Route("Project/{projectId:int}/State")]
+        public ActionResult State(int projectId)
+        {
+            BackgroundJob.Enqueue(() => ProjectStateJob.RequestProjectState(projectId, User.Identity.Name));
+
+            return Json(new
+            {
+                State = "why do you care?"
+            });
+        }
+
+        [HttpPost]
+        [Route("Project/{projectId:int}/Stop")]
+        public ActionResult Stop(int projectId)
+        {
+            BackgroundJob.Enqueue(() => ProjectStopJob.SendProjectStop(projectId, User.Identity.Name));
+
+            return Json(new
+            {
+                State = "me mataste :'("
+            });
+        }
+
         [Route("Project/{projectId:int}/Files")]
         public ActionResult Files(int projectId)
         {
