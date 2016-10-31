@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Web;
 using VTeIC.Requerimientos.Web.Models;
 using VTeIC.Requerimientos.Web.WebService;
 
@@ -14,6 +10,9 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
         {
             QuestionDBContext db = new QuestionDBContext();
             var project = db.Projects.Find(projectId);
+
+            if (project == null)
+                return;
 
             try
             {
@@ -31,9 +30,6 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
 
                 if (ex.InnerException != null)
                     ex = ex.InnerException;
-
-                Debug.Print("ERRORRRRR!!!!!11");
-                Debug.Print(ex.Message);
 
                 throw;
             }

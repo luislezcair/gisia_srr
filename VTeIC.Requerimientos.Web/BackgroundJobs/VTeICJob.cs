@@ -17,6 +17,9 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
 
             var project = db.Projects.Find(projectId);
 
+            if (project == null)
+                return;
+
             project.State = ProjectState.WORKING;
             project.StateTime = DateTime.Now;
 

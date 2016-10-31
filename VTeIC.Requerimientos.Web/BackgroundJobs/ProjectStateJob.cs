@@ -15,6 +15,9 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
             QuestionDBContext db = new QuestionDBContext();
             var project = db.Projects.Find(projectId);
 
+            if (project == null)
+                return;
+
             try
             {
                 var client = new GisiaClient(userName, project);
@@ -49,9 +52,6 @@ namespace VTeIC.Requerimientos.Web.BackgroundJobs
 
                 if (ex.InnerException != null)
                     ex = ex.InnerException;
-
-                Debug.Print("ERRORRRRR!!!!!11");
-                Debug.Print(ex.Message);
 
                 throw;
             }

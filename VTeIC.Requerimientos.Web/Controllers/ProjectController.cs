@@ -13,7 +13,6 @@ using VTeIC.Requerimientos.Web.BackgroundJobs;
 using System.Data.Entity.Infrastructure;
 using VTeIC.Requerimientos.Web.SearchKey;
 using VTeIC.Requerimientos.Web.Util;
-using System.Diagnostics;
 using System;
 
 namespace VTeIC.Requerimientos.Web.Controllers
@@ -142,11 +141,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
         public ActionResult State(int projectId)
         {
             BackgroundJob.Enqueue(() => ProjectStateJob.RequestProjectState(projectId, User.Identity.Name));
-
-            return Json(new
-            {
-                State = "why do you care?"
-            });
+            return Json(new { });
         }
 
         [HttpPost]
@@ -154,11 +149,7 @@ namespace VTeIC.Requerimientos.Web.Controllers
         public ActionResult Stop(int projectId)
         {
             BackgroundJob.Enqueue(() => ProjectStopJob.SendProjectStop(projectId, User.Identity.Name));
-
-            return Json(new
-            {
-                State = "me mataste :'("
-            });
+            return Json(new { });
         }
 
         [Route("Project/{projectId:int}/Files")]
