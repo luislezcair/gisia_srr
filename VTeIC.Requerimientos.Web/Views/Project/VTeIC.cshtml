@@ -10,6 +10,7 @@
 
 <div class="page-header">
     <h2>Asistente de Recopilación de Requerimientos</h2>
+    <p class="small-text">@Model.Project.Nombre</p>
 </div>
 
 <form id="form-vteic">
@@ -39,7 +40,12 @@
                         <div class="answer-field">
                             @if (question.QuestionType == QuestionTypes.TEXT_FIELD || question.QuestionType == QuestionTypes.EXCLUSION_TERMS)
                             {
-                                <input type="text" class="form-control input-lg" id="text-q-@(question.Id)" @(question.IsPivot ? "required" : "") autocomplete="off" autofocus>
+                                <input type="text" class="form-control input-lg"
+                                       id="text-q-@(question.Id)"
+                                       @(question.IsPivot ? "required" : "")
+                                       autocomplete="off"
+                                       autofocus
+                                       placeholder="@(question.HintText)">
                             }
                             else if (question.QuestionType == QuestionTypes.BOOLEAN)
                             {

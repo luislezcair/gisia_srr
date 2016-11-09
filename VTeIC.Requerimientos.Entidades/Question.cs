@@ -12,6 +12,8 @@ namespace VTeIC.Requerimientos.Entidades
         public int Id { get; set; }
         public string Text { get; set; }
 
+        public string HintText { get; set; }
+
         // Si es true, la respuesta a esta pregunta se va a utilzar como parte del texto
         // de las siguientes preguntas
         public bool IsPivot { get; set; }

@@ -16,6 +16,7 @@ namespace VTeIC.Requerimientos.Web.ViewModels
             QuestionType = question.QuestionType;
             IsPivot = question.IsPivot;
             Group = question.QuestionGroup.Id;
+            HintText = question.HintText;
 
             Link = new QuestionLinkViewModel(_db.QuestionLinks.FirstOrDefault(q => q.Question.Id == question.Id));
 
@@ -33,5 +34,6 @@ namespace VTeIC.Requerimientos.Web.ViewModels
         public bool IsPivot { get; set; }
         public QuestionLinkViewModel Link { get; set; }
         public int Group { get; set; }
+        public string HintText { get; set; }
     }
 }
