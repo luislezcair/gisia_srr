@@ -52,7 +52,8 @@
                 </td>
                 <td>
                     <a class="fa fa-trash fa-2x dark-red action-button" href="@Url.Action("Delete", new {id = item.Id})" data-toggle="tooltip" data-placement="top" title="Borrar proyecto"></a>
-                    <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivos"></a>
+                    <a class="fa fa-files-o fa-2x blue action-button" href="@Url.Action("Files", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Ver archivo"></a>
+                    <a class="fa fa-search fa-2x" href="@Url.Action("Busqueda", new {projectId = item.Id})" data-toggle="tooltip" data-placement="top" title="Refinar búsqueda"></a>
                     @Html.ActionLink(" ", "Details",
                                      new {id = item.Id},
                                      new { @class = "fa fa-info-circle fa-2x action-button",
