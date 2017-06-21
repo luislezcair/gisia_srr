@@ -51,12 +51,12 @@ namespace busquedaSolrnet.Controllers
                 }
                 else
                 {
-                    a.Append("Debe insertar un criterio de búsqueda válido");
+                    a.Append("Debe insertar un criterio de búsqueda válido.");
                 }
             }
             else
             {
-                a.Append("Debe seleccionar al menos un formato");
+                a.Append("Debe seleccionar al menos un formato.");
             }
 
 
