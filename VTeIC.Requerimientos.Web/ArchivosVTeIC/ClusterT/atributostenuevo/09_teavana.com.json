@@ -1,0 +1,16 @@
+{
+  "document": [
+    {
+      "url": "http://teavana.com", 
+      "urlsDominio": [
+        "http://teavana.com/ca/en/home", 
+        "http://teavana.com/ca/en/privacy/privacy-policy.html", 
+        "http://teavana.com/us/en/faq-all-links.html", 
+        "http://teavana.com/ca/en/store-locator.html"
+      ], 
+      "id_request": "71", 
+      "weight": 7571, 
+      "filename": "09_teavana.com.html"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "document": [
+    {
+      "url": "http://www.teatrends.com/article.html?category=Analysis", 
+      "urlsDominio": [
+        "http://www.teatrends.com/article.html?category=Products", 
+        "http://www.teatrends.com/article.html?category=Industry", 
+        "http://www.teatrends.com/article.html?category=People", 
+        "http://www.teatrends.com/article.html?category=Health", 
+        "http://www.teatrends.com/article.html?category=Companies", 
+        "http://www.teatrends.com/interview.html?interview=1743"
+      ], 
+      "id_request": "71", 
+      "weight": 11356, 
+      "filename": "28_www.teatrends.com.html"
+    }
+  ]
+}
