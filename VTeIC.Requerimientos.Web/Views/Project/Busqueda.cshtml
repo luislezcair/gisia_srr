@@ -1,0 +1,87 @@
+﻿@using VTeIC.Requerimientos.Web.ViewModels
+@using Microsoft.AspNet.Identity
+@model ProjectViewModel
+
+@{
+    ViewBag.Title = "Archivos";
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+    <li>@Html.ActionLink("Proyectos", "Index", "Project")</li>
+    <li class="active">@Model.Nombre</li> 
+    <li class="active">Archivos</li>
+</ol>
+
+<div class="page-header">
+    <h2>Archivos del proyecto</h2>
+    <p class="small-text">@Model.Nombre</p>
+</div>
+
+<body>
+
+    <div>
+        @*            @using(Html.BeginForm("Index","Busqueda","POST", new { enctype = "multipart/form-data" })) *@
+        @using (Html.BeginForm("subirArchivo", "Busqueda", FormMethod.Post, new { enctype = "multipart/form-data" }))   //subirarchivo es el nombre de metodo, busqueda es el busquedacontroller, formethod indica que usamos Post, el new es el tipo de encriptacion (permite mandar en el formulario varios input)
+            {
+            @*    <label>Url: <input type ="text" name ="url" value=" " /></label><br />
+                <label>Frase: <input type ="text" name ="frase" value=" " /></label><br />
+                <input type ="submit" name ="enviar" value ="Enviar" />
+                <input type="file" name="file" />
+                <br />*@
+
+                
+                
+                    <div>
+
+                        @*<label>Html: <input type="checkbox" name="html" value="false" checked /></label><br />*@
+                        @*<label>Html <i class="fa fa-camera-retro fa-lg"></i> <input type="checkbox" name="html" value="true"  /></label><br />
+    <label>Pdf <input type="checkbox" name="pdf" value="true"  /> PDF </label><br />
+    <label>Rtf <input type="checkbox" name="rtf" value="true"  /></label><br />
+    <label>Doc <input type="checkbox" name="word" value="true"  /></label><br />
+    <label>Xls <input type="checkbox" name="excel" value="true"  /></label><br />*@
+
+                        <form>
+                            <h5>Seleccione formato</h5>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="html" value="true"><i class="fa fa-file-text-o fa-lg"></i> Html</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="pdf" value="true"><i class="fa fa-file-pdf-o fa-lg"></i> Pdf</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="rtf" value="true"><i class="fa fa-file-o fa-lg"></i> Rtf</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="word" value="true"><i class="fa fa-file-text-o fa-lg"></i> Doc</label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="excel" value="true"><i class="fa fa-file-excel-o fa-lg"></i> Xls</label>
+                            </div>
+
+                            </form>
+
+
+                                <label>Frase: <input type="text" name="frase" value="" /></label><br />
+                                <input type="text" hidden name="proyecto" value=@Model.Directorio /> @*         @*se saca de session de lo que creamos en ProjectController*@
+                                <input type="text" hidden name="usuario" value=@User.Identity.GetUserName() />  @*se saca de session de lo que creamos en ProjectController*@
+                                <input type="text" hidden name="proyectoid" value=@Model.Id />  @* el id del proyecto *@
+    <br />
+            <br />
+            <input type="submit" name="enviar" value="Buscar" />   @*lleva al controlar busquedacontroller*@
+</div>
+
+                        <div>
+
+
+                        </div>
+                        }
+                    </div>
+
+
+    </body>
+
+
+
+
+

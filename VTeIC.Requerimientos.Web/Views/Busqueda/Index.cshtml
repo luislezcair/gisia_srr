@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<html>
+    <head>
+         <h2>Index</h2>
+
+        </head>
+    <body>
+
+        <div>
+@*            @using(Html.BeginForm("Index","Busqueda","POST", new { enctype = "multipart/form-data" })) *@
+            @using (Html.BeginForm("subirArchivo", "Busqueda", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+              @*    <label>Url: <input type ="text" name ="url" value=" " /></label><br />
+                <label>Frase: <input type ="text" name ="frase" value=" " /></label><br />
+                <input type ="submit" name ="enviar" value ="Enviar" />
+                <input type="file" name="file" /> 
+                <br />*@
+                
+                <div><label>Frase: <input type ="text" name ="frase" value="" /></label><br />
+                 <br />
+                <br />
+                <input type ="submit" name ="enviar" value ="Enviar" /></div>
+                
+              <div>
+
+
+              </div>
+            }
+        </div>
+
+        
+    </body>
+
+
+
+</html>

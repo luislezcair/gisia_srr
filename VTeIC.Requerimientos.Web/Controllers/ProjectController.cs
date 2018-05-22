@@ -152,6 +152,49 @@ namespace VTeIC.Requerimientos.Web.Controllers
             return Json(new { });
         }
 
+        [Route("Project/{projectId:int}/Busqueda")]
+        public ActionResult Busqueda(int projectId)
+        {
+            Project project = _db.Projects.Find(projectId); //Busca en la BD por el ID, que saca de sesion
+
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            var projectVM = new ProjectViewModel(project);   //creas el projectViewModel
+
+            /*
+             //identify the virtual path                //desde aca hasta *****
+            string filePath = "/Archivos";
+            string absoluteDir = Server.MapPath(filePath) + "\\" + User.Identity.Name + "\\" + project.Directorio;   //mappath, a partir de una direccion te da la direccion logica, el user.identity.name esta en session igual que project.directorio. Es para buscar en esa carpeta.
+            DirectoryInfo dir = new DirectoryInfo(absoluteDir);
+
+            if (!dir.Exists)
+            {
+                return View(projectVM);
+            }
+
+            FileInfo[] files = dir.GetFiles();  //crea un arreglo de ficheros que estan en ese directorio
+
+            //iterate through each file, get its name and set its path, and add to my VM
+            foreach (FileInfo file in files)   //recorre ese arreglo buscando json, se puede quitar.
+            {
+                if (file.FullName.EndsWith("json"))
+                    continue;
+
+                FileViewModel newFile = new FileViewModel(file.FullName);
+
+                //set path to virtual directory + file name
+                newFile.VirtualPath = filePath + "/" + User.Identity.Name + "/" + project.Directorio + "/" + file.Name;
+                projectVM.Files.Add(newFile);
+            }   //******** 
+            
+             */
+
+            return View(projectVM); //devuelve la vista de busqueda principal
+        }
+
         [Route("Project/{projectId:int}/Files")]
         public ActionResult Files(int projectId)
         {
